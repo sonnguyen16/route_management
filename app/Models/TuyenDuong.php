@@ -16,13 +16,17 @@ class TuyenDuong extends Model
         'ma_phan_cap',
         'diem_dau_huyen_id',
         'diem_dau_xa_id',
+        'diem_dau_lat',
+        'diem_dau_lng',
         'diem_cuoi_huyen_id',
         'diem_cuoi_xa_id',
+        'diem_cuoi_lat',
+        'diem_cuoi_lng',
         'chieu_dai',
         'chieu_rong',
         'dien_tich',
         'loai_tuan_tra',
-        'don_vi_quan_ly',
+        'don_vi_id',
         'xi_nghiep',
         'huyen_id',
     ];
@@ -55,5 +59,10 @@ class TuyenDuong extends Model
     public function diem_cuoi_xa()
     {
         return $this->belongsTo(Xa::class, 'diem_cuoi_xa_id');
+    }
+
+    public function don_vi()
+    {
+        return $this->belongsTo(DonVi::class, 'don_vi_id');
     }
 }

@@ -20,10 +20,7 @@ return new class extends Migration
             $table->integer('district_code');
             $table->timestamps();
 
-            $table->foreign('district_code')
-                ->references('code')
-                ->on('quan_huyen')
-                ->onDelete('cascade');
+            $table->foreign('district_code')->references('code')->on('quan_huyen')->onDelete('cascade');
         });
     }
 

@@ -19,10 +19,7 @@ return new class extends Migration
             $table->string('file');
             $table->timestamps();
 
-            $table->foreign('tuyen_duong_id')
-                ->references('id')
-                ->on('tuyen_duong')
-                ->onDelete('cascade');
+            $table->foreign('tuyen_duong_id')->references('id')->on('tuyen_duong')->onDelete('cascade');
         });
     }
 

@@ -22,19 +22,23 @@ class TuyenDuongFactory extends Factory
     {
         return [
             'ten' => fake()->name(),
-            'loai' => fake()->randomElement([1, 2, 3, 4, 5]),
-            'ma_phan_cap' => fake()->randomElement([1, 2, 3, 4, 5]),
-            'diem_dau_huyen_id' => fake()->randomElement([1, 2, 3, 4, 5]),
-            'diem_dau_xa_id' => fake()->randomElement([1, 2, 3, 4, 5]),
-            'diem_cuoi_huyen_id' => fake()->randomElement([1, 2, 3, 4, 5]),
-            'diem_cuoi_xa_id' => fake()->randomElement([1, 2, 3, 4, 5]),
+            'loai' => fake()->randomElement([1, 2, 3]),
+            'ma_phan_cap' => fake()->randomElement([1, 2, 3]),
+            'diem_dau_huyen_id' => 1,
+            'diem_dau_xa_id' => rand(1,17),
+            'diem_dau_lat' => fake()->randomFloat(2, 0, 100),
+            'diem_dau_lng' => fake()->randomFloat(2, 0, 100),
+            'diem_cuoi_huyen_id' => 2,
+            'diem_cuoi_xa_id' => rand(18,28),
+            'diem_cuoi_lat' => fake()->randomFloat(2, 0, 100),
+            'diem_cuoi_lng' => fake()->randomFloat(2, 0, 100),
             'chieu_dai' => fake()->randomFloat(2, 0, 100),
             'chieu_rong' => fake()->randomFloat(2, 0, 100),
             'dien_tich' => fake()->randomFloat(2, 0, 100),
-            'loai_tuan_tra' => fake()->randomElement([1, 2, 3, 4, 5]),
-            'don_vi_quan_ly' => fake()->name(),
+            'loai_tuan_tra' => fake()->randomElement([1, 2, 3]),
+            'don_vi_id' => 1,
             'xi_nghiep' => fake()->name(),
-            'huyen_id' => fake()->randomElement([1, 2, 3, 4, 5]),
+            'huyen_id' => fake()->randomElement([1, 2]),
         ];
     }
 }

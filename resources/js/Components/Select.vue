@@ -15,7 +15,7 @@ const model = defineModel();
             <option value="">{{ optionDefault }}</option>
             <option v-for="option in options"
                     :value="option.id"
-                    :key="option.id">{{ option.name }}</option>
+                    :key="option.id">{{ option?.name || option?.ten }}</option>
         </select>
         <InputError :message="errors" />
     </div>

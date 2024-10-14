@@ -18,16 +18,22 @@ return new class extends Migration
             $table->tinyInteger('ma_phan_cap');
             $table->tinyInteger('diem_dau_huyen_id')->nullable();
             $table->tinyInteger('diem_dau_xa_id')->nullable();
+            $table->double('diem_dau_lat', 8, 6)->nullable();
+            $table->double('diem_dau_lng', 8, 6)->nullable();
             $table->tinyInteger('diem_cuoi_huyen_id')->nullable();
             $table->tinyInteger('diem_cuoi_xa_id')->nullable();
+            $table->double('diem_cuoi_lat', 8, 6)->nullable();
+            $table->double('diem_cuoi_lng', 8, 6)->nullable();
             $table->double('chieu_dai', 8, 2)->default(0);
             $table->double('chieu_rong', 8, 2)->default(0);
             $table->double('dien_tich', 8, 2)->default(0);
             $table->tinyInteger('loai_tuan_tra');
-            $table->string('don_vi_quan_ly');
+            $table->unsignedBigInteger('don_vi_id');
             $table->string('xi_nghiep');
             $table->integer('huyen_id');
             $table->timestamps();
+
+            $table->foreign('don_vi_id')->references('id')->on('don_vi')->onDelete('cascade');
         });
     }
 

@@ -10,6 +10,7 @@ import {nextTick, onMounted, ref} from "vue";
 const props = defineProps({
     tuyen_duong: Object,
     huyen: Object,
+    don_vi: Object,
 })
 
 const td = ref(null);
@@ -30,7 +31,7 @@ const columns = [
     {field: 'chieu_rong', label: 'Chiều rộng'},
     {field: 'dien_tich', label: 'Diện tích'},
     {field: 'loai_tuan_tra', label: 'Loại tuần tra'},
-    {field: 'don_vi_quan_ly', label: 'Đơn vị quản lý'},
+    {field: 'don_vi.ten', label: 'Đơn vị quản lý'},
     {field: 'xi_nghiep', label: 'Xí nghiệp'},
     {field: 'huyen.name', label: 'Huyện quản lý'},
     {field: 'action', label: 'Hành động'},
@@ -65,8 +66,9 @@ const eventForEditBtn = () => {
              <button @click.prevent="modal.showModal()" class="btn btn-success">Thêm tuyến đường</button>
              <input class="border-gray-300 rounded-lg w-1/5" placeholder="Tìm kiếm tuyến đường">
          </div>
-         <table :key="key" v-data="{ data: tuyen_duong.data, columns: columns }"
-                class="table table-striped text-2xl">
+         <table :key="key"
+                class="table table-striped text-2xl"
+                v-data="{ data: tuyen_duong.data, columns: columns }">
          </table>
          <Pagination
              :all-data="tuyen_duong"
@@ -78,6 +80,7 @@ const eventForEditBtn = () => {
          @refresh="onRefresh"
          :huyen="huyen"
          :tuyen_duong="td"
+         :don_vi="don_vi"
      />
 </MainLayout>
 </template>

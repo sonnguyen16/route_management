@@ -37,7 +37,6 @@ class StoreTuyenDuongRequest extends FormRequest
             'don_vi_quan_ly' => 'required|string|max:255',
             'xi_nghiep' => 'required|string|max:255',
             'huyen_id' => 'required',
-            'tai_lieu' => 'nullable',
         ];
     }
 

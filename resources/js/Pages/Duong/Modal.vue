@@ -7,6 +7,7 @@ import {computed, watch} from "vue";
 const props = defineProps({
     huyen: Object,
     tuyen_duong: Object,
+    don_vi: Object,
 })
 
 const emits = defineEmits(['closeModal', 'refresh']);
@@ -23,16 +24,19 @@ const form = useForm({
     ma_phan_cap: '',
     diem_dau_huyen_id: '',
     diem_cuoi_huyen_id: '',
+    diem_dau_lat: '',
+    diem_dau_lng: '',
     diem_dau_xa_id: '',
     diem_cuoi_xa_id: '',
+    diem_cuoi_lat: '',
+    diem_cuoi_lng: '',
     chieu_dai: '',
     chieu_rong: '',
     dien_tich: '',
     loai_tuan_tra: '',
-    don_vi_quan_ly: '',
+    don_vi_id: '',
     xi_nghiep: '',
     huyen_id: '',
-    tai_lieu: [],
 })
 
 watch(() => props.tuyen_duong, (value) => {
@@ -43,13 +47,17 @@ watch(() => props.tuyen_duong, (value) => {
         form.ma_phan_cap = value.ma_phan_cap;
         form.diem_dau_huyen_id = value.diem_dau_huyen_id;
         form.diem_cuoi_huyen_id = value.diem_cuoi_huyen_id;
+        form.diem_dau_lat = value.diem_dau_lat;
+        form.diem_dau_lng = value.diem_dau_lng;
         form.diem_dau_xa_id = value.diem_dau_xa_id;
         form.diem_cuoi_xa_id = value.diem_cuoi_xa_id;
+        form.diem_cuoi_lat = value.diem_cuoi_lat;
+        form.diem_cuoi_lng = value.diem_cuoi_lng;
         form.chieu_dai = value.chieu_dai;
         form.chieu_rong = value.chieu_rong;
         form.dien_tich = value.dien_tich;
         form.loai_tuan_tra = value.loai_tuan_tra;
-        form.don_vi_quan_ly = value.don_vi_quan_ly;
+        form.don_vi_id = value.don_vi_id;
         form.xi_nghiep = value.xi_nghiep;
         form.huyen_id = value.huyen_id;
     }
@@ -97,10 +105,6 @@ const submit = () => {
     })
 }
 
-const onFileChange = (e) => {
-    form.tai_lieu = e.target.files;
-}
-
 </script>
 
 <template>
@@ -134,7 +138,7 @@ const onFileChange = (e) => {
 
                         <div class="form-group">
                             <label for="diem_dau_huyen_id">Điểm đầu</label>
-                            <div class="grid grid-cols-2 gap-3">
+                            <div class="grid grid-cols-2 gap-x-3">
                                 <Select v-model="form.diem_dau_huyen_id"
                                         :errors="form.errors.diem_dau_huyen_id"
                                         :options="huyen"
@@ -143,12 +147,14 @@ const onFileChange = (e) => {
                                         :errors="form.errors.diem_dau_xa_id"
                                         :options="dau_xa"
                                         option-default="Chọn xã"/>
+                                <Input v-model="form.diem_dau_lat" :errors="form.errors.diem_dau_lat" />
+                                <Input v-model="form.diem_dau_lng" :errors="form.errors.diem_dau_lng" />
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="diem_cuoi_huyen_id">Điểm cuối</label>
-                            <div class="grid grid-cols-2 gap-3">
+                            <div class="grid grid-cols-2 gap-x-3">
                                 <Select v-model="form.diem_cuoi_huyen_id"
                                         :errors="form.errors.diem_cuoi_huyen_id"
                                         :options="huyen"
@@ -157,6 +163,8 @@ const onFileChange = (e) => {
                                         :errors="form.errors.diem_cuoi_xa_id"
                                         :options="cuoi_xa"
                                         option-default="Chọn xã"/>
+                                <Input v-model="form.diem_cuoi_lat" :errors="form.errors.diem_cuoi_lat" />
+                                <Input v-model="form.diem_cuoi_lng" :errors="form.errors.diem_cuoi_lng" />
                             </div>
                         </div>
 
@@ -185,7 +193,10 @@ const onFileChange = (e) => {
 
                         <div class="form-group">
                             <label for="don_vi_quan_ly">Đơn vị quản lý</label>
-                            <Input v-model="form.don_vi_quan_ly" :errors="form.errors.don_vi_quan_ly" />
+                            <Select v-model="form.don_vi_id"
+                                    :errors="form.errors.don_vi_id"
+                                    :options="props.don_vi"
+                                    option-default="Chọn đơn vị"/>
                         </div>
 
                         <div class="form-group">
@@ -199,11 +210,6 @@ const onFileChange = (e) => {
                                     :errors="form.errors.huyen_id"
                                     :options="huyen"
                                     option-default="Chọn huyện"/>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="tai_lieu">Tài liệu</label>
-                            <input type="file" @change="onFileChange"  multiple>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -219,7 +225,3 @@ const onFileChange = (e) => {
         </div>
     </div>
 </template>
-
-<style scoped>
-
-</style>
