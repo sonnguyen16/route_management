@@ -3,23 +3,22 @@ import MainLayout from "@/Layouts/MainLayout.vue";
 import {vData} from "@/Directives/v-data.js";
 import Pagination from "@/Components/Pagination.vue";
 import {router} from "@inertiajs/vue3";
-import Modal from "@/Pages/Duong/Modal.vue";
+import Modal from "@/Pages/GiamSat/Modal.vue";
 import {useModal} from "@/Hooks/useModal.js";
 import {nextTick, onMounted, ref, watch} from "vue";
-import {_TIME_DEBOUNCE, loaiOptions, loaiTuanTraOptions, maPhanCapOptions} from "@/Constants/constants.js";
-import {debounce} from "lodash";
+import { debounce } from 'lodash';
+import {_TIME_DEBOUNCE} from "@/Constants/constants.js";
 
 const props = defineProps({
+    giam_sat: Object,
     tuyen_duong: Object,
-    huyen: Object,
     don_vi: Object,
 })
 
-const tuyen_duong_selected = ref(null);
-
+const giam_sat_selected = ref(null);
 const key = ref(0);
 const changePage = (page) => {
-    router.visit(route('tuyen-duong.index', {page: page, ten_duong: search.value}), {
+    router.visit(route('giam-sat.index', {page: page, ten_duong: search.value}), {
         preserveState: true,
         onSuccess: () => {
             onRefresh()
@@ -29,18 +28,15 @@ const changePage = (page) => {
 
 const columns = [
     {field: 'id', label: 'ID'},
-    {field: 'ten', label: 'Tên'},
-    {field: 'loai', label: 'Loại', enums: loaiOptions},
-    {field: 'ma_phan_cap', label: 'Mã phân cấp', enums: maPhanCapOptions},
-    {field: 'diem_dau_xa.name', label: 'Điểm đầu'},
-    {field: 'diem_cuoi_xa.name', label: 'Điểm cuối'},
-    {field: 'chieu_dai', label: 'Chiều dài'},
-    {field: 'chieu_rong', label: 'Chiều rộng'},
-    {field: 'dien_tich', label: 'Diện tích'},
-    {field: 'loai_tuan_tra', label: 'Loại tuần tra', enums: loaiTuanTraOptions},
-    {field: 'don_vi.ten', label: 'Đơn vị quản lý'},
-    {field: 'xi_nghiep', label: 'Xí nghiệp'},
-    {field: 'huyen.name', label: 'Huyện quản lý'},
+    {field: 'tuyen_duong.ten', label: 'Tên đường'},
+    {field: 'tuyen_duong.loai', label: 'Tên đường'},
+    {field: 'tuyen_duong.ma_phan_cap', label: 'Mã phân cấp'},
+    {field: 'tuyen_duong.diem_dau_xa.name', label: 'Điểm đầu'},
+    {field: 'tuyen_duong.diem_cuoi_xa.name', label: 'Điểm cuối'},
+    {field: 'tuyen_duong.chieu_dai', label: 'Chiều dài'},
+    {field: 'tuyen_duong.chieu_rong', label: 'Chiều rộng'},
+    {field: 'tuyen_duong.dien_tich', label: 'Chiều rộng'},
+    {field: 'don_vi.ten', label: 'Đơn vị giám sát'},
     {field: 'action', label: 'Hành động'},
 ]
 
@@ -59,13 +55,13 @@ const onRefresh = () => {
 const eventForEditBtn = () => {
     $('.edit').click(function () {
         const id = $(this).data('id');
-        tuyen_duong_selected.value = props.tuyen_duong.data.find(item => item.id === id);
+        giam_sat_selected.value = props.giam_sat.data.find(item => item.id === id);
         modal.showModal();
     });
 }
 
 const openModal = () => {
-    tuyen_duong_selected.value = null;
+    giam_sat_selected.value = null;
     modal.showModal();
 }
 
@@ -76,7 +72,7 @@ watch(search, (value) => {
 })
 
 const searchDebounce = debounce((value) => {
-    router.visit(route('tuyen-duong.index', {ten_duong: value}), {
+    router.visit(route('giam-sat.index', {ten_duong: value}), {
         preserveState: true,
         onSuccess: () => {
             onRefresh()
@@ -84,33 +80,29 @@ const searchDebounce = debounce((value) => {
     });
 }, _TIME_DEBOUNCE)
 
-const loadData = () => {
-
-}
-
 </script>
 
 <template>
  <MainLayout>
      <div class="py-3 px-4">
          <div class="mb-3 flex justify-between">
-             <button @click.prevent="openModal" class="btn btn-success">Thêm tuyến đường</button>
-             <input v-model="search" class="border-gray-300 rounded-lg w-1/5" placeholder="Tìm kiếm tuyến đường">
+             <button @click.prevent="openModal" class="btn btn-success">Thêm giám sát</button>
+             <input v-model="search" class="border-gray-300 rounded-lg w-1/5" placeholder="Tìm kiếm giám sát">
          </div>
          <table :key="key"
                 class="table table-striped text-2xl"
-                v-data="{ data: tuyen_duong.data, columns: columns }">
+                v-data="{ data: giam_sat.data, columns: columns }">
          </table>
          <Pagination
-             :all-data="tuyen_duong"
+             :all-data="giam_sat"
              @changePage="changePage"
          />
      </div>
      <Modal
          @close-modal="modal.hideModal"
          @refresh="onRefresh"
-         :huyen="huyen"
-         :tuyen_duong="tuyen_duong_selected"
+         :giam_sat="giam_sat_selected"
+         :tuyen_duong="tuyen_duong"
          :don_vi="don_vi"
      />
 </MainLayout>

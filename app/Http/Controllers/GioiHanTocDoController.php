@@ -2,18 +2,30 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\GioiHanTocDo;
 use App\Http\Requests\StoreGioiHanTocDoRequest;
 use App\Models\TaiLieu;
 use App\Enums\DanhMucTaiLieu;
+use App\Models\TuyenDuong;
 
 class GioiHanTocDoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $gioi_han_toc_do = GioiHanTocDo::with(['tuyen_duong', 'don_vi'])->paginate(15);
-        return Inertia::render('TocDo/Index', compact('gioi_han_toc_do'));
+        $gioi_han_toc_do = GioiHanTocDo::with([
+            'tuyen_duong',
+            'tuyen_duong.diem_dau_xa',
+            'tuyen_duong.diem_cuoi_xa',]);
+        if($request->filled('ten_duong')) {
+            $gioi_han_toc_do = $gioi_han_toc_do->whereHas('tuyen_duong', function($query) use ($request) {
+                $query->where('ten', 'like', '%'.$request->ten_duong.'%');
+            });
+        }
+        $gioi_han_toc_do = $gioi_han_toc_do->paginate(15);
+        $tuyen_duong = TuyenDuong::all();
+        return Inertia::render('TocDo/Index', compact('gioi_han_toc_do', 'tuyen_duong'));
     }
 
     public function store(StoreGioiHanTocDoRequest $request)
@@ -23,7 +35,7 @@ class GioiHanTocDoController extends Controller
         $toc_do = GioiHanTocDo::updateOrCreate(['id' => $validated['id']],$validated);
 
         if($request->hasFile('tai_lieu')) {
-            foreach ($validated('tai_lieu') as $file) {
+            foreach ($request->file('tai_lieu') as $file) {
                 $originalName = $file->getClientOriginalName();
                 $file = $file->store('tai_lieu/toc_do', 'public');
 

@@ -15,16 +15,16 @@ return new class extends Migration
             $table->id();
             $table->string('ten');
             $table->tinyInteger('loai')->default(1);
-            $table->unsignedBigInteger('don_vi_id')->nullable();
+            $table->unsignedBigInteger('don_vi_id');
             $table->date('ngay_gui');
             $table->date('ngay_nhan');
-            $table->unsignedBigInteger('nguoi_xu_ly')->nullable();
+            $table->unsignedBigInteger('nguoi_xu_ly_id');
             $table->tinyInteger('trang_thai')->default(0);
             $table->string('ghi_chu')->nullable();
             $table->timestamps();
 
-            $table->foreign('don_vi_id')->references('id')->on('don_vi')->onDelete('set null');
-            $table->foreign('nguoi_xu_ly')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('don_vi_id')->references('id')->on('don_vi')->onDelete('cascade');
+            $table->foreign('nguoi_xu_ly_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

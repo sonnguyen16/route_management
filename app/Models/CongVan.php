@@ -17,7 +17,7 @@ class CongVan extends Model
         'don_vi_id',
         'ngay_gui',
         'ngay_nhan',
-        'nguoi_xu_ly',
+        'nguoi_xu_ly_id',
         'trang_thai',
         'ghi_chu'
     ];

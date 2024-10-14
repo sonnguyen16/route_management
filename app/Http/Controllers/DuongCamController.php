@@ -23,7 +23,7 @@ class DuongCamController extends Controller
         $duong_cam = DuongCam::updateOrCreate(['id' => $validated['id']],$validated);
 
         if($request->hasFile('tai_lieu')) {
-            foreach ($validated('tai_lieu') as $file) {
+            foreach ($request->file('tai_lieu') as $file) {
                 $originalName = $file->getClientOriginalName();
                 $file = $file->store('tai_lieu/duong_cam', 'public');
 

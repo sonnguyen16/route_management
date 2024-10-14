@@ -3,6 +3,7 @@ import Input from "@/Components/Input.vue";
 import {useForm} from "@inertiajs/vue3";
 import Select from "@/Components/Select.vue";
 import {computed, watch} from "vue";
+import { loaiOptions, loaiTuanTraOptions, maPhanCapOptions } from "@/Constants/constants.js";
 
 const props = defineProps({
     huyen: Object,
@@ -17,7 +18,7 @@ const closeModal = () => {
     form.clearErrors();
 }
 
-const form = useForm({
+let form = useForm({
     id: '',
     ten: '',
     loai: '',
@@ -41,45 +42,11 @@ const form = useForm({
 
 watch(() => props.tuyen_duong, (value) => {
     if(value) {
-        form.id = value.id;
-        form.ten = value.ten;
-        form.loai = value.loai;
-        form.ma_phan_cap = value.ma_phan_cap;
-        form.diem_dau_huyen_id = value.diem_dau_huyen_id;
-        form.diem_cuoi_huyen_id = value.diem_cuoi_huyen_id;
-        form.diem_dau_lat = value.diem_dau_lat;
-        form.diem_dau_lng = value.diem_dau_lng;
-        form.diem_dau_xa_id = value.diem_dau_xa_id;
-        form.diem_cuoi_xa_id = value.diem_cuoi_xa_id;
-        form.diem_cuoi_lat = value.diem_cuoi_lat;
-        form.diem_cuoi_lng = value.diem_cuoi_lng;
-        form.chieu_dai = value.chieu_dai;
-        form.chieu_rong = value.chieu_rong;
-        form.dien_tich = value.dien_tich;
-        form.loai_tuan_tra = value.loai_tuan_tra;
-        form.don_vi_id = value.don_vi_id;
-        form.xi_nghiep = value.xi_nghiep;
-        form.huyen_id = value.huyen_id;
+        Object.assign(form, value);
+    }else{
+        form.reset();
     }
 })
-
-const loaiOptions = [
-    {id: 1, name: 'Loại 1'},
-    {id: 2, name: 'Loại 2'},
-    {id: 3, name: 'Loại 3'},
-]
-
-const maPhanCapOptions = [
-    {id: 1, name: 'Cấp 1'},
-    {id: 2, name: 'Cấp 2'},
-    {id: 3, name: 'Cấp 3'},
-]
-
-const loaiTuanTraOptions = [
-    {id: 1, name: 'Loại 1'},
-    {id: 2, name: 'Loại 2'},
-    {id: 3, name: 'Loại 3'},
-]
 
 const dau_xa = computed(() => {
     if(form.diem_dau_huyen_id) {
@@ -112,7 +79,10 @@ const submit = () => {
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header pt-2">
-                    <h5 class="modal-title text-primary">Thêm tuyến đường</h5>
+                    <h5 class="modal-title text-primary">
+                        <span v-if="form.id">Chỉnh sửa</span>
+                        <span v-else>Thêm mới</span>
+                    </h5>
                     <button type="button" class="btn-close" @click.prevent="closeModal" aria-label="Close"></button>
                 </div>
                 <form @submit.prevent="submit">

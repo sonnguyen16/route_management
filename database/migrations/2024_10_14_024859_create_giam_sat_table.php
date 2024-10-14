@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('giam_sat', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('tuyen_duong_id')->nullable();
-            $table->unsignedBigInteger('don_vi_id')->nullable();
+            $table->unsignedBigInteger('tuyen_duong_id');
+            $table->unsignedBigInteger('don_vi_id');
             $table->timestamps();
 
             $table->foreign('tuyen_duong_id')->references('id')->on('tuyen_duong')->onDelete('cascade');

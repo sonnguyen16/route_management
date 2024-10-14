@@ -22,6 +22,7 @@ class StoreSuaChuaRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'id' => 'nullable',
             'tuyen_duong_id' => 'required|exists:tuyen_duong,id',
             'don_vi_id' => 'required|exists:don_vi,id',
             'ngay_khoi_cong' => 'required|date',

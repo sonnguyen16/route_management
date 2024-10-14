@@ -24,7 +24,6 @@ class StoreGioiHanTocDoRequest extends FormRequest
         return [
             'id' => 'nullable',
             'tuyen_duong_id' => 'required|exists:tuyen_duong,id',
-            'don_vi_id' => 'required|exists:don_vi,id',
             'tu_km' => 'required|numeric',
             'den_km' => 'required|numeric',
             'toc_do' => 'required|numeric',
@@ -42,8 +41,6 @@ class StoreGioiHanTocDoRequest extends FormRequest
         return [
             'tuyen_duong_id.required' => 'Tuyến đường không được để trống',
             'tuyen_duong_id.exists' => 'Tuyến đường không tồn tại',
-            'don_vi_id.required' => 'Đơn vị không được để trống',
-            'don_vi_id.exists' => 'Đơn vị không tồn tại',
             'tu_km.required' => 'Từ km không được để trống',
             'tu_km.numeric' => 'Từ km phải là số',
             'den_km.required' => 'Đến km không được để trống',

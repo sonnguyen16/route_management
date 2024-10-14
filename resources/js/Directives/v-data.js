@@ -31,7 +31,12 @@ export const vData = {
                         td.innerHTML = `<a data-id="${item.id}" class="edit cursor-pointer"><i class="fas fa-edit mr-2"></i>Sửa</a>`;
                         tr.appendChild(td);
                     } else{
-                        td.textContent = value !== undefined ? value : '';
+                        if(column.enums){
+                            const enumValue = column.enums.find(enumItem => enumItem.id === value);
+                            td.textContent = enumValue ? enumValue.name : '';
+                        }else{
+                            td.textContent = value;
+                        }
                     }
                     tr.appendChild(td);
                 });
