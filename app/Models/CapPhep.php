@@ -27,4 +27,9 @@ class CapPhep extends Model
     {
         return $this->belongsTo(DonVi::class);
     }
+
+    public function tai_lieu()
+    {
+        return $this->hasMany(TaiLieu::class, 'tuyen_duong_id', 'tuyen_duong_id');
+    }
 }

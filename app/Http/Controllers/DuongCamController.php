@@ -2,18 +2,35 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DonVi;
 use App\Models\DuongCam;
 use App\Http\Requests\StoreDuongCamRequest;
+use App\Models\TuyenDuong;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\TaiLieu;
 use App\Enums\DanhMucTaiLieu;
 
 class DuongCamController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $don_vi = DuongCam::with(['don_vi_quyet_dinh','don_vi_thuc_hien', 'tuyen_duong'])->paginate(15);
-        return Inertia::render('DuongCam/Index', compact('don_vi'));
+        $duong_cam = DuongCam::with([
+            'tai_lieu',
+            'don_vi_quyet_dinh',
+            'don_vi_thuc_hien',
+            'tuyen_duong'
+        ]);
+        if($request->filled('ten_duong')){
+            $duong_cam = $duong_cam->whereHas('tuyen_duong', function($query) use ($request){
+                $query->where('ten', 'like', '%'.$request->ten_duong.'%');
+            });
+        }
+        $duong_cam = $duong_cam->paginate(15);
+        $don_vi = DonVi::all();
+        $tuyen_duong = TuyenDuong::all();
+
+        return Inertia::render('DuongCam/Index', compact('duong_cam', 'don_vi', 'tuyen_duong'));
     }
 
     public function store(StoreDuongCamRequest $request)
@@ -25,7 +42,7 @@ class DuongCamController extends Controller
         if($request->hasFile('tai_lieu')) {
             foreach ($request->file('tai_lieu') as $file) {
                 $originalName = $file->getClientOriginalName();
-                $file = $file->store('tai_lieu/duong_cam', 'public');
+                $file = $file->storeAs('files/1/duong_cam', $originalName, 'public');
 
                 TaiLieu::create([
                     'ten' => $originalName,

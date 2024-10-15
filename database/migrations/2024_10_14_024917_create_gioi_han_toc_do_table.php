@@ -14,14 +14,12 @@ return new class extends Migration
         Schema::create('gioi_han_toc_do', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('tuyen_duong_id');
-            $table->unsignedBigInteger('don_vi_id');
             $table->double('tu_km', 8, 2)->default(0);
             $table->double('den_km', 8, 2)->default(0);
             $table->double('toc_do', 8, 2)->default(0);
             $table->timestamps();
 
             $table->foreign('tuyen_duong_id')->references('id')->on('tuyen_duong')->onDelete('cascade');
-            $table->foreign('don_vi_id')->references('id')->on('don_vi')->onDelete('cascade');
         });
     }
 

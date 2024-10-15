@@ -36,6 +36,7 @@ const columns = [
     {field: 'ngay_nhan', label: 'Ngày nhận'},
     {field: 'nguoi_xu_ly.name', label: 'Người xử lý'},
     {field: 'trang_thai', label: 'Trạng thái', enums: trangThaiCongVan},
+    {field: 'tai_lieu', label: 'Tài liệu'},
     {field: 'action', label: 'Hành động'},
 ]
 

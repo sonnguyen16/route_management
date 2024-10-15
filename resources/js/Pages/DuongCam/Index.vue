@@ -3,24 +3,23 @@ import MainLayout from "@/Layouts/MainLayout.vue";
 import {vData} from "@/Directives/v-data.js";
 import Pagination from "@/Components/Pagination.vue";
 import {router} from "@inertiajs/vue3";
-import Modal from "@/Pages/TocDo/Modal.vue";
+import Modal from "@/Pages/DuongCam/Modal.vue";
 import {useModal} from "@/Hooks/useModal.js";
 import {nextTick, onMounted, ref, watch} from "vue";
-import {_TIME_DEBOUNCE, loaiOptions, maPhanCapOptions} from "@/Constants/constants.js";
+import {_TIME_DEBOUNCE} from "@/Constants/constants.js";
 import { debounce } from 'lodash';
 
 const props = defineProps({
-    gioi_han_toc_do: Object,
+    duong_cam: Object,
     tuyen_duong: Object,
     don_vi: Object,
-    nguoi_duyet: Object,
 })
 
-const gioi_han_toc_do_selected = ref(null);
+const duong_cam_selected = ref(null);
 
 const key = ref(0);
 const changePage = (page) => {
-    router.visit(route('gioi-han-toc-do.index', {page: page, ten_duong: search.value}), {
+    router.visit(route('duong-cam.index', {page: page, ten_duong: search.value}), {
         preserveState: true,
         onSuccess: () => {
             onRefresh()
@@ -31,13 +30,10 @@ const changePage = (page) => {
 const columns = [
     {field: 'id', label: 'ID'},
     {field: 'tuyen_duong.ten', label: 'Tên đường'},
-    {field: 'tuyen_duong.loai', label: 'Loại', enums: loaiOptions},
-    {field: 'tuyen_duong.ma_phan_cap', label: 'Loại', enums: maPhanCapOptions},
-    {field: 'tuyen_duong.diem_dau_xa.name', label: 'Điểm đầu'},
-    {field: 'tuyen_duong.diem_cuoi_xa.name', label: 'Điểm cuối'},
-    {field: 'tu_km', label: 'Từ km'},
-    {field: 'den_km', label: 'Đến km'},
-    {field: 'toc_do', label: 'Tốc độ'},
+    {field: 'tu_ngay', label: 'Từ ngày'},
+    {field: 'den_ngay', label: 'Đến ngày'},
+    {field: 'don_vi_quyet_dinh.ten', label: 'Đơn vị quyết định'},
+    {field: 'don_vi_thuc_hien.ten', label: 'Đơn vị thực hiện'},
     {field: 'tai_lieu', label: 'Tài liệu'},
     {field: 'action', label: 'Hành động'},
 ]
@@ -57,13 +53,13 @@ const onRefresh = () => {
 const eventForEditBtn = () => {
     $('.edit').click(function () {
         const id = $(this).data('id');
-        gioi_han_toc_do_selected.value = props.gioi_han_toc_do.data.find(item => item.id === id);
+        duong_cam_selected.value = props.duong_cam.data.find(item => item.id === id);
         modal.showModal();
     });
 }
 
 const openModal = () => {
-    gioi_han_toc_do_selected.value = null;
+    duong_cam_selected.value = null;
     modal.showModal();
 }
 
@@ -74,7 +70,7 @@ watch(search, (value) => {
 })
 
 const searchDebounce = debounce((value) => {
-    router.visit(route('gioi-han-toc-do.index', {ten_duong: value}), {
+    router.visit(route('duong-cam.index', {ten_duong: value}), {
         preserveState: true,
         onSuccess: () => {
             onRefresh()
@@ -88,15 +84,15 @@ const searchDebounce = debounce((value) => {
  <MainLayout>
      <div class="py-3 px-4">
          <div class="mb-3 flex justify-between">
-             <button @click.prevent="openModal" class="btn btn-success">Thêm giới hạn tốc độ</button>
-             <input v-model="search" class="border-gray-300 rounded-lg w-1/5" placeholder="Tìm kiếm giới hạn tốc độ">
+             <button @click.prevent="openModal" class="btn btn-success">Thêm đường cấm</button>
+             <input v-model="search" class="border-gray-300 rounded-lg w-1/5" placeholder="Tìm kiếm đường cấm">
          </div>
          <table :key="key"
                 class="table table-striped text-2xl"
-                v-data="{ data: gioi_han_toc_do.data, columns: columns }">
+                v-data="{ data: duong_cam.data, columns: columns }">
          </table>
          <Pagination
-             :all-data="gioi_han_toc_do"
+             :all-data="duong_cam"
              @changePage="changePage"
          />
      </div>
@@ -104,9 +100,8 @@ const searchDebounce = debounce((value) => {
          @close-modal="modal.hideModal"
          @refresh="onRefresh"
          :tuyen_duong="tuyen_duong"
-         :gioi_han_toc_do="gioi_han_toc_do_selected"
+         :duong_cam="duong_cam_selected"
          :don_vi="don_vi"
-         :nguoi_duyet="nguoi_duyet"
      />
 </MainLayout>
 </template>

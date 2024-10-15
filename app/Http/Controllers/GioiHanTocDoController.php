@@ -15,6 +15,7 @@ class GioiHanTocDoController extends Controller
     public function index(Request $request)
     {
         $gioi_han_toc_do = GioiHanTocDo::with([
+            'tai_lieu',
             'tuyen_duong',
             'tuyen_duong.diem_dau_xa',
             'tuyen_duong.diem_cuoi_xa',]);
@@ -37,7 +38,7 @@ class GioiHanTocDoController extends Controller
         if($request->hasFile('tai_lieu')) {
             foreach ($request->file('tai_lieu') as $file) {
                 $originalName = $file->getClientOriginalName();
-                $file = $file->store('tai_lieu/toc_do', 'public');
+                $file = $file->storeAs('/files/1/gioi_han_toc_do', $originalName, 'public');
 
                 TaiLieu::create([
                     'ten' => $originalName,

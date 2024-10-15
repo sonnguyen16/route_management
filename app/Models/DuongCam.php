@@ -34,4 +34,9 @@ class DuongCam extends Model
     {
         return $this->belongsTo(DonVi::class, 'don_vi_thuc_hien_id');
     }
+
+    public function tai_lieu()
+    {
+        return $this->hasMany(TaiLieu::class, 'tuyen_duong_id', 'tuyen_duong_id');
+    }
 }

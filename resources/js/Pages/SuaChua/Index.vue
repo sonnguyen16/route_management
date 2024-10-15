@@ -39,6 +39,7 @@ const columns = [
     {field: 'ngay_khoi_cong', label: 'Ngày khởi công'},
     {field: 'ngay_hoan_thanh', label: 'Ngày hoàn thành'},
     {field: 'don_vi.ten', label: 'Đơn vị thi công'},
+    {field: 'tai_lieu', label: 'Tài liệu'},
     {field: 'action', label: 'Hành động'},
 ]
 

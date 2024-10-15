@@ -10,7 +10,6 @@ class TaiLieuController extends Controller
 {
     public function index()
     {
-        $tuyen_duong = TuyenDuong::whereHas('tai_lieu')->with('tai_lieu')->get();
-        return Inertia::render('TaiLieu/Index', compact('tuyen_duong'));
+        return redirect()->route('unisharp.lfm.show');
     }
 }

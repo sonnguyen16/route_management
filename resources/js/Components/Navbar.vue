@@ -27,7 +27,7 @@ import DropdownLink from "@/Components/DropdownLink.vue";
                     <i class="fas fa-user"></i>
                 </a>
                 <div class="dropdown-menu dropdown-menu-md dropdown-menu-right border-0 shadow">
-                    <DropdownLink :href="route('auth.logout')" class="dropdown-item" as="button">
+                    <DropdownLink :href="route('logout')" class="dropdown-item" as="button">
                         Đăng xuất
                     </DropdownLink>
                 </div>

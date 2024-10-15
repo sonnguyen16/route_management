@@ -40,7 +40,7 @@ const links = [
     },
     {
         title: "Quản lý tài liệu",
-        href: "/tai-lieu",
+        href: "/laravel-filemanager",
     },
     {
         title: "Quản lý người dùng",

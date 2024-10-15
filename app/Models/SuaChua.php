@@ -37,4 +37,9 @@ class SuaChua extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function tai_lieu()
+    {
+        return $this->hasMany(TaiLieu::class, 'tuyen_duong_id', 'tuyen_duong_id');
+    }
 }

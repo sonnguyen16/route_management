@@ -13,9 +13,9 @@ use App\Http\Controllers\CapPhepController;
 use App\Http\Controllers\DuongCamController;
 use App\Http\Controllers\CongVanController;
 
-Route::get('/', [AuthController::class, 'index'])->name('auth.index');
-Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
-Route::get('/logout', [AuthController::class, 'destroy'])->name('auth.logout');
+Route::get('/', [AuthController::class, 'index'])->name('index');
+Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::get('/logout', [AuthController::class, 'destroy'])->name('logout');
 
 Route::prefix('tuyen-duong')->group(function () {
     Route::get('/', [TuyenDuongController::class, 'index'])->name('tuyen-duong.index');
@@ -66,6 +66,10 @@ Route::prefix('nguoi-dung')->group(function () {
     Route::get('/', [NguoiDungController::class, 'index'])->name('nguoi-dung.index');
     Route::post('/store', [NguoiDungController::class, 'store'])->name('nguoi-dung.store');
 })->middleware('auth');
+
+Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
+    \UniSharp\LaravelFilemanager\Lfm::routes();
+});
 
 
 Route::get('/map', function () {

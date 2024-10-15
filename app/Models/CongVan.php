@@ -32,4 +32,9 @@ class CongVan extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function tai_lieu()
+    {
+        return $this->hasMany(TaiLieu::class, 'cong_van_id', 'id');
+    }
 }

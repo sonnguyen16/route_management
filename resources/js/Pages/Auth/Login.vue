@@ -8,7 +8,7 @@ const form = useForm({
     password: ""
 })
 const submit = () => {
-    form.post(route('auth.login'), {
+    form.post(route('login'), {
         onFinish: () => {
             form.reset('password');
         },

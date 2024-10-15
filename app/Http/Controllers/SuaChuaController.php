@@ -8,6 +8,7 @@ use App\Http\Requests\StoreSuaChuaRequest;
 use App\Models\TuyenDuong;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use App\Models\TaiLieu;
 use App\Enums\DanhMucTaiLieu;
@@ -16,7 +17,7 @@ class SuaChuaController extends Controller
 {
     public function index(Request $request)
     {
-        $sua_chua = SuaChua::with(['tuyen_duong', 'don_vi', 'nguoi_duyet']);
+        $sua_chua = SuaChua::with(['tai_lieu','tuyen_duong', 'don_vi', 'nguoi_duyet']);
         if($request->filled('ten_duong')){
             $sua_chua = $sua_chua->whereHas('tuyen_duong', function($query) use ($request){
                 $query->where('ten', 'like', '%'.$request->ten_duong.'%');
@@ -38,7 +39,8 @@ class SuaChuaController extends Controller
         if($request->hasFile('tai_lieu')) {
             foreach ($request->file('tai_lieu') as $file) {
                 $originalName = $file->getClientOriginalName();
-                $file = $file->store('tai_lieu/sua_chua', 'public');
+
+                $file = $file->storeAs('files/1/sua_chua', $originalName, 'public');
 
                 TaiLieu::create([
                     'ten' => $originalName,

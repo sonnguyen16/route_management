@@ -15,7 +15,7 @@ class CongVanController extends Controller
 {
     public function index(Request $request)
     {
-        $cong_van = CongVan::with(['don_vi', 'nguoi_xu_ly']);
+        $cong_van = CongVan::with(['tai_lieu','don_vi', 'nguoi_xu_ly']);
         if($request->filled('ten')) {
             $cong_van = $cong_van->where('ten', 'like', '%'.$request->ten.'%');
         }
@@ -34,7 +34,7 @@ class CongVanController extends Controller
         if($request->hasFile('tai_lieu')) {
             foreach ($request->file('tai_lieu') as $file) {
                 $originalName = $file->getClientOriginalName();
-                $file = $file->store('tai_lieu/cong_van', 'public');
+                $file = $file->storeAs('files/1/cong_van', $originalName, 'public');
 
                 TaiLieu::create([
                     'ten' => $originalName,
