@@ -3,13 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Inertia\Inertia;
-use App\Models\TuyenDuong;
+use App\Models\TaiLieu;
+use Illuminate\Support\Facades\Storage;
 
 class TaiLieuController extends Controller
 {
-    public function index()
+    public function delete(Request $request)
     {
-        return redirect()->route('unisharp.lfm.show');
+        $tai_lieu = TaiLieu::find($request->id);
+        $path = $tai_lieu->file;
+        Storage::disk('public')->delete($path);
+        $tai_lieu->delete();
     }
 }

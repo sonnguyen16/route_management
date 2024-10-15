@@ -1,9 +1,10 @@
 <script setup>
 import Input from "@/Components/Input.vue";
-import {useForm} from "@inertiajs/vue3";
+import {router, useForm} from "@inertiajs/vue3";
 import Select from "@/Components/Select.vue";
-import {computed, watch} from "vue";
+import {computed, ref, watch} from "vue";
 import { loaiOptions, loaiTuanTraOptions, maPhanCapOptions } from "@/Constants/constants.js";
+import FilePreview from "@/Components/FilePreview.vue";
 
 const props = defineProps({
     huyen: Object,
@@ -38,14 +39,7 @@ let form = useForm({
     don_vi_id: '',
     xi_nghiep: '',
     huyen_id: '',
-})
-
-watch(() => props.tuyen_duong, (value) => {
-    if(value) {
-        Object.assign(form, value);
-    }else{
-        form.reset();
-    }
+    tai_lieu: [],
 })
 
 const dau_xa = computed(() => {
@@ -60,16 +54,48 @@ const cuoi_xa = computed(() => {
     }
 })
 
+watch(() => props.tuyen_duong, (value) => {
+    if(value) {
+        Object.assign(form, value);
+        uploadedFiles.value = value.tai_lieu;
+    }else{
+        form.reset();
+    }
+})
+
+const uploadedFiles = ref([]);
+const selectedFiles = ref([]);
+
 const submit = () => {
+    form.tai_lieu = selectedFiles.value;
     form.post(route('tuyen-duong.store'), {
         onSuccess: () => {
             closeModal()
             emits('refresh')
+            selectedFiles.value = []
         },
         onError: (err) => {
             console.log(err)
         }
     })
+}
+
+const addFiles = (files) => {
+    selectedFiles.value = files;
+}
+
+const removeFileUploaded = (id) => {
+    uploadedFiles.value = uploadedFiles.value.filter(file => file.id !== id)
+    router.delete(route('tai-lieu.delete', {id: id}), {
+        onSuccess: () => {
+            emits('refresh')
+            selectedFiles.value = []
+        }
+    })
+}
+
+const removeFileSelected = (index) => {
+    selectedFiles.value.splice(index, 1)
 }
 
 </script>
@@ -180,6 +206,17 @@ const submit = () => {
                                     :errors="form.errors.huyen_id"
                                     :options="huyen"
                                     option-default="Chọn huyện"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tai_lieu">Tài liệu</label>
+                            <FilePreview
+                                :existing-files="uploadedFiles"
+                                :selected-files="selectedFiles"
+                                @add-files="addFiles"
+                                @remove-file-selected="removeFileSelected"
+                                @remove-file-uploaded="removeFileUploaded"
+                            />
                         </div>
                     </div>
                     <div class="modal-footer">

@@ -34,7 +34,6 @@ const columns = [
     {field: 'tuyen_duong.diem_dau_xa.name', label: 'Điểm đầu'},
     {field: 'tuyen_duong.diem_cuoi_xa.name', label: 'Điểm cuối'},
     {field: 'don_vi.ten', label: 'Đơn vị cấp phép'},
-    {field: 'tai_lieu', label: 'Tài liệu'},
     {field: 'action', label: 'Hành động'},
 ]
 

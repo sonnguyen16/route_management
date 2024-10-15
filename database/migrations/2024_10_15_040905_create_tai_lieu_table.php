@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('danh_muc')->nullable()->default(1);
             $table->string('ten');
             $table->string('file');
+            $table->string('loai');
             $table->timestamps();
 
             $table->foreign('tuyen_duong_id')->references('id')->on('tuyen_duong')->onDelete('cascade');

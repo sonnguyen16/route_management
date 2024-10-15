@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\DanhMucTaiLieu;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -31,6 +32,7 @@ class GioiHanTocDo extends Model
 
     public function tai_lieu()
     {
-        return $this->hasMany(TaiLieu::class, 'tuyen_duong_id', 'tuyen_duong_id');
+        return $this->hasMany(TaiLieu::class, 'tuyen_duong_id', 'tuyen_duong_id')
+            ->where('danh_muc', DanhMucTaiLieu::toc_do->value);
     }
 }

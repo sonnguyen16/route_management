@@ -42,11 +42,13 @@ class DuongCamController extends Controller
         if($request->hasFile('tai_lieu')) {
             foreach ($request->file('tai_lieu') as $file) {
                 $originalName = $file->getClientOriginalName();
+                $type = $file->getClientOriginalExtension();
                 $file = $file->storeAs('files/1/duong_cam', $originalName, 'public');
 
                 TaiLieu::create([
                     'ten' => $originalName,
                     'file' => $file,
+                    'loai' => $type,
                     'tuyen_duong_id' => $duong_cam->tuyen_duong_id,
                     'danh_muc' => DanhMucTaiLieu::duong_cam->value,
                 ]);

@@ -38,11 +38,13 @@ class GioiHanTocDoController extends Controller
         if($request->hasFile('tai_lieu')) {
             foreach ($request->file('tai_lieu') as $file) {
                 $originalName = $file->getClientOriginalName();
-                $file = $file->storeAs('/files/1/gioi_han_toc_do', $originalName, 'public');
+                $type = $file->getClientOriginalExtension();
+                $file = $file->storeAs('files/1/gioi_han_toc_do', $originalName, 'public');
 
                 TaiLieu::create([
                     'ten' => $originalName,
                     'file' => $file,
+                    'loai' => $type,
                     'tuyen_duong_id' => $toc_do->tuyen_duong_id,
                     'danh_muc' => DanhMucTaiLieu::toc_do->value,
                 ]);

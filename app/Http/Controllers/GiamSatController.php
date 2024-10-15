@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\DanhMucTaiLieu;
+use App\Models\TaiLieu;
 use App\Models\TuyenDuong;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -15,6 +17,7 @@ class GiamSatController extends Controller
     public function index(Request $request)
     {
         $giam_sat = GiamSat::with([
+            'tai_lieu',
             'tuyen_duong',
             'tuyen_duong.diem_dau_xa',
             'tuyen_duong.diem_cuoi_xa',
@@ -35,6 +38,22 @@ class GiamSatController extends Controller
     {
         $validated = $request->validated();
         unset($validated['tai_lieu']);
-        GiamSat::updateOrCreate(['id' => $validated['id']],$validated);
+        $giam_sat = GiamSat::updateOrCreate(['id' => $validated['id']],$validated);
+
+        if($request->hasFile('tai_lieu')) {
+            foreach ($request->file('tai_lieu') as $file) {
+                $originalName = $file->getClientOriginalName();
+                $type = $file->getClientOriginalExtension();
+                $file = $file->storeAs('files/1/giam_sat', $originalName, 'public');
+
+                TaiLieu::create([
+                    'ten' => $originalName,
+                    'file' => $file,
+                    'loai' => $type,
+                    'tuyen_duong_id' => $giam_sat->tuyen_duong_id,
+                    'danh_muc' => DanhMucTaiLieu::giam_sat->value,
+                ]);
+            }
+        }
     }
 }

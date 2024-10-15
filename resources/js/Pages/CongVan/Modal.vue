@@ -1,9 +1,10 @@
 <script setup>
 import Input from "@/Components/Input.vue";
-import {useForm} from "@inertiajs/vue3";
+import {router, useForm} from "@inertiajs/vue3";
 import Select from "@/Components/Select.vue";
-import { watch} from "vue";
+import {ref, watch} from "vue";
 import {loaiCongVanOptions, trangThaiCongVan} from "@/Constants/constants.js";
+import FilePreview from "@/Components/FilePreview.vue";
 
 const props = defineProps({
     cong_van: Object,
@@ -28,22 +29,28 @@ let form = useForm({
     nguoi_xu_ly_id: '',
     trang_thai: '',
     ghi_chu: '',
-    tai_lieu: '',
+    tai_lieu: [],
 })
 
 watch(() => props.cong_van, (value) => {
     if(value) {
         Object.assign(form, value);
+        uploadedFiles.value = value.tai_lieu;
     }else{
         form.reset();
     }
 })
 
+const uploadedFiles = ref([]);
+const selectedFiles = ref([]);
+
 const submit = () => {
+    form.tai_lieu = selectedFiles.value;
     form.post(route('cong-van.store'), {
         onSuccess: () => {
             closeModal()
             emits('refresh')
+            selectedFiles.value = []
         },
         onError: (err) => {
             console.log(err)
@@ -51,8 +58,22 @@ const submit = () => {
     })
 }
 
-const onFileChange = (e) => {
-    form.tai_lieu = e.target.files;
+const addFiles = (files) => {
+    selectedFiles.value = files;
+}
+
+const removeFileUploaded = (id) => {
+    uploadedFiles.value = uploadedFiles.value.filter(file => file.id !== id)
+    router.delete(route('tai-lieu.delete', {id: id}), {
+        onSuccess: () => {
+            emits('refresh')
+            selectedFiles.value = []
+        }
+    })
+}
+
+const removeFileSelected = (index) => {
+    selectedFiles.value.splice(index, 1)
 }
 
 </script>
@@ -112,7 +133,13 @@ const onFileChange = (e) => {
 
                         <div class="form-group">
                             <label for="tai_lieu">Tài liệu</label>
-                            <input type="file" @change="onFileChange" multiple>
+                            <FilePreview
+                                :existing-files="uploadedFiles"
+                                :selected-files="selectedFiles"
+                                @add-files="addFiles"
+                                @remove-file-selected="removeFileSelected"
+                                @remove-file-uploaded="removeFileUploaded"
+                            />
                         </div>
                     </div>
                     <div class="modal-footer">

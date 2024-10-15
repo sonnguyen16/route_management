@@ -42,11 +42,13 @@ class CapPhepController extends Controller
         if($request->hasFile('tai_lieu')) {
             foreach ($request->file('tai_lieu') as $file) {
                 $originalName = $file->getClientOriginalName();
+                $type = $file->getClientOriginalExtension();
                 $file = $file->storeAs('files/1/cap_phep', $originalName, 'public');
 
                 TaiLieu::create([
                     'ten' => $originalName,
                     'file' => $file,
+                    'loai' => $type,
                     'tuyen_duong_id' => $cap_phep->tuyen_duong_id,
                     'danh_muc' => DanhMucTaiLieu::cap_phep->value,
                 ]);

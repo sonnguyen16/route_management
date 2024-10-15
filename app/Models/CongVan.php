@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\DanhMucTaiLieu;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -35,6 +36,7 @@ class CongVan extends Model
 
     public function tai_lieu()
     {
-        return $this->hasMany(TaiLieu::class, 'cong_van_id', 'id');
+        return $this->hasMany(TaiLieu::class, 'cong_van_id', 'id')
+            ->where('danh_muc', DanhMucTaiLieu::cong_van->value);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\DanhMucTaiLieu;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -33,7 +34,8 @@ class TuyenDuong extends Model
 
     public function tai_lieu()
     {
-        return $this->hasMany(TaiLieu::class);
+        return $this->hasMany(TaiLieu::class)
+            ->where('danh_muc', DanhMucTaiLieu::tuyen_duong->value);
     }
 
     public function huyen()

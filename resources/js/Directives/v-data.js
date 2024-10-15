@@ -37,10 +37,6 @@ export const vData = {
                         }else{
                             if(column.field.includes("ngay")){
                                 td.textContent = new Date(value).toLocaleDateString();
-                            }else if(column.field.includes("tai_lieu")){
-                                value.forEach(item => {
-                                    td.innerHTML += `<a href="${'/storage/' + item.file}" target="_blank" class="d-block mb-0"><i class="fa fa-folder me-2 text-yellow-300"></i>${item.ten}</a>`;
-                                });
                             }else{
                                 td.textContent = value;
                             }

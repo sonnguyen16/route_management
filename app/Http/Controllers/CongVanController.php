@@ -34,12 +34,14 @@ class CongVanController extends Controller
         if($request->hasFile('tai_lieu')) {
             foreach ($request->file('tai_lieu') as $file) {
                 $originalName = $file->getClientOriginalName();
+                $type = $file->getClientOriginalExtension();
                 $file = $file->storeAs('files/1/cong_van', $originalName, 'public');
 
                 TaiLieu::create([
                     'ten' => $originalName,
                     'file' => $file,
-                    'tuyen_duong_id' => $cong_van->tuyen_duong_id,
+                    'loai' => $type,
+                    'cong_van_id' => $cong_van->cong_van_id,
                     'danh_muc' => DanhMucTaiLieu::cong_van->value,
                 ]);
             }

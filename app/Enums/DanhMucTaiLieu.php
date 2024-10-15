@@ -8,4 +8,7 @@ enum DanhMucTaiLieu: int
     case cong_van = 3;
     case cap_phep = 4;
     case duong_cam = 5;
+    case tuyen_duong = 6;
+
+    case giam_sat = 7;
 }

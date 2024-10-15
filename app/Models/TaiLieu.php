@@ -13,7 +13,9 @@ class TaiLieu extends Model
     protected $fillable = [
         'ten',
         'tuyen_duong_id',
+        'cong_van_id',
         'danh_muc',
         'file',
+        'loai',
     ];
 }
