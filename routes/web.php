@@ -27,6 +27,8 @@ Route::prefix('tuyen-duong')->middleware('auth')->group(function () {
 
 Route::prefix('tai-lieu')->middleware('auth')->group(function () {
     Route::delete('/delete', [TaiLieuController::class, 'delete'])->name('tai-lieu.delete');
+    Route::post('/store', [TaiLieuController::class, 'store'])->name('tai-lieu.store');
+    Route::post('/update-detail', [TaiLieuController::class, 'updateDetail'])->name('tai-lieu.update');
 });
 
 Route::prefix('don-vi')->middleware('auth')->group(function () {

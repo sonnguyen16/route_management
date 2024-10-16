@@ -33,4 +33,16 @@ export const trangThaiCongVan = [
     {id: 1, name: 'Đã xử lý'},
 ]
 
+export const danhMucTaiLieuOptions = {
+    sua_chua: 1,
+    toc_do: 2,
+    cong_van: 3,
+    cap_phep: 4,
+    duong_cam: 5,
+    tuyen_duong: 6,
+    giam_sat: 7,
+}
+
 export const _TIME_DEBOUNCE = 300;
+
+export const MEDIA_ENDPOINT = '/storage/';

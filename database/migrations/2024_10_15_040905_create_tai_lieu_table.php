@@ -17,6 +17,8 @@ return new class extends Migration
             $table->unsignedBigInteger('cong_van_id')->nullable();
             $table->integer('danh_muc')->nullable()->default(1);
             $table->string('ten');
+            $table->string('mo_ta')->nullable();
+            $table->integer('dung_luong');
             $table->string('file');
             $table->string('loai');
             $table->timestamps();

@@ -17,5 +17,7 @@ class TaiLieu extends Model
         'danh_muc',
         'file',
         'loai',
+        'dung_luong',
+        'mo_ta',
     ];
 }

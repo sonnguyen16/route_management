@@ -29,22 +29,6 @@ class TuyenDuongController extends Controller
     public function store(StoreTuyenDuongRequest $request)
     {
         $validated = $request->validated();
-        $tuyen_duong = TuyenDuong::updateOrCreate(['id' => $validated['id']],$validated);
-
-        if($request->hasFile('tai_lieu')) {
-            foreach ($request->file('tai_lieu') as $file) {
-                $originalName = $file->getClientOriginalName();
-                $type = $file->getClientOriginalExtension();
-                $file = $file->storeAs('files/1/tuyen_duong', $originalName, 'public');
-
-                TaiLieu::create([
-                    'ten' => $originalName,
-                    'file' => $file,
-                    'loai' => $type,
-                    'tuyen_duong_id' => $tuyen_duong->id,
-                    'danh_muc' => DanhMucTaiLieu::tuyen_duong->value,
-                ]);
-            }
-        }
+        TuyenDuong::updateOrCreate(['id' => $validated['id']], $validated);
     }
 }

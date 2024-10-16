@@ -6,8 +6,14 @@ import {router} from "@inertiajs/vue3";
 import Modal from "@/Pages/Duong/Modal.vue";
 import {useModal} from "@/Hooks/useModal.js";
 import {nextTick, onMounted, ref, watch} from "vue";
-import {_TIME_DEBOUNCE, loaiOptions, loaiTuanTraOptions, maPhanCapOptions} from "@/Constants/constants.js";
 import {debounce} from "lodash";
+import {
+    _TIME_DEBOUNCE,
+    loaiOptions,
+    loaiTuanTraOptions,
+    maPhanCapOptions
+} from "@/Constants/constants.js";
+
 
 const props = defineProps({
     tuyen_duong: Object,
@@ -55,17 +61,22 @@ const onRefresh = () => {
     nextTick(() => {
         eventForEditBtn()
     })
+    if(tuyen_duong_selected.value){
+        tuyen_duong_selected.value = props.tuyen_duong.data.find(item => item.id === tuyen_duong_selected.value.id);
+    }
 }
 const eventForEditBtn = () => {
     $('.edit').click(function () {
         const id = $(this).data('id');
         tuyen_duong_selected.value = props.tuyen_duong.data.find(item => item.id === id);
+        isEdit.value = true;
         modal.showModal();
     });
 }
 
 const openModal = () => {
     tuyen_duong_selected.value = null;
+    isEdit.value = false;
     modal.showModal();
 }
 
@@ -84,9 +95,7 @@ const searchDebounce = debounce((value) => {
     });
 }, _TIME_DEBOUNCE)
 
-const loadData = () => {
-
-}
+const isEdit = ref(false);
 
 </script>
 
@@ -112,6 +121,7 @@ const loadData = () => {
          :huyen="huyen"
          :tuyen_duong="tuyen_duong_selected"
          :don_vi="don_vi"
+         :is-edit="isEdit"
      />
 </MainLayout>
 </template>

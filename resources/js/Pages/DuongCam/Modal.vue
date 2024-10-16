@@ -2,7 +2,7 @@
 import Input from "@/Components/Input.vue";
 import {router, useForm} from "@inertiajs/vue3";
 import Select from "@/Components/Select.vue";
-import { watch} from "vue";
+import {ref, watch} from "vue";
 import FilePreview from "@/Components/FilePreview.vue";
 
 const props = defineProps({
