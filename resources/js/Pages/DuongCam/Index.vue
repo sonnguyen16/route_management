@@ -16,7 +16,7 @@ const props = defineProps({
 })
 
 const duong_cam_selected = ref(null);
-
+const isEdit = ref(false);
 const key = ref(0);
 const changePage = (page) => {
     router.visit(route('duong-cam.index', {page: page, ten_duong: search.value}), {
@@ -34,7 +34,6 @@ const columns = [
     {field: 'den_ngay', label: 'Đến ngày'},
     {field: 'don_vi_quyet_dinh.ten', label: 'Đơn vị quyết định'},
     {field: 'don_vi_thuc_hien.ten', label: 'Đơn vị thực hiện'},
-    {field: 'tai_lieu', label: 'Tài liệu'},
     {field: 'action', label: 'Hành động'},
 ]
 
@@ -49,17 +48,22 @@ const onRefresh = () => {
     nextTick(() => {
         eventForEditBtn()
     })
+    if (duong_cam_selected.value) {
+        duong_cam_selected.value = props.duong_cam.data.find(item => item.id === duong_cam_selected.value.id);
+    }
 }
 const eventForEditBtn = () => {
     $('.edit').click(function () {
         const id = $(this).data('id');
         duong_cam_selected.value = props.duong_cam.data.find(item => item.id === id);
+        isEdit.value = true;
         modal.showModal();
     });
 }
 
 const openModal = () => {
     duong_cam_selected.value = null;
+    isEdit.value = false;
     modal.showModal();
 }
 
@@ -99,6 +103,7 @@ const searchDebounce = debounce((value) => {
      <Modal
          @close-modal="modal.hideModal"
          @refresh="onRefresh"
+         :is-edit="isEdit"
          :tuyen_duong="tuyen_duong"
          :duong_cam="duong_cam_selected"
          :don_vi="don_vi"

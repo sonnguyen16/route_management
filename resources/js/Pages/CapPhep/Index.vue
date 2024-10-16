@@ -13,10 +13,12 @@ const props = defineProps({
     cap_phep: Object,
     tuyen_duong: Object,
     don_vi: Object,
+
 })
 
 const cap_phep_selected = ref(null);
 const key = ref(0);
+const isEdit = ref(false);
 const changePage = (page) => {
     router.visit(route('cap-phep.index', {page: page, ten_duong: search.value}), {
         preserveState: true,
@@ -48,17 +50,22 @@ const onRefresh = () => {
     nextTick(() => {
         eventForEditBtn()
     })
+    if(cap_phep_selected.value) {
+        cap_phep_selected.value = props.cap_phep.data.find(item => item.id === cap_phep_selected.value.id);
+    }
 }
 const eventForEditBtn = () => {
     $('.edit').click(function () {
         const id = $(this).data('id');
         cap_phep_selected.value = props.cap_phep.data.find(item => item.id === id);
+        isEdit.value = true;
         modal.showModal();
     });
 }
 
 const openModal = () => {
     cap_phep_selected.value = null;
+    isEdit.value = false;
     modal.showModal();
 }
 
@@ -98,6 +105,7 @@ const searchDebounce = debounce((value) => {
      <Modal
          @close-modal="modal.hideModal"
          @refresh="onRefresh"
+         :is-edit="isEdit"
          :cap_phep="cap_phep_selected"
          :tuyen_duong="tuyen_duong"
          :don_vi="don_vi"

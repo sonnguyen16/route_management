@@ -53,7 +53,12 @@ const addDetail = () => {
 <template>
 <div class="hover:bg-gray-200 rounded p-1">
     <div class="flex gap-3">
-        <i class="fa text-[80px] text-gray-500" :class="[iconFileTypes[file.loai]]"></i>
+        <img v-if="[ 'jpg', 'png', 'jpeg' ].includes(file.loai)"
+             :src="MEDIA_ENDPOINT + file.file"
+             class="w-[60px] h-[80px] object-cover rounded-md"
+             alt="image"
+        >
+        <i v-else class="fa text-[80px] text-gray-500" :class="[iconFileTypes[file.loai]]"></i>
         <div class="flex-1">
             <div class="font-semibold p-[1px]">{{ file.ten }}</div>
             <div class="text-gray-500 p-[1px]">

@@ -17,7 +17,7 @@ const props = defineProps({
 })
 
 const gioi_han_toc_do_selected = ref(null);
-
+const isEdit = ref(false);
 const key = ref(0);
 const changePage = (page) => {
     router.visit(route('gioi-han-toc-do.index', {page: page, ten_duong: search.value}), {
@@ -38,7 +38,6 @@ const columns = [
     {field: 'tu_km', label: 'Từ km'},
     {field: 'den_km', label: 'Đến km'},
     {field: 'toc_do', label: 'Tốc độ'},
-    {field: 'tai_lieu', label: 'Tài liệu'},
     {field: 'action', label: 'Hành động'},
 ]
 
@@ -53,17 +52,22 @@ const onRefresh = () => {
     nextTick(() => {
         eventForEditBtn()
     })
+    if(gioi_han_toc_do_selected.value) {
+        gioi_han_toc_do_selected.value = props.gioi_han_toc_do.data.find(item => item.id === gioi_han_toc_do_selected.value.id);
+    }
 }
 const eventForEditBtn = () => {
     $('.edit').click(function () {
         const id = $(this).data('id');
         gioi_han_toc_do_selected.value = props.gioi_han_toc_do.data.find(item => item.id === id);
+        isEdit.value = true;
         modal.showModal();
     });
 }
 
 const openModal = () => {
     gioi_han_toc_do_selected.value = null;
+    isEdit.value = false;
     modal.showModal();
 }
 
@@ -103,6 +107,7 @@ const searchDebounce = debounce((value) => {
      <Modal
          @close-modal="modal.hideModal"
          @refresh="onRefresh"
+         :is-edit="isEdit"
          :tuyen_duong="tuyen_duong"
          :gioi_han_toc_do="gioi_han_toc_do_selected"
          :don_vi="don_vi"

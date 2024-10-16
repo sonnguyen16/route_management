@@ -2,47 +2,34 @@
 import {router, useForm} from "@inertiajs/vue3";
 import Select from "@/Components/Select.vue";
 import {ref, watch} from "vue";
-import FilePreview from "@/Components/FilePreview.vue";
+import {danhMucTaiLieuOptions} from "@/Constants/constants.js";
+import {formatDate} from "@/assets/js/script.js";
+import Upload from "@/Components/Upload.vue";
+import File from "@/Components/File.vue";
 
 const props = defineProps({
     giam_sat: Object,
     tuyen_duong: Object,
     don_vi: Object,
+    isEdit: {
+        type: Boolean,
+        default: false
+    },
 })
 
-const emits = defineEmits(['closeModal', 'refresh']);
-const closeModal = () => {
-    emits('closeModal');
-    form.reset();
-    form.clearErrors();
-}
+const emits = defineEmits(['closeModal', 'refresh', 'fileChange']);
 
 const form = useForm({
     id: '',
     don_vi_id: '',
     tuyen_duong_id: '',
-    tai_lieu: [],
 })
-
-watch(() => props.giam_sat, (value) => {
-    if(value) {
-        Object.assign(form, value);
-        uploadedFiles.value = value.tai_lieu;
-    }else{
-        form.reset();
-    }
-})
-
-const uploadedFiles = ref([]);
-const selectedFiles = ref([]);
 
 const submit = () => {
-    form.tai_lieu = selectedFiles.value;
     form.post(route('giam-sat.store'), {
         onSuccess: () => {
             closeModal()
             emits('refresh')
-            selectedFiles.value = []
         },
         onError: (err) => {
             console.log(err)
@@ -50,74 +37,120 @@ const submit = () => {
     })
 }
 
-const addFiles = (files) => {
-    selectedFiles.value = files;
+let formFile = useForm({
+    tuyen_duong_id: '',
+    danh_muc: null,
+    file: []
+})
+
+watch(() => props.giam_sat, (value) => {
+    if(value) {
+        Object.assign(form, value);
+        formFile.tuyen_duong_id = value.tuyen_duong_id;
+        formFile.danh_muc = danhMucTaiLieuOptions.giam_sat;
+        uploadedFiles.value = value.tai_lieu;
+    }else{
+        form.reset();
+        formFile.reset();
+    }
+})
+const closeModal = () => {
+    emits('closeModal');
+    form.reset();
+    formFile.reset();
+    form.clearErrors();
 }
 
+const uploadedFiles = ref([]);
 const removeFileUploaded = (id) => {
     uploadedFiles.value = uploadedFiles.value.filter(file => file.id !== id)
     router.delete(route('tai-lieu.delete', {id: id}), {
         onSuccess: () => {
             emits('refresh')
-            selectedFiles.value = []
         }
     })
 }
 
-const removeFileSelected = (index) => {
-    selectedFiles.value.splice(index, 1)
+const uploadFiles = (files) => {
+    formFile.file = files;
+    formFile.post(route('tai-lieu.store'), {
+        onSuccess: () => {
+            emits('refresh')
+        },
+        onError: (err) => {
+            console.log(err)
+        }
+    })
 }
 
 </script>
 
 <template>
-    <div id="modal" class="modal fade" tabindex="-1">
-        <div class="modal-dialog modal-lg">
+    <div class="modal fade" id="modal">
+        <div
+            class="modal-dialog modal-dialog-centered"
+            :class="[isEdit ? 'modal-xl' : 'modal-lg']"
+        >
             <div class="modal-content">
-                <div class="modal-header pt-2">
-                    <h5 class="modal-title text-primary">
-                        <span v-if="form.id">Chỉnh sửa</span>
-                        <span v-else>Thêm mới</span>
-                    </h5>
-                    <button type="button" class="btn-close" @click.prevent="closeModal" aria-label="Close"></button>
-                </div>
-                <form @submit.prevent="submit">
-                    <div class="modal-body mt-3">
-                        <div class="form-group">
-                            <label for="loai_tuyen_duong">Tuyến đường</label>
-                            <Select v-model="form.tuyen_duong_id"
-                                    :errors="form.errors.tuyen_duong_id"
-                                    :options="tuyen_duong"
-                                    option-default="Chọn tuyến đường"/>
-                        </div>
-                        <div class="form-group">
-                            <label for="ma_phan_cap">Đơn vị giám sát</label>
-                            <Select v-model="form.don_vi_id"
-                                    :errors="form.errors.don_vi_id"
-                                    :options="don_vi"
-                                    option-default="Chọn đơn vị"/>
+                <div class="modal-body p-0">
+                    <div class="row">
+                        <!-- Main Content -->
+                        <div :class="['p-4 pb-0', isEdit ? 'col-md-8' : 'col-md-12']">
+                            <div class="form-group">
+                                <label for="loai_tuyen_duong">Tuyến đường</label>
+                                <Select v-model="form.tuyen_duong_id"
+                                        :errors="form.errors.tuyen_duong_id"
+                                        :options="tuyen_duong"
+                                        option-default="Chọn tuyến đường"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="ma_phan_cap">Đơn vị giám sát</label>
+                                <Select v-model="form.don_vi_id"
+                                        :errors="form.errors.don_vi_id"
+                                        :options="don_vi"
+                                        option-default="Chọn đơn vị"/>
+                            </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="tai_lieu">Tài liệu</label>
-                            <FilePreview
-                                :existing-files="uploadedFiles"
-                                :selected-files="selectedFiles"
-                                @add-files="addFiles"
-                                @remove-file-selected="removeFileSelected"
-                                @remove-file-uploaded="removeFileUploaded"
+                        <!-- Sidebar Actions -->
+                        <div v-if="isEdit" class="col-md-4 bg-gray-100 p-3 flex flex-col">
+                            <div class="mb-3">
+                                <div class="flex items-center space-x-2">
+                                    <img src="@/assets/img/avatar.jpg"
+                                         alt="Avatar" class="rounded-full w-12 h-12">
+                                    <div>
+                                        <div class="font-semibold">Admin</div>
+                                        <div class="text-gray-500">
+                                            <i class="fas fa-clock mr-1"></i>
+                                            {{ formatDate(giam_sat.created_at.toString()) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <Upload
+                                @file-change="uploadFiles"
+                                @submit="submit"
+                                @close="closeModal"
                             />
+                            <div class="font-bold mt-4 ">Tệp đã tải lên</div>
+                            <div class="flex-1 overflow-y-auto max-h-[200px] mt-2">
+                                <File v-for="file in uploadedFiles"
+                                      :key="file.id"
+                                      :file="file"
+                                      @remove-file-upload="removeFileUploaded"
+                                      @refresh="emits('refresh')"
+                                />
+                            </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                            <button type="submit" class="btn btn-success">Lưu</button>
-                            <button type="reset"
-                                    @click.prevent="closeModal"
-                                    class="btn btn-secondary ml-2">
-                                Hủy
-                            </button>
-                    </div>
-                </form>
+                </div>
+                <div v-if="!isEdit" class="modal-footer">
+                    <button @click.prevent="submit" type="submit" class="btn btn-success">Lưu</button>
+                    <button @click.prevent="closeModal" type="reset"
+                            class="btn btn-secondary ml-2">
+                        Hủy
+                    </button>
+                </div>
             </div>
         </div>
     </div>

@@ -16,7 +16,7 @@ const props = defineProps({
 })
 
 const cong_van_selected = ref(null);
-
+const isEdit = ref(false);
 const key = ref(0);
 const changePage = (page) => {
     router.visit(route('cong-van.index', {page: page, ten: search.value}), {
@@ -36,7 +36,6 @@ const columns = [
     {field: 'ngay_nhan', label: 'Ngày nhận'},
     {field: 'nguoi_xu_ly.name', label: 'Người xử lý'},
     {field: 'trang_thai', label: 'Trạng thái', enums: trangThaiCongVan},
-    {field: 'tai_lieu', label: 'Tài liệu'},
     {field: 'action', label: 'Hành động'},
 ]
 
@@ -51,17 +50,22 @@ const onRefresh = () => {
     nextTick(() => {
         eventForEditBtn()
     })
+    if(cong_van_selected.value) {
+        cong_van_selected.value = props.cong_van.data.find(item => item.id === cong_van_selected.value.id);
+    }
 }
 const eventForEditBtn = () => {
     $('.edit').click(function () {
         const id = $(this).data('id');
         cong_van_selected.value = props.cong_van.data.find(item => item.id === id);
+        isEdit.value = true;
         modal.showModal();
     });
 }
 
 const openModal = () => {
     cong_van_selected.value = null;
+    isEdit.value = false;
     modal.showModal();
 }
 
@@ -101,6 +105,7 @@ const searchDebounce = debounce((value) => {
      <Modal
          @close-modal="modal.hideModal"
          @refresh="onRefresh"
+         :is-edit="isEdit"
          :cong_van="cong_van_selected"
          :don_vi="don_vi"
          :nguoi_xu_ly="nguoi_xu_ly"

@@ -17,7 +17,7 @@ const props = defineProps({
 })
 
 const sua_chua_selected = ref(null);
-
+const isEdit = ref(false);
 const key = ref(0);
 const changePage = (page) => {
     router.visit(route('sua-chua.index', {page: page, ten_duong: search.value}), {
@@ -39,7 +39,6 @@ const columns = [
     {field: 'ngay_khoi_cong', label: 'Ngày khởi công'},
     {field: 'ngay_hoan_thanh', label: 'Ngày hoàn thành'},
     {field: 'don_vi.ten', label: 'Đơn vị thi công'},
-    {field: 'tai_lieu', label: 'Tài liệu'},
     {field: 'action', label: 'Hành động'},
 ]
 
@@ -54,17 +53,22 @@ const onRefresh = () => {
     nextTick(() => {
         eventForEditBtn()
     })
+    if (sua_chua_selected.value) {
+        sua_chua_selected.value = props.sua_chua.data.find(item => item.id === sua_chua_selected.value.id);
+    }
 }
 const eventForEditBtn = () => {
     $('.edit').click(function () {
         const id = $(this).data('id');
         sua_chua_selected.value = props.sua_chua.data.find(item => item.id === id);
+        isEdit.value = true;
         modal.showModal();
     });
 }
 
 const openModal = () => {
     sua_chua_selected.value = null;
+    isEdit.value = false;
     modal.showModal();
 }
 
@@ -104,6 +108,7 @@ const searchDebounce = debounce((value) => {
      <Modal
          @close-modal="modal.hideModal"
          @refresh="onRefresh"
+         :is-edit="isEdit"
          :tuyen_duong="tuyen_duong"
          :sua_chua="sua_chua_selected"
          :don_vi="don_vi"

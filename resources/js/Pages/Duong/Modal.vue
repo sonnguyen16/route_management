@@ -25,12 +25,6 @@ const props = defineProps({
 })
 
 const emits = defineEmits(['closeModal', 'refresh', 'fileChange']);
-const closeModal = () => {
-    emits('closeModal');
-    form.reset();
-    formFile.reset();
-    form.clearErrors();
-}
 
 let form = useForm({
     id: '',
@@ -54,11 +48,6 @@ let form = useForm({
     huyen_id: '',
 })
 
-let formFile = useForm({
-    tuyen_duong_id: '',
-    danh_muc: null,
-    file: []
-})
 
 const dau_xa = computed(() => {
     if(form.diem_dau_huyen_id) {
@@ -72,6 +61,24 @@ const cuoi_xa = computed(() => {
     }
 })
 
+const submit = () => {
+    form.post(route('tuyen-duong.store'), {
+        onSuccess: () => {
+            closeModal()
+            emits('refresh')
+        },
+        onError: (err) => {
+            console.log(err)
+        }
+    })
+}
+
+let formFile = useForm({
+    tuyen_duong_id: '',
+    danh_muc: null,
+    file: []
+})
+
 watch(() => props.tuyen_duong, (value) => {
     if(value) {
         Object.assign(form, value);
@@ -83,17 +90,11 @@ watch(() => props.tuyen_duong, (value) => {
         formFile.reset();
     }
 })
-
-const submit = () => {
-    form.post(route('tuyen-duong.store'), {
-        onSuccess: () => {
-            closeModal()
-            emits('refresh')
-        },
-        onError: (err) => {
-            console.log(err)
-        }
-    })
+const closeModal = () => {
+    emits('closeModal');
+    form.reset();
+    formFile.reset();
+    form.clearErrors();
 }
 
 const uploadedFiles = ref([]);
@@ -261,8 +262,8 @@ const uploadFiles = (files) => {
                     </div>
                 </div>
                 <div v-if="!isEdit" class="modal-footer">
-                    <button type="submit" class="btn btn-success">Lưu</button>
-                    <button type="reset"
+                    <button @click.prevent="submit" type="submit" class="btn btn-success">Lưu</button>
+                    <button @click.prevent="closeModal" type="reset"
                             class="btn btn-secondary ml-2">
                         Hủy
                     </button>

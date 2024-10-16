@@ -11,29 +11,31 @@ const links = [
         href: "/tuyen-duong",
     },
     {
-        title: "Quản lý giám sát",
-        href: "/giam-sat",
-    },
-    {
         title: "Quản lý sửa chữa",
         href: "/sua-chua",
-    },
-    {
-        title: "Quản lý giới hạn tốc độ",
-        href: "/gioi-han-toc-do",
     },
     {
         title: "Quản lý công văn",
         href: "/cong-van",
     },
     {
-        title: "Quản lý cấp phép",
-        href: "/cap-phep",
-    },
-    {
         title: "Quản lý đường cấm",
         href: "/duong-cam",
     },
+    {
+        title: "Quản lý giám sát",
+        href: "/giam-sat",
+    },
+
+    {
+        title: "Quản lý giới hạn tốc độ",
+        href: "/gioi-han-toc-do",
+    },
+    {
+        title: "Quản lý cấp phép",
+        href: "/cap-phep",
+    },
+
     {
         title: "Quản lý đơn vị",
         href: "/don-vi",
