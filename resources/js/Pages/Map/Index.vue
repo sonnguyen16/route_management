@@ -17,14 +17,14 @@ let map: any = null;
 
 const coordStreet = [
     [106.65656967668332, 10.788345590010692],
-    [106.65633981621085, 10.787891601865596],
+  /*  [106.65633981621085, 10.787891601865596],
     [106.65627062925398, 10.78783981961],
     [106.65616849612803, 10.787800982912955],
     [106.65611248763867, 10.787775091779537],
     [106.65607624685282, 10.787619744926772],
     [106.65604330068174, 10.787506471130058],
     [106.65601364912965, 10.787389960893677],
-    [106.65601035451272, 10.78711163070352],
+    [106.65601035451272, 10.78711163070352], */
     [106.6560498899155, 10.786885082683582],
 ];
 
@@ -68,6 +68,7 @@ onMounted(() => {
     });
 
     map.on("style.load", function () {
+        
         map.addSource("route", {
             type: "geojson",
             data: geojsonLine,
@@ -86,7 +87,8 @@ onMounted(() => {
             layout: {
                 "line-join": "round",
                 "line-cap": "round",
-            },
+                'text-field': 'Crosses the world',
+            }, 
             paint: {
                 "line-color": [
                     "case",
@@ -94,20 +96,34 @@ onMounted(() => {
                     "#64bdbb",
                     "#888888",
                 ],
-                "line-width": 8,
+                "line-width": 10,
             },
         });
+    /*
         map.addLayer({
             id: "label-style",
             type: "symbol",
-            source: "label",
+            source: "route", // lable
             layout: {
-                "text-field": "Custom tên đường",
+                'symbol-placement': 'line-center',
+                "text-field": "Phan Đình Phùng",
+                'text-anchor': 'center',
             },
             paint: {
                 "text-color": "blue",
             },
         });
+*/
+        map.addLayer({
+            'id': 'route-label',
+            'type': 'symbol',
+            'source': 'route',
+            'layout': {
+                'symbol-placement': 'line-center',
+                'text-field': 'aa'
+            }
+        });
+
 
         let streetId: any = null;
         map.on("click", function () {
@@ -172,6 +188,34 @@ onMounted(() => {
             });
         });
     });
+     function createGeometry(doesCrossAntimeridian) {
+            const geometry = {
+                'type': 'LineString',
+                'coordinates': [
+                    [-72.42187, -16.59408],
+                    [140.27343, 35.67514]
+                ]
+            };
+
+            // To draw a line across the 180th meridian,
+            // if the longitude of the second point minus
+            // the longitude of original (or previous) point is >= 180,
+            // subtract 360 from the longitude of the second point.
+            // If it is less than 180, add 360 to the second point.
+
+            if (doesCrossAntimeridian) {
+                const startLng = geometry.coordinates[0][0];
+                const endLng = geometry.coordinates[1][0];
+
+                if (endLng - startLng >= 180) {
+                    geometry.coordinates[1][0] -= 360;
+                } else if (endLng - startLng < 180) {
+                    geometry.coordinates[1][0] += 360;
+                }
+            }
+
+            return geometry;
+        }
 });
 </script>
 
