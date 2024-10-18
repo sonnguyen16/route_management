@@ -17,6 +17,7 @@ const props = defineProps({
         type: Boolean,
         default: false
     },
+    keyModal: Number
 })
 
 const emits = defineEmits(['closeModal', 'refresh', 'fileChange']);
@@ -48,12 +49,12 @@ let formFile = useForm({
     file: []
 })
 
-watch(() => props.gioi_han_toc_do, (value) => {
-    if(value) {
-        Object.assign(form, value);
-        formFile.tuyen_duong_id = value.tuyen_duong_id;
+watch(() => props.keyModal, () => {
+    if(props.gioi_han_toc_do) {
+        Object.assign(form, props.gioi_han_toc_do);
+        formFile.tuyen_duong_id = props.gioi_han_toc_do.tuyen_duong_id;
         formFile.danh_muc = danhMucTaiLieuOptions.toc_do;
-        uploadedFiles.value = value.tai_lieu;
+        uploadedFiles.value = props.gioi_han_toc_do.tai_lieu;
     }else{
         form.reset();
         formFile.reset();
@@ -100,13 +101,14 @@ const uploadFiles = (files) => {
                 <div class="modal-body p-0">
                     <div class="row">
                         <!-- Main Content -->
-                        <div :class="['p-4 pb-0', isEdit ? 'col-md-8' : 'col-md-12']">
+                        <div :class="['px-4 pt-4', isEdit ? 'col-md-8' : 'col-md-12']">
                             <div class="form-group">
                                 <label for="tuyen_duong_id">Tuyến đường</label>
                                 <Select
                                     v-model="form.tuyen_duong_id"
                                     :options="tuyen_duong"
                                     :errors="form.errors.tuyen_duong_id"
+                                    id="tuyen_duong_id"
                                     option-default="Chọn tuyến đường"
                                 />
                             </div>

@@ -16,6 +16,7 @@ const props = defineProps({
         type: Boolean,
         default: false
     },
+    keyModal: Number
 })
 
 const emits = defineEmits(['closeModal', 'refresh', 'fileChange']);
@@ -46,12 +47,12 @@ let formFile = useForm({
     file: []
 })
 
-watch(() => props.cap_phep, (value) => {
-    if(value) {
-        Object.assign(form, value);
-        formFile.tuyen_duong_id = value.tuyen_duong_id;
+watch(() => props.keyModal, () => {
+    if(props.cap_phep) {
+        Object.assign(form, props.cap_phep);
+        formFile.tuyen_duong_id = props.cap_phep.tuyen_duong_id;
         formFile.danh_muc = danhMucTaiLieuOptions.cap_phep;
-        uploadedFiles.value = value.tai_lieu;
+        uploadedFiles.value = props.cap_phep.tai_lieu;
     }else{
         form.reset();
         formFile.reset();
@@ -98,12 +99,13 @@ const uploadFiles = (files) => {
                 <div class="modal-body p-0">
                     <div class="row">
                         <!-- Main Content -->
-                        <div :class="['p-4 pb-0', isEdit ? 'col-md-8' : 'col-md-12']">
+                        <div :class="['px-4 pt-4', isEdit ? 'col-md-8' : 'col-md-12']">
                             <div class="form-group">
                                 <label for="loai_tuyen_duong">Tuyến đường</label>
                                 <Select v-model="form.tuyen_duong_id"
                                         :errors="form.errors.tuyen_duong_id"
                                         :options="tuyen_duong"
+                                        id="tuyen_duong_id"
                                         option-default="Chọn tuyến đường"/>
                             </div>
                             <div class="form-group">
@@ -111,6 +113,7 @@ const uploadFiles = (files) => {
                                 <Select v-model="form.don_vi_id"
                                         :errors="form.errors.don_vi_id"
                                         :options="don_vi"
+                                        id="don_vi_id"
                                         option-default="Chọn đơn vị"/>
                             </div>
                             <div class="form-group">

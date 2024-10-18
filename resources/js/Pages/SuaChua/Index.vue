@@ -8,6 +8,7 @@ import {useModal} from "@/Hooks/useModal.js";
 import {nextTick, onMounted, ref, watch} from "vue";
 import {_TIME_DEBOUNCE, loaiSuaChuaOptions} from "@/Constants/constants.js";
 import { debounce } from 'lodash';
+import Input from "@/Components/Input.vue";
 
 const props = defineProps({
     sua_chua: Object,
@@ -19,8 +20,17 @@ const props = defineProps({
 const sua_chua_selected = ref(null);
 const isEdit = ref(false);
 const key = ref(0);
+const keyModal = ref(0);
+const ngay_khoi_cong = ref('');
+const ngay_hoan_thanh = ref('');
+
 const changePage = (page) => {
-    router.visit(route('sua-chua.index', {page: page, ten_duong: search.value}), {
+    router.visit(route('sua-chua.index', {
+            page: page,
+            ten_duong: search.value,
+            ngay_hoan_thanh: ngay_hoan_thanh.value,
+            ngay_khoi_cong: ngay_khoi_cong.value
+        }), {
         preserveState: true,
         onSuccess: () => {
             onRefresh()
@@ -62,6 +72,7 @@ const eventForEditBtn = () => {
         const id = $(this).data('id');
         sua_chua_selected.value = props.sua_chua.data.find(item => item.id === id);
         isEdit.value = true;
+        keyModal.value++
         modal.showModal();
     });
 }
@@ -76,6 +87,33 @@ const search = ref('');
 
 watch(search, (value) => {
     searchDebounce(value)
+})
+
+watch(ngay_khoi_cong, (value) => {
+    ngay_hoan_thanh.value = '';
+    router.visit(route('sua-chua.index', {
+        ngay_khoi_cong: value,
+        ngay_hoan_thanh: ngay_hoan_thanh.value,
+        ten_duong: search.value
+    }), {
+        preserveState: true,
+        onSuccess: () => {
+            onRefresh()
+        }
+    });
+})
+
+watch(ngay_hoan_thanh, (value) => {
+    router.visit(route('sua-chua.index', {
+        ngay_khoi_cong: ngay_khoi_cong.value,
+        ngay_hoan_thanh: value,
+        ten_duong: search.value
+    }), {
+        preserveState: true,
+        onSuccess: () => {
+            onRefresh()
+        }
+    });
 })
 
 const searchDebounce = debounce((value) => {
@@ -93,7 +131,17 @@ const searchDebounce = debounce((value) => {
  <MainLayout>
      <div class="py-3 px-4">
          <div class="mb-3 flex justify-between">
-             <button @click.prevent="openModal" class="btn btn-success">Thêm sửa chữa</button>
+             <div class="flex gap-5 items-center">
+                 <button @click.prevent="openModal" class="btn btn-success w-[200px]">Thêm sửa chữa</button>
+                 <div class="flex items-center w-[300px] gap-2">
+                     <label class="mb-0" for="ngay_khoi_cong">Ngày khởi công</label>
+                     <input v-model="ngay_khoi_cong" type="date" class="form-control flex-1" placeholder="Ngày khởi công"/>
+                 </div>
+                 <div class="flex items-center w-[300px] gap-2">
+                     <label class="mb-0" for="ngay_hoan_thanh">Ngày hoàn thành</label>
+                     <input v-model="ngay_hoan_thanh" type="date" class="form-control flex-1" placeholder="Ngày hoàn thành"/>
+                 </div>
+             </div>
              <input v-model="search" class="border-gray-300 rounded-lg w-1/5" placeholder="Tìm kiếm sửa chữa">
          </div>
          <table :key="key"
@@ -109,6 +157,7 @@ const searchDebounce = debounce((value) => {
          @close-modal="modal.hideModal"
          @refresh="onRefresh"
          :is-edit="isEdit"
+         :key-modal="keyModal"
          :tuyen_duong="tuyen_duong"
          :sua_chua="sua_chua_selected"
          :don_vi="don_vi"

@@ -17,6 +17,7 @@ const props = defineProps({
         type: Boolean,
         default: false
     },
+    keyModal: Number
 })
 
 const emits = defineEmits(['closeModal', 'refresh', 'fileChange']);
@@ -54,12 +55,12 @@ let formFile = useForm({
     file: []
 })
 
-watch(() => props.sua_chua, (value) => {
-    if(value) {
-        Object.assign(form, value);
-        formFile.tuyen_duong_id = value.tuyen_duong_id;
+watch(() => props.keyModal, () => {
+    if(props.sua_chua) {
+        Object.assign(form, props.sua_chua);
+        formFile.tuyen_duong_id = props.sua_chua.tuyen_duong_id;
         formFile.danh_muc = danhMucTaiLieuOptions.sua_chua;
-        uploadedFiles.value = value.tai_lieu;
+        uploadedFiles.value = props.sua_chua.tai_lieu;
     }else{
         form.reset();
         formFile.reset();
@@ -106,13 +107,14 @@ const uploadFiles = (files) => {
                 <div class="modal-body p-0">
                     <div class="row">
                         <!-- Main Content -->
-                        <div :class="['p-4 pb-0', isEdit ? 'col-md-8' : 'col-md-12']">
+                        <div :class="['px-4 pt-4', isEdit ? 'col-md-8' : 'col-md-12']">
                             <div class="form-group">
                                 <label for="tuyen_duong_id">Tuyến đường</label>
                                 <Select
                                     v-model="form.tuyen_duong_id"
                                     :options="tuyen_duong"
                                     :errors="form.errors.tuyen_duong_id"
+                                    id="tuyen_duong_id"
                                     option-default="Chọn tuyến đường"
                                 />
                             </div>
@@ -123,6 +125,7 @@ const uploadFiles = (files) => {
                                     v-model="form.loai_sua_chua"
                                     :options="loaiSuaChuaOptions"
                                     :errors="form.errors.loai_sua_chua"
+                                    id="loai_sua_chua"
                                     option-default="Chọn loại sửa chữa"
                                 />
                             </div>
@@ -146,21 +149,33 @@ const uploadFiles = (files) => {
                             </div>
 
                             <div class="form-group">
-                                <label for="ngay_duyet">Ngày duyệt</label>
-                                <Input
-                                    v-model="form.ngay_duyet"
-                                    type="date"
-                                    :errors="form.errors.ngay_duyet"
-                                />
-                            </div>
-
-                            <div class="form-group">
                                 <label for="nguoi_duyet_id">Người duyệt</label>
                                 <Select
                                     v-model="form.nguoi_duyet_id"
                                     :options="nguoi_duyet"
                                     :errors="form.errors.nguoi_duyet_id"
+                                    id="nguoi_duyet_id"
                                     option-default="Chọn người duyệt"
+                                />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="don_vi_id">Đơn vị thi công</label>
+                                <Select
+                                    v-model="form.don_vi_id"
+                                    :options="don_vi"
+                                    :errors="form.errors.don_vi_id"
+                                    id="don_vi_id"
+                                    option-default="Chọn đơn vị thi công"
+                                />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="ngay_duyet">Ngày duyệt</label>
+                                <Input
+                                    v-model="form.ngay_duyet"
+                                    type="date"
+                                    :errors="form.errors.ngay_duyet"
                                 />
                             </div>
 
@@ -182,15 +197,7 @@ const uploadFiles = (files) => {
                                 />
                             </div>
 
-                            <div class="form-group">
-                                <label for="don_vi_id">Đơn vị thi công</label>
-                                <Select
-                                    v-model="form.don_vi_id"
-                                    :options="don_vi"
-                                    :errors="form.errors.don_vi_id"
-                                    option-default="Chọn đơn vị thi công"
-                                />
-                            </div>
+
                         </div>
 
                         <!-- Sidebar Actions -->

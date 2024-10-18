@@ -18,8 +18,16 @@ const props = defineProps({
 const duong_cam_selected = ref(null);
 const isEdit = ref(false);
 const key = ref(0);
+const keyModal = ref(0);
+const tu_ngay = ref('');
+const den_ngay = ref('');
 const changePage = (page) => {
-    router.visit(route('duong-cam.index', {page: page, ten_duong: search.value}), {
+    router.visit(route('duong-cam.index', {
+        page: page,
+        ten_duong: search.value,
+        tu_ngay: tu_ngay.value,
+        den_ngay: den_ngay.value
+    }), {
         preserveState: true,
         onSuccess: () => {
             onRefresh()
@@ -57,6 +65,7 @@ const eventForEditBtn = () => {
         const id = $(this).data('id');
         duong_cam_selected.value = props.duong_cam.data.find(item => item.id === id);
         isEdit.value = true;
+        keyModal.value++
         modal.showModal();
     });
 }
@@ -71,6 +80,33 @@ const search = ref('');
 
 watch(search, (value) => {
     searchDebounce(value)
+})
+
+watch(tu_ngay, (value) => {
+    den_ngay.value = '';
+    router.visit(route('duong-cam.index', {
+        tu_ngay: value,
+        den_ngay: den_ngay.value,
+        ten_duong: search.value
+    }), {
+        preserveState: true,
+        onSuccess: () => {
+            onRefresh()
+        }
+    });
+})
+
+watch(den_ngay, (value) => {
+    router.visit(route('duong-cam.index', {
+        den_ngay: value,
+        tu_ngay: tu_ngay.value,
+        ten_duong: search.value
+    }), {
+        preserveState: true,
+        onSuccess: () => {
+            onRefresh()
+        }
+    });
 })
 
 const searchDebounce = debounce((value) => {
@@ -88,7 +124,17 @@ const searchDebounce = debounce((value) => {
  <MainLayout>
      <div class="py-3 px-4">
          <div class="mb-3 flex justify-between">
-             <button @click.prevent="openModal" class="btn btn-success">Thêm đường cấm</button>
+             <div class="flex gap-5 items-center">
+                 <button @click.prevent="openModal" class="btn btn-success w-[200px]">Thêm đường cấm</button>
+                 <div class="flex items-center w-[300px] gap-2">
+                     <label class="mb-0" for="ngay_khoi_cong">Từ ngày</label>
+                     <input v-model="tu_ngay" type="date" class="form-control flex-1" placeholder="Ngày khởi công"/>
+                 </div>
+                 <div class="flex items-center w-[300px] gap-2">
+                     <label class="mb-0" for="ngay_hoan_thanh">Đến ngày</label>
+                     <input v-model="den_ngay" type="date" class="form-control flex-1" placeholder="Ngày hoàn thành"/>
+                 </div>
+             </div>
              <input v-model="search" class="border-gray-300 rounded-lg w-1/5" placeholder="Tìm kiếm đường cấm">
          </div>
          <table :key="key"
@@ -104,6 +150,7 @@ const searchDebounce = debounce((value) => {
          @close-modal="modal.hideModal"
          @refresh="onRefresh"
          :is-edit="isEdit"
+         :key-modal="keyModal"
          :tuyen_duong="tuyen_duong"
          :duong_cam="duong_cam_selected"
          :don_vi="don_vi"

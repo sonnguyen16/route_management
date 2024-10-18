@@ -22,7 +22,7 @@ const props = defineProps({
 })
 
 const tuyen_duong_selected = ref(null);
-
+const keyModal = ref(0);
 const key = ref(0);
 const changePage = (page) => {
     router.visit(route('tuyen-duong.index', {page: page, ten_duong: search.value}), {
@@ -70,6 +70,7 @@ const eventForEditBtn = () => {
         const id = $(this).data('id');
         tuyen_duong_selected.value = props.tuyen_duong.data.find(item => item.id === id);
         isEdit.value = true;
+        keyModal.value++;
         modal.showModal();
     });
 }
@@ -119,6 +120,7 @@ const isEdit = ref(false);
          @close-modal="modal.hideModal"
          @refresh="onRefresh"
          :huyen="huyen"
+         :key-modal="keyModal"
          :tuyen_duong="tuyen_duong_selected"
          :don_vi="don_vi"
          :is-edit="isEdit"

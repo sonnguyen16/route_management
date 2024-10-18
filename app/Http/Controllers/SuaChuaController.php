@@ -23,6 +23,15 @@ class SuaChuaController extends Controller
                 $query->where('ten', 'like', '%'.$request->ten_duong.'%');
             });
         }
+
+        if($request->filled('ngay_khoi_cong')){
+            $sua_chua = $sua_chua->where('ngay_khoi_cong', '>=', $request->ngay_khoi_cong);
+        }
+
+        if($request->filled('ngay_hoan_thanh')){
+            $sua_chua = $sua_chua->where('ngay_hoan_thanh', '<=', $request->ngay_hoan_thanh);
+        }
+
         $sua_chua = $sua_chua->paginate(15);
         $tuyen_duong = TuyenDuong::all();
         $don_vi = DonVi::all();

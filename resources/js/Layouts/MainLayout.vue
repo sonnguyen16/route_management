@@ -3,6 +3,7 @@
     import '@/assets/admin/plugins/fontawesome-free/css/all.css'
     import '@/assets/admin/dist/css/adminlte.min.css'
     import '@/assets/plugins/select2/css/select2.min.css'
+    import 'choices.js/public/assets/styles/choices.css';
     import '@/assets/css/style.css'
     // js
     import '@/assets/admin/plugins/jquery/jquery.min.js'

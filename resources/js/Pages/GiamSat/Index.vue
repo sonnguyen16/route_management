@@ -18,6 +18,7 @@ const props = defineProps({
 const giam_sat_selected = ref(null);
 const isEdit = ref(false);
 const key = ref(0);
+const keyModal = ref(0);
 const changePage = (page) => {
     router.visit(route('giam-sat.index', {page: page, ten_duong: search.value}), {
         preserveState: true,
@@ -61,6 +62,7 @@ const eventForEditBtn = () => {
         const id = $(this).data('id');
         giam_sat_selected.value = props.giam_sat.data.find(item => item.id === id);
         isEdit.value = true;
+        keyModal.value++
         modal.showModal();
     });
 }
@@ -108,6 +110,7 @@ const searchDebounce = debounce((value) => {
          @close-modal="modal.hideModal"
          @refresh="onRefresh"
          :is-edit="isEdit"
+         :key-modal="keyModal"
          :giam_sat="giam_sat_selected"
          :tuyen_duong="tuyen_duong"
          :don_vi="don_vi"

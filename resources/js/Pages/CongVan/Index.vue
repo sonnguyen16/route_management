@@ -18,8 +18,16 @@ const props = defineProps({
 const cong_van_selected = ref(null);
 const isEdit = ref(false);
 const key = ref(0);
+const keyModal = ref(0);
+const ngay_gui = ref('');
+const ngay_nhan = ref('');
 const changePage = (page) => {
-    router.visit(route('cong-van.index', {page: page, ten: search.value}), {
+    router.visit(route('cong-van.index', {
+        page: page,
+        ten: search.value,
+        ngay_gui: ngay_gui.value,
+        ngay_nhan: ngay_nhan.value
+    }), {
         preserveState: true,
         onSuccess: () => {
             onRefresh()
@@ -59,6 +67,7 @@ const eventForEditBtn = () => {
         const id = $(this).data('id');
         cong_van_selected.value = props.cong_van.data.find(item => item.id === id);
         isEdit.value = true;
+        keyModal.value++;
         modal.showModal();
     });
 }
@@ -73,6 +82,33 @@ const search = ref('');
 
 watch(search, (value) => {
     searchDebounce(value)
+})
+
+watch(ngay_gui, (value) => {
+    ngay_nhan.value = '';
+    router.visit(route('cong-van.index', {
+        ngay_gui: value,
+        ngay_nhan: ngay_nhan.value,
+        ten: search.value
+    }), {
+        preserveState: true,
+        onSuccess: () => {
+            onRefresh()
+        }
+    });
+})
+
+watch(ngay_nhan, (value) => {
+    router.visit(route('cong-van.index', {
+        ngay_nhan: value,
+        ngay_gui: ngay_gui.value,
+        ten: search.value
+    }), {
+        preserveState: true,
+        onSuccess: () => {
+            onRefresh()
+        }
+    });
 })
 
 const searchDebounce = debounce((value) => {
@@ -90,7 +126,17 @@ const searchDebounce = debounce((value) => {
  <MainLayout>
      <div class="py-3 px-4">
          <div class="mb-3 flex justify-between">
-             <button @click.prevent="openModal" class="btn btn-success">Thêm công văn</button>
+             <div class="flex gap-5 items-center">
+                 <button @click.prevent="openModal" class="btn btn-success w-[200px]">Thêm công văn</button>
+                 <div class="flex items-center w-[300px] gap-2">
+                     <label class="mb-0" for="ngay_khoi_cong">Từ ngày</label>
+                     <input v-model="ngay_gui" type="date" class="form-control flex-1" placeholder="Ngày khởi công"/>
+                 </div>
+                 <div class="flex items-center w-[300px] gap-2">
+                     <label class="mb-0" for="ngay_hoan_thanh">Đến ngày</label>
+                     <input v-model="ngay_nhan" type="date" class="form-control flex-1" placeholder="Ngày hoàn thành"/>
+                 </div>
+             </div>
              <input v-model="search" class="border-gray-300 rounded-lg w-1/5" placeholder="Tìm kiếm công văn">
          </div>
          <table :key="key"
@@ -105,6 +151,7 @@ const searchDebounce = debounce((value) => {
      <Modal
          @close-modal="modal.hideModal"
          @refresh="onRefresh"
+         :key-modal="keyModal"
          :is-edit="isEdit"
          :cong_van="cong_van_selected"
          :don_vi="don_vi"

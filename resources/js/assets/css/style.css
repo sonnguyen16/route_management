@@ -33,6 +33,22 @@
     font-size: 15px;
 }
 
+.modal-footer button{
+    width: 100px;
+}
+
+input[type="datetime-local"] {
+    width: 50%;
+}
+
+input[type="date"] {
+    width: 50%;
+}
+
+.choices {
+    margin-bottom: 0;
+}
+
 .form-group {
     display: grid;
     grid-template-columns: 2fr 10fr;

@@ -18,6 +18,7 @@ const props = defineProps({
 
 const cap_phep_selected = ref(null);
 const key = ref(0);
+const keyModal = ref(0);
 const isEdit = ref(false);
 const changePage = (page) => {
     router.visit(route('cap-phep.index', {page: page, ten_duong: search.value}), {
@@ -59,6 +60,7 @@ const eventForEditBtn = () => {
         const id = $(this).data('id');
         cap_phep_selected.value = props.cap_phep.data.find(item => item.id === id);
         isEdit.value = true;
+        keyModal.value++;
         modal.showModal();
     });
 }
@@ -106,6 +108,7 @@ const searchDebounce = debounce((value) => {
          @close-modal="modal.hideModal"
          @refresh="onRefresh"
          :is-edit="isEdit"
+         :key-modal="keyModal"
          :cap_phep="cap_phep_selected"
          :tuyen_duong="tuyen_duong"
          :don_vi="don_vi"

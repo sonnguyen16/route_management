@@ -26,6 +26,15 @@ class DuongCamController extends Controller
                 $query->where('ten', 'like', '%'.$request->ten_duong.'%');
             });
         }
+
+        if($request->filled('tu_ngay')){
+            $duong_cam = $duong_cam->where('tu_ngay', '>=', $request->tu_ngay);
+        }
+
+        if($request->filled('den_ngay')){
+            $duong_cam = $duong_cam->where('den_ngay', '<=', $request->den_ngay);
+        }
+
         $duong_cam = $duong_cam->paginate(15);
         $don_vi = DonVi::all();
         $tuyen_duong = TuyenDuong::all();

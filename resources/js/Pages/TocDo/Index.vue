@@ -19,6 +19,7 @@ const props = defineProps({
 const gioi_han_toc_do_selected = ref(null);
 const isEdit = ref(false);
 const key = ref(0);
+const keyModal = ref(0);
 const changePage = (page) => {
     router.visit(route('gioi-han-toc-do.index', {page: page, ten_duong: search.value}), {
         preserveState: true,
@@ -61,6 +62,7 @@ const eventForEditBtn = () => {
         const id = $(this).data('id');
         gioi_han_toc_do_selected.value = props.gioi_han_toc_do.data.find(item => item.id === id);
         isEdit.value = true;
+        keyModal.value++
         modal.showModal();
     });
 }
@@ -108,6 +110,7 @@ const searchDebounce = debounce((value) => {
          @close-modal="modal.hideModal"
          @refresh="onRefresh"
          :is-edit="isEdit"
+         :key-modal="keyModal"
          :tuyen_duong="tuyen_duong"
          :gioi_han_toc_do="gioi_han_toc_do_selected"
          :don_vi="don_vi"

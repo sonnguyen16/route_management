@@ -19,6 +19,15 @@ class CongVanController extends Controller
         if($request->filled('ten')) {
             $cong_van = $cong_van->where('ten', 'like', '%'.$request->ten.'%');
         }
+
+        if($request->filled('ngay_gui')) {
+            $cong_van = $cong_van->where('ngay_gui', '>=', $request->ngay_gui);
+        }
+
+        if($request->filled('ngay_nhan')) {
+            $cong_van = $cong_van->where('ngay_nhan', '<=', $request->ngay_nhan);
+        }
+
         $cong_van = $cong_van->paginate(15);
         $nguoi_xu_ly = User::all();
         $don_vi = DonVi::all();

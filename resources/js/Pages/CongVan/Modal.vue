@@ -16,6 +16,7 @@ const props = defineProps({
         type: Boolean,
         default: false
     },
+    keyModal: Number
 })
 
 const emits = defineEmits(['closeModal', 'refresh', 'fileChange']);
@@ -50,12 +51,12 @@ let formFile = useForm({
     file: []
 })
 
-watch(() => props.cong_van, (value) => {
-    if(value) {
-        Object.assign(form, value);
-        formFile.cong_van_id = value.id;
+watch(() => props.keyModal, () => {
+    if(props.cong_van) {
+        Object.assign(form, props.cong_van);
+        formFile.cong_van_id = props.cong_van.id;
         formFile.danh_muc = danhMucTaiLieuOptions.cong_van;
-        uploadedFiles.value = value.tai_lieu;
+        uploadedFiles.value = props.cong_van.tai_lieu;
     }else{
         form.reset();
         formFile.reset();
@@ -102,45 +103,69 @@ const uploadFiles = (files) => {
                 <div class="modal-body p-0">
                     <div class="row">
                         <!-- Main Content -->
-                        <div :class="['p-4 pb-0', isEdit ? 'col-md-8' : 'col-md-12']">
+                        <div :class="['px-4 pt-4', isEdit ? 'col-md-8' : 'col-md-12']">
                             <div class="form-group">
                                 <label for="ten">Tên công văn</label>
-                                <Input :errors="form.errors.ten" v-model="form.ten" id="ten" type="text" />
+                                <Input :errors="form.errors.ten"
+                                       v-model="form.ten" id="ten"
+                                       type="text" />
                             </div>
 
                             <div class="form-group">
                                 <label for="loai">Loại công văn</label>
-                                <Select :errors="form.errors.loai" v-model="form.loai" option-default="Chọn loại" :options="loaiCongVanOptions"  />
+                                <Select :errors="form.errors.loai"
+                                        v-model="form.loai"
+                                        option-default="Chọn loại"
+                                        id="loai"
+                                        :options="loaiCongVanOptions"  />
                             </div>
 
                             <div class="form-group">
                                 <label for="don_vi_id">Đơn vị gửi</label>
-                                <Select :errors="form.errors.don_vi_id" v-model="form.don_vi_id" option-default="Chọn đơn vị" id="don_vi_id" :options="props.don_vi"  />
-                            </div>
-
-                            <div class="form-group">
-                                <label for="ngay_gui">Ngày gửi</label>
-                                <Input :errors="form.errors.ngay_gui" v-model="form.ngay_gui" id="ngay_gui" type="date"  />
-                            </div>
-
-                            <div class="form-group">
-                                <label for="ngay_nhan">Ngày nhận</label>
-                                <Input :errors="form.errors.ngay_nhan" v-model="form.ngay_nhan" id="ngay_nhan" type="date"  />
+                                <Select :errors="form.errors.don_vi_id"
+                                        v-model="form.don_vi_id"
+                                        option-default="Chọn đơn vị"
+                                        id="don_vi_id"
+                                        :options="props.don_vi"  />
                             </div>
 
                             <div class="form-group">
                                 <label for="nguoi_xu_ly">Người xử lý</label>
-                                <Select :errors="form.errors.nguoi_xu_ly_id" v-model="form.nguoi_xu_ly_id" option-default="Chọn người xử lý" :options="props.nguoi_xu_ly"  />
+                                <Select :errors="form.errors.nguoi_xu_ly_id"
+                                        v-model="form.nguoi_xu_ly_id"
+                                        option-default="Chọn người xử lý"
+                                        id="nguoi_xu_ly_id"
+                                        :options="props.nguoi_xu_ly"  />
                             </div>
 
                             <div class="form-group">
                                 <label for="trang_thai">Trạng thái</label>
-                                <Select :errors="form.errors.trang_thai" v-model="form.trang_thai" option-default="Chọn trạng thái" :options="trangThaiCongVan"  />
+                                <Select :errors="form.errors.trang_thai"
+                                        v-model="form.trang_thai"
+                                        option-default="Chọn trạng thái"
+                                        id="trang_thai"
+                                        :options="trangThaiCongVan"  />
                             </div>
 
                             <div class="form-group">
                                 <label for="ghi_chu">Ghi chú</label>
-                                <Input :errors="form.errors.ghi_chu" v-model="form.ghi_chu" id="ghi_chu" type="text" />
+                                <Input :errors="form.errors.ghi_chu"
+                                       v-model="form.ghi_chu" id="ghi_chu"
+                                       type="text" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="ngay_gui">Ngày gửi</label>
+                                <Input :errors="form.errors.ngay_gui"
+                                       v-model="form.ngay_gui" id="ngay_gui"
+                                       type="date"  />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="ngay_nhan">Ngày nhận</label>
+                                <Input :errors="form.errors.ngay_nhan"
+                                       v-model="form.ngay_nhan" id="ngay_nhan"
+                                       type="date"  />
                             </div>
                         </div>
 

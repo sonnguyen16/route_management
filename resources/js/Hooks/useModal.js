@@ -16,7 +16,9 @@ export function useModal(modalId) {
     }
 
     onMounted(() => {
-        modalInstance.value = new bootstrap.Modal(document.getElementById(modalId));
+        modalInstance.value = new bootstrap.Modal(document.getElementById(modalId), {
+            backdrop: 'static'
+        });
     });
 
     onUnmounted(() => {

@@ -16,6 +16,7 @@ const props = defineProps({
         type: Boolean,
         default: false
     },
+    keyModal: Number
 })
 
 const emits = defineEmits(['closeModal', 'refresh', 'fileChange']);
@@ -48,12 +49,12 @@ let formFile = useForm({
     file: []
 })
 
-watch(() => props.duong_cam, (value) => {
-    if(value) {
-        Object.assign(form, value);
-        formFile.tuyen_duong_id = value.tuyen_duong_id;
+watch(() => props.keyModal, () => {
+    if(props.duong_cam) {
+        Object.assign(form, props.duong_cam);
+        formFile.tuyen_duong_id = props.duong_cam.tuyen_duong_id;
         formFile.danh_muc = danhMucTaiLieuOptions.duong_cam;
-        uploadedFiles.value = value.tai_lieu;
+        uploadedFiles.value = props.duong_cam.tai_lieu;
     }else{
         form.reset();
         formFile.reset();
@@ -100,14 +101,45 @@ const uploadFiles = (files) => {
                 <div class="modal-body p-0">
                     <div class="row">
                         <!-- Main Content -->
-                        <div :class="['p-4 pb-0', isEdit ? 'col-md-8' : 'col-md-12']">
+                        <div :class="['px-4 pt-4', isEdit ? 'col-md-8' : 'col-md-12']">
                             <div class="form-group">
                                 <label for="tuyen_duong_id">Tuyến đường</label>
                                 <Select
                                     v-model="form.tuyen_duong_id"
                                     :options="tuyen_duong"
                                     :errors="form.errors.tuyen_duong_id"
+                                    id="tuyen_duong_id"
                                     option-default="Chọn tuyến đường"
+                                />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="don_vi_quyet_dinh_id">Đơn vị quyết định</label>
+                                <Select
+                                    v-model="form.don_vi_quyet_dinh_id"
+                                    :options="don_vi"
+                                    :errors="form.errors.don_vi_quyet_dinh_id"
+                                    id="don_vi_quyet_dinh_id"
+                                    option-default="Chọn đơn vị quyết định"
+                                />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="don_vi_thuc_hien_id">Đơn vị thực hiện</label>
+                                <Select
+                                    v-model="form.don_vi_thuc_hien_id"
+                                    :options="don_vi"
+                                    :errors="form.errors.don_vi_thuc_hien_id"
+                                    id="don_vi_thuc_hien_id"
+                                    option-default="Chọn đơn vị thực hiện"
+                                />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="ly_do">Lý do</label>
+                                <Input
+                                    v-model="form.ly_do"
+                                    :errors="form.errors.ly_do"
                                 />
                             </div>
 
@@ -126,34 +158,6 @@ const uploadFiles = (files) => {
                                     v-model="form.den_ngay"
                                     type="datetime-local"
                                     :errors="form.errors.den_ngay"
-                                />
-                            </div>
-
-                            <div class="form-group">
-                                <label for="don_vi_quyet_dinh_id">Đơn vị quyết định</label>
-                                <Select
-                                    v-model="form.don_vi_quyet_dinh_id"
-                                    :options="don_vi"
-                                    :errors="form.errors.don_vi_quyet_dinh_id"
-                                    option-default="Chọn đơn vị quyết định"
-                                />
-                            </div>
-
-                            <div class="form-group">
-                                <label for="don_vi_thuc_hien_id">Đơn vị thực hiện</label>
-                                <Select
-                                    v-model="form.don_vi_thuc_hien_id"
-                                    :options="don_vi"
-                                    :errors="form.errors.don_vi_thuc_hien_id"
-                                    option-default="Chọn đơn vị thực hiện"
-                                />
-                            </div>
-
-                            <div class="form-group">
-                                <label for="ly_do">Lý do</label>
-                                <Input
-                                    v-model="form.ly_do"
-                                    :errors="form.errors.ly_do"
                                 />
                             </div>
                         </div>
