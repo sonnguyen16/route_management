@@ -80,7 +80,7 @@ watch(props.tuyen_duong, () => {
 
 const closeSheet = () => {
     isSheetOpen.value = false;
-    map.setPaintProperty(selectedRoute.value, "line-color", "#0000ff");
+    map.setPaintProperty(selectedRoute.value.id, "line-color", "#0000ff");
 };
 
 const addAllRoutes = () => {
