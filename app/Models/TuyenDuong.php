@@ -30,6 +30,7 @@ class TuyenDuong extends Model
         'don_vi_id',
         'xi_nghiep',
         'huyen_id',
+        'key',
     ];
 
     public function tai_lieu()
@@ -66,5 +67,10 @@ class TuyenDuong extends Model
     public function don_vi()
     {
         return $this->belongsTo(DonVi::class, 'don_vi_id');
+    }
+
+    public function toa_do()
+    {
+        return $this->hasMany(ToaDo::class, 'duong', 'key');
     }
 }

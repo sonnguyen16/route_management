@@ -30,6 +30,7 @@ return new class extends Migration
             $table->tinyInteger('loai_tuan_tra');
             $table->unsignedBigInteger('don_vi_id');
             $table->string('xi_nghiep');
+            $table->string('key');
             $table->integer('huyen_id');
             $table->timestamps();
 

@@ -55,6 +55,7 @@ onMounted(() => {
 
 const onRefresh = () => {
     key.value++
+    keyModal.value++
     nextTick(() => {
         eventForEditBtn()
     })

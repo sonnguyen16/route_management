@@ -6,6 +6,7 @@ use App\Enums\DanhMucTaiLieu;
 use App\Models\TaiLieu;
 use App\Models\TuyenDuong;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use App\Models\Huyen;
 use App\Http\Requests\StoreTuyenDuongRequest;
@@ -29,6 +30,7 @@ class TuyenDuongController extends Controller
     public function store(StoreTuyenDuongRequest $request)
     {
         $validated = $request->validated();
+        $validated['key'] = Str::slug($validated['ten']);
         TuyenDuong::updateOrCreate(['id' => $validated['id']], $validated);
     }
 }

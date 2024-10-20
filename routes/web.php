@@ -12,6 +12,7 @@ use App\Http\Controllers\GioiHanTocDoController;
 use App\Http\Controllers\CapPhepController;
 use App\Http\Controllers\DuongCamController;
 use App\Http\Controllers\CongVanController;
+use App\Http\Controllers\BanDoController;
 
 Route::get('/', [AuthController::class, 'index'])->name('index');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
@@ -71,12 +72,13 @@ Route::prefix('nguoi-dung')->middleware('auth') ->group(function () {
     Route::post('/store', [NguoiDungController::class, 'store'])->name('nguoi-dung.store');
 });
 
+Route::prefix('map')->middleware('auth')->group(function () {
+    Route::get('/', [BanDoController::class, 'index'])->name('map.index');
+});
+
 Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
     \UniSharp\LaravelFilemanager\Lfm::routes();
 });
 
-Route::get('/map', function () {
-    return Inertia::render('Map/Index');
-})->name('map')->middleware('auth');
 
 

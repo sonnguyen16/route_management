@@ -250,7 +250,7 @@ const uploadFiles = (files) => {
                                         <div class="font-semibold">Admin</div>
                                         <div class="text-gray-500">
                                             <i class="fas fa-clock mr-1"></i>
-                                            {{ formatDate(form.created_at.toString()) }}
+                                            {{ formatDate(tuyen_duong.created_at?.toString()) }}
                                         </div>
                                     </div>
                                 </div>
