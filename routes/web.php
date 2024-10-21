@@ -77,9 +77,6 @@ Route::prefix('map')->middleware('auth')->group(function () {
     Route::post('/update-mota', [BanDoController::class, 'update_mota'])->name('map.update-mota');
 });
 
-Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
-    \UniSharp\LaravelFilemanager\Lfm::routes();
-});
 
 
 

@@ -41,10 +41,6 @@ const links = [
         href: "/don-vi",
     },
     {
-        title: "Quản lý tài liệu",
-        href: "/laravel-filemanager",
-    },
-    {
         title: "Quản lý người dùng",
         href: "/nguoi-dung",
     },
