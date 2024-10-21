@@ -74,6 +74,7 @@ Route::prefix('nguoi-dung')->middleware('auth') ->group(function () {
 
 Route::prefix('map')->middleware('auth')->group(function () {
     Route::get('/', [BanDoController::class, 'index'])->name('map.index');
+    Route::post('/update-mota', [BanDoController::class, 'update_mota'])->name('map.update-mota');
 });
 
 Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {

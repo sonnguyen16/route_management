@@ -1,8 +1,6 @@
 <?php
 
 namespace Database\Seeders;
-
-use App\Models\TuyenDuong;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -24,6 +22,7 @@ class DatabaseSeeder extends Seeder
             DistrictSeeder::class,
             WardSeeder::class,
             DonViSeeder::class,
+            ToaDoKhacSeeder::class,
         ]);
 
 //        TuyenDuong::factory(100)->create();

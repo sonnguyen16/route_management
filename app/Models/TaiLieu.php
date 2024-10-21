@@ -14,6 +14,7 @@ class TaiLieu extends Model
         'ten',
         'tuyen_duong_id',
         'cong_van_id',
+        'toa_do_id',
         'danh_muc',
         'file',
         'loai',

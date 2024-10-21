@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('tai_lieu', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('tuyen_duong_id')->nullable();
+            $table->unsignedBigInteger('toa_do_id')->nullable();
             $table->unsignedBigInteger('cong_van_id')->nullable();
             $table->integer('danh_muc')->nullable()->default(1);
             $table->string('ten');
@@ -25,6 +26,7 @@ return new class extends Migration
 
             $table->foreign('tuyen_duong_id')->references('id')->on('tuyen_duong')->onDelete('cascade');
             $table->foreign('cong_van_id')->references('id')->on('cong_van')->onDelete('cascade');
+            $table->foreign('toa_do_id')->references('id')->on('toa_do_khac')->onDelete('cascade');
         });
     }
 

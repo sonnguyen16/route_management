@@ -138,10 +138,12 @@ const searchDebounce = debounce((value) => {
              </div>
              <input v-model="search" class="border-gray-300 rounded-lg w-1/5" placeholder="Tìm kiếm đường cấm">
          </div>
-         <table :key="key"
-                class="table table-striped text-2xl"
-                v-data="{ data: duong_cam.data, columns: columns }">
-         </table>
+         <div class="table-responsive">
+             <table :key="key"
+                    class="table table-striped text-2xl"
+                    v-data="{ data: duong_cam.data, columns: columns }">
+             </table>
+         </div>
          <Pagination
              :all-data="duong_cam"
              @changePage="changePage"

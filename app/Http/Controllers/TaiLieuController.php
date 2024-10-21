@@ -37,6 +37,7 @@ class TaiLieuController extends Controller
                     'loai' => $type,
                     'tuyen_duong_id' => $validated['tuyen_duong_id'] ?? null,
                     'cong_van_id' => $validated['cong_van_id'] ?? null,
+                    'toa_do_id' => $validated['toa_do_id'] ?? null,
                     'danh_muc' => $validated['danh_muc'],
                     'dung_luong' => $dung_luong,
                 ]);

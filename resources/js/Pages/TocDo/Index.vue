@@ -98,10 +98,12 @@ const searchDebounce = debounce((value) => {
              <button @click.prevent="openModal" class="btn btn-success">Thêm giới hạn tốc độ</button>
              <input v-model="search" class="border-gray-300 rounded-lg w-1/5" placeholder="Tìm kiếm giới hạn tốc độ">
          </div>
-         <table :key="key"
-                class="table table-striped text-2xl"
-                v-data="{ data: gioi_han_toc_do.data, columns: columns }">
-         </table>
+        <div class="table-responsive">
+            <table :key="key"
+                   class="table table-striped text-2xl"
+                   v-data="{ data: gioi_han_toc_do.data, columns: columns }">
+            </table>
+        </div>
          <Pagination
              :all-data="gioi_han_toc_do"
              @changePage="changePage"

@@ -96,10 +96,12 @@ const searchDebounce = debounce((value) => {
              <button @click.prevent="openModal" class="btn btn-success">Thêm cấp phép</button>
              <input v-model="search" class="border-gray-300 rounded-lg w-1/5" placeholder="Tìm kiếm cấp phép">
          </div>
-         <table :key="key"
-                class="table table-striped text-2xl"
-                v-data="{ data: cap_phep.data, columns: columns }">
-         </table>
+         <div class="table-responsive">
+             <table :key="key"
+                    class="table table-striped text-2xl"
+                    v-data="{ data: cap_phep.data, columns: columns }">
+             </table>
+         </div>
          <Pagination
              :all-data="cap_phep"
              @changePage="changePage"

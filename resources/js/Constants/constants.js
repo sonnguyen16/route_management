@@ -41,6 +41,18 @@ export const danhMucTaiLieuOptions = {
     duong_cam: 5,
     tuyen_duong: 6,
     giam_sat: 7,
+    toa_do: 8,
+}
+
+export const iconFileTypes = {
+    pdf: 'fa-file-pdf',
+    docx: 'fa-file-word',
+    xlsx: 'fa-file-excel',
+    xls: 'fa-file-excel',
+    doc: 'fa-file-word',
+    jpg: 'fa-file-image',
+    png: 'fa-file-image',
+    jpeg: 'fa-file-image',
 }
 
 export const _TIME_DEBOUNCE = 300;

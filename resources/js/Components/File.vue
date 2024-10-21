@@ -1,22 +1,15 @@
 <script setup>
 import {ref} from "vue";
 import {formatDate} from "../assets/js/script.js";
-import {MEDIA_ENDPOINT} from "@/Constants/constants.js";
+import {MEDIA_ENDPOINT, iconFileTypes} from "@/Constants/constants.js";
 import {useForm} from "@inertiajs/vue3";
 const props = defineProps({
-    file: Object
+    file: Object,
+    enableDelete: {
+        type: Boolean,
+        default: true
+    }
 })
-
-const iconFileTypes = {
-    pdf: 'fa-file-pdf',
-    docx: 'fa-file-word',
-    xlsx: 'fa-file-excel',
-    xls: 'fa-file-excel',
-    doc: 'fa-file-word',
-    jpg: 'fa-file-image',
-    png: 'fa-file-image',
-    jpeg: 'fa-file-image',
-}
 
 const emits = defineEmits(['removeFileUpload', 'refresh']);
 const edit = ref(false);
@@ -84,7 +77,7 @@ const addDetail = () => {
                    class="hover:text-indigo-500 border-0 p-[1px] rounded-md text-gray-500 actions">
                     Tải xuống
                 </a>
-                <button @click="emits('removeFileUpload', file.id)"
+                <button v-if="enableDelete" @click="emits('removeFileUpload', file.id)"
                         class="hover:text-indigo-500 border-0 p-[1px] rounded-md text-gray-500 actions">
                     Xóa
                 </button>

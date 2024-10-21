@@ -63,7 +63,8 @@ const onRefresh = () => {
         eventForEditBtn()
     })
     if(tuyen_duong_selected.value){
-        tuyen_duong_selected.value = props.tuyen_duong.data.find(item => item.id === tuyen_duong_selected.value.id);
+        tuyen_duong_selected.value = props.tuyen_duong.data.
+        find(item => item.id === tuyen_duong_selected.value.id);
     }
 }
 const eventForEditBtn = () => {
@@ -108,10 +109,12 @@ const isEdit = ref(false);
              <button @click.prevent="openModal" class="btn btn-success">Thêm tuyến đường</button>
              <input v-model="search" class="border-gray-300 rounded-lg w-1/5" placeholder="Tìm kiếm tuyến đường">
          </div>
-         <table :key="key"
-                class="table table-striped text-2xl"
-                v-data="{ data: tuyen_duong.data, columns: columns }">
-         </table>
+         <div class="table-responsive">
+             <table :key="key"
+                    class="table table-striped text-2xl"
+                    v-data="{ data: tuyen_duong.data, columns: columns }">
+             </table>
+         </div>
          <Pagination
              :all-data="tuyen_duong"
              @changePage="changePage"

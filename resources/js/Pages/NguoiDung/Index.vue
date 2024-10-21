@@ -3,7 +3,6 @@ import MainLayout from "@/Layouts/MainLayout.vue";
 import {vData} from "@/Directives/v-data.js";
 import Pagination from "@/Components/Pagination.vue";
 import {router} from "@inertiajs/vue3";
-import {useModal} from "@/Hooks/useModal.js";
 import {nextTick, onMounted, ref} from "vue";
 
 const props = defineProps({
@@ -53,9 +52,11 @@ const eventForEditBtn = () => {
                 <button class="btn btn-success">Thêm người dùng</button>
                 <input class="border-gray-300 rounded-lg w-1/5" placeholder="Tìm kiếm người dùng">
             </div>
-            <table :key="key" v-data="{ data: nguoi_dung.data, columns: columns }"
-                   class="table table-striped text-2xl">
-            </table>
+            <div class="table-responsive">
+                <table :key="key" v-data="{ data: nguoi_dung.data, columns: columns }"
+                class="table table-striped text-2xl">
+                </table>
+            </div>
             <Pagination
                 :all-data="nguoi_dung"
                 @changePage="changePage"
