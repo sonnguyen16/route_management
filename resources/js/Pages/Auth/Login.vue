@@ -20,7 +20,7 @@ const submit = () => {
     <AuthLayout>
         <div class="row vh-100">
             <div class="col d-none d-xl-flex justify-content-center align-items-center flex-column">
-                <h1 class="font-weight-bold text-primary">Quản lý hệ thống</h1>
+                <h1 class="font-weight-bold text-primary">QUẢN LÝ HỆ THỐNG</h1>
             </div>
             <div id="app" class="col bg-light-blue d-flex justify-content-center flex-column m-4" style="border-radius: 8px">
                 <div class="row">

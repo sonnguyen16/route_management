@@ -42,7 +42,3 @@ watch(() => model.value, () => {
         <InputError :message="errors" />
     </div>
 </template>
-
-<style scoped>
-
-</style>

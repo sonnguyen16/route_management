@@ -192,11 +192,16 @@ th, td{
   width: 250px;
   border-radius: 10px;
 }
+
 .table-bordered td,
 .table-bordered th {
   border: 1px solid #90caf9 !important;
 }
-
+th, td {
+  vertical-align: middle !important;
+  padding: 0px !important;
+  padding-left: 10px !important;
+}
 thead th {
   background: rgba(227, 242, 253, 1);
 }

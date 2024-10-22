@@ -17,7 +17,7 @@ const currentTab = ref('info');
 <template>
     <div v-if="isSheetOpen" class="sheet">
         <div class="sheet-header">
-            <h5 class="mb-0">Thông tin tuyến đường</h5>
+            <h5 class="mb-0" style="font-size: 15px;">Thông tin tuyến đường</h5>
             <button @click.prevent="emits('closeSheet')">Đóng</button>
         </div>
 
@@ -132,7 +132,8 @@ const currentTab = ref('info');
 .tabs button {
     flex-basis: 20px;
     flex-grow: 1;
-    padding: 10px;
+    padding: 5px;
+    font-weight: 600;
     cursor: pointer;
     background-color: #fff;
     border: none;

@@ -10,7 +10,7 @@ import DropdownLink from "@/Components/DropdownLink.vue";
                 <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
             </li>
             <li class="navbar-brand d-flex align-items-center" href="#">
-                <h5 class="font-weight-bold d-md-inline d-none mb-0 text-primary">Quản lý hệ thống</h5>
+                <h5 class="font-weight-bold d-md-inline d-none mb-0 text-primary">QUẢN LÝ HỆ THỐNG</h5>
             </li>
         </ul>
 

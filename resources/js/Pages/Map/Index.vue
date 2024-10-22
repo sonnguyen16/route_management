@@ -152,7 +152,7 @@ const addAllRoutes = () => {
                     "line-cap": "round"
                 },
                 paint: {
-                    "line-color": "#0000ff",
+                    "line-color": "#00ff00",
                     "line-width": 5
                 }
             });
@@ -162,14 +162,35 @@ const addAllRoutes = () => {
                 type: "symbol",
                 source: routeId,
                 layout: {
-                    "symbol-placement": "line",
+                /* 
+                     "symbol-placement": "line",
                     "text-field": ["get", "ten_duong"],
                     "text-size": 12,
                     "text-offset": [0, 0.5],
-                    "text-rotation-alignment": "map"
+                    "text-rotation-alignment": "map",
+                    "icon-image": "demo",
+                "icon-size": 1,
+                "icon-allow-overlap": true,
+                */
+
+                "icon-image": "demo",
+                "icon-size": 1,
+                "icon-allow-overlap": true,
+                'symbol-placement': 'line', // line-center, line, point // hiển thị nhiều lần hay ít lần
+                "text-field": ["get", "ten_duong"],
+                "text-size": 12,   
+                'text-max-width': 10,   
+                "symbol-spacing": 2,
+                "text-rotation-alignment": "map",
+                "text-keep-upright": false
                 },
                 paint: {
-                    "text-color": "#000000"
+                   // "text-color": "#000000",
+                    "text-color": "blue", // màu của chữ
+                    "text-halo-color": "white", // đường viền của chữ
+                    "text-halo-width": 1, // độ đậm của đường viền
+                    'line-opacity':     0.5,
+                    'line-dasharray':   [0, 2], 
                 }
             });
         }
@@ -217,9 +238,19 @@ const addMarker = (point, name, iconUrl, iconId) => {
                 "icon-image": iconId,
                 "icon-size": .4,
                 "text-field": name,
+                "text-size": 10,
+                "text-color": "blue",
                 "text-offset": [0, 1.25],
                 "text-anchor": "top"
-            }
+            },
+            paint: {
+                   // "text-color": "#000000",
+                    "text-color": "blue", // màu của chữ
+                    "text-halo-color": "white", // đường viền của chữ
+                    "text-halo-width": 1, // độ đậm của đường viền
+                    'line-opacity':     0.5,
+                    'line-dasharray':   [0, 2], 
+                }
         });
 
         // Thêm sự kiện click vào marker

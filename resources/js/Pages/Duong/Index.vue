@@ -34,14 +34,14 @@ const changePage = (page) => {
 }
 
 const columns = [
-    {field: 'id', label: 'ID'},
+    {field: 'id', label: 'STT'},
     {field: 'ten', label: 'Tên'},
     {field: 'loai', label: 'Loại', enums: loaiOptions},
     {field: 'ma_phan_cap', label: 'Mã phân cấp', enums: maPhanCapOptions},
     {field: 'diem_dau_xa.name', label: 'Điểm đầu'},
     {field: 'diem_cuoi_xa.name', label: 'Điểm cuối'},
-    {field: 'chieu_dai', label: 'Chiều dài'},
-    {field: 'chieu_rong', label: 'Chiều rộng'},
+    {field: 'chieu_dai', label: 'Chiều dài', align: 'center'},
+    {field: 'chieu_rong', label: 'Chiều rộng', align: 'center'},
     {field: 'dien_tich', label: 'Diện tích'},
     {field: 'loai_tuan_tra', label: 'Loại tuần tra', enums: loaiTuanTraOptions},
     {field: 'don_vi.ten', label: 'Đơn vị quản lý'},
