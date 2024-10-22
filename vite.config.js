@@ -17,5 +17,4 @@ export default defineConfig({
             },
         }),
     ],
-    base: 'https://netdigital.vn/',
 });
