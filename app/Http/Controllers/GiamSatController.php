@@ -39,13 +39,5 @@ class GiamSatController extends Controller
         $validated = $request->validated();
         unset($validated['tai_lieu']);
         $giam_sat = GiamSat::updateOrCreate(['id' => $validated['id']],$validated);
-        $giam_sat_query = GiamSat::with([
-            'tai_lieu',
-            'tuyen_duong',
-            'tuyen_duong.diem_dau_xa',
-            'tuyen_duong.diem_cuoi_xa',
-            'don_vi'
-        ])->find($giam_sat->id);
-        return response()->json($giam_sat_query);
     }
 }
