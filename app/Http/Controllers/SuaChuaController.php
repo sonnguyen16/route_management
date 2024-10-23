@@ -44,21 +44,5 @@ class SuaChuaController extends Controller
         $validated = $request->validated();
         unset($validated['tai_lieu']);
         $sua_chua = SuaChua::updateOrCreate(['id' => $validated['id']],$validated);
-
-        if($request->hasFile('tai_lieu')) {
-            foreach ($request->file('tai_lieu') as $file) {
-                $originalName = $file->getClientOriginalName();
-                $type = $file->getClientOriginalExtension();
-                $file = $file->storeAs('files/1/sua_chua', $originalName, 'public');
-
-                TaiLieu::create([
-                    'ten' => $originalName,
-                    'file' => $file,
-                    'loai' => $type,
-                    'tuyen_duong_id' => $sua_chua->tuyen_duong_id,
-                    'danh_muc' => DanhMucTaiLieu::sua_chua->value,
-                ]);
-            }
-        }
     }
 }

@@ -39,21 +39,13 @@ class GiamSatController extends Controller
         $validated = $request->validated();
         unset($validated['tai_lieu']);
         $giam_sat = GiamSat::updateOrCreate(['id' => $validated['id']],$validated);
-
-        if($request->hasFile('tai_lieu')) {
-            foreach ($request->file('tai_lieu') as $file) {
-                $originalName = $file->getClientOriginalName();
-                $type = $file->getClientOriginalExtension();
-                $file = $file->storeAs('files/1/giam_sat', $originalName, 'public');
-
-                TaiLieu::create([
-                    'ten' => $originalName,
-                    'file' => $file,
-                    'loai' => $type,
-                    'tuyen_duong_id' => $giam_sat->tuyen_duong_id,
-                    'danh_muc' => DanhMucTaiLieu::giam_sat->value,
-                ]);
-            }
-        }
+        $giam_sat_query = GiamSat::with([
+            'tai_lieu',
+            'tuyen_duong',
+            'tuyen_duong.diem_dau_xa',
+            'tuyen_duong.diem_cuoi_xa',
+            'don_vi'
+        ])->find($giam_sat->id);
+        return response()->json($giam_sat_query);
     }
 }

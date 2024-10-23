@@ -7,7 +7,7 @@ import Modal from "@/Pages/GiamSat/Modal.vue";
 import {useModal} from "@/Hooks/useModal.js";
 import {nextTick, onMounted, ref, watch} from "vue";
 import { debounce } from 'lodash';
-import {_TIME_DEBOUNCE} from "@/Constants/constants.js";
+import {_TIME_DEBOUNCE, maPhanCapOptions} from "@/Constants/constants.js";
 
 const props = defineProps({
     giam_sat: Object,
@@ -31,8 +31,7 @@ const changePage = (page) => {
 const columns = [
     {field: 'id', label: 'ID'},
     {field: 'tuyen_duong.ten', label: 'Tên đường'},
-    {field: 'tuyen_duong.loai', label: 'Tên đường'},
-    {field: 'tuyen_duong.ma_phan_cap', label: 'Mã phân cấp'},
+    {field: 'tuyen_duong.ma_phan_cap', label: 'Mã phân cấp', enums: maPhanCapOptions},
     {field: 'tuyen_duong.diem_dau_xa.name', label: 'Điểm đầu'},
     {field: 'tuyen_duong.diem_cuoi_xa.name', label: 'Điểm cuối'},
     {field: 'tuyen_duong.chieu_dai', label: 'Chiều dài'},
@@ -55,7 +54,8 @@ const onRefresh = () => {
         eventForEditBtn()
     })
     if (giam_sat_selected.value) {
-        giam_sat_selected.value = props.giam_sat.data.find(item => item.id === giam_sat_selected.value.id);
+        giam_sat_selected.value = props.giam_sat.data.
+        find(item => item.id === giam_sat_selected.value.id);
     }
 }
 const eventForEditBtn = () => {

@@ -29,7 +29,6 @@ class StoreDuongCamRequest extends FormRequest
             'tu_ngay' => 'required|date',
             'den_ngay' => 'required|date',
             'ly_do' => 'required|string',
-            'tai_lieu' => 'nullable',
         ];
     }
 

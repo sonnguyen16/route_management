@@ -60,7 +60,8 @@ const onRefresh = () => {
         eventForEditBtn()
     })
     if(cong_van_selected.value) {
-        cong_van_selected.value = props.cong_van.data.find(item => item.id === cong_van_selected.value.id);
+        cong_van_selected.value = props.cong_van.data.
+        find(item => item.id === cong_van_selected.value.id);
     }
 }
 const eventForEditBtn = () => {

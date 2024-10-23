@@ -27,7 +27,6 @@ class StoreCapPhepRequest extends FormRequest
             'don_vi_id' => 'required|exists:don_vi,id',
             'so_cap_phep' => 'required|string',
             'ngay_cap_phep' => 'required|date',
-            'tai_lieu' => 'nullable',
         ];
     }
 

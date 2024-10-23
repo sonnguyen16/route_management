@@ -34,21 +34,5 @@ class GioiHanTocDoController extends Controller
         $validated = $request->validated();
         unset($validated['tai_lieu']);
         $toc_do = GioiHanTocDo::updateOrCreate(['id' => $validated['id']],$validated);
-
-        if($request->hasFile('tai_lieu')) {
-            foreach ($request->file('tai_lieu') as $file) {
-                $originalName = $file->getClientOriginalName();
-                $type = $file->getClientOriginalExtension();
-                $file = $file->storeAs('files/1/gioi_han_toc_do', $originalName, 'public');
-
-                TaiLieu::create([
-                    'ten' => $originalName,
-                    'file' => $file,
-                    'loai' => $type,
-                    'tuyen_duong_id' => $toc_do->tuyen_duong_id,
-                    'danh_muc' => DanhMucTaiLieu::toc_do->value,
-                ]);
-            }
-        }
     }
 }

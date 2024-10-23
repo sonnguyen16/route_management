@@ -27,7 +27,6 @@ class StoreGioiHanTocDoRequest extends FormRequest
             'tu_km' => 'required|numeric',
             'den_km' => 'required|numeric',
             'toc_do' => 'required|numeric',
-            'tai_lieu' => 'nullable',
         ];
     }
 

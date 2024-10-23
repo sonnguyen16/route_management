@@ -58,7 +58,8 @@ const onRefresh = () => {
         eventForEditBtn()
     })
     if (duong_cam_selected.value) {
-        duong_cam_selected.value = props.duong_cam.data.find(item => item.id === duong_cam_selected.value.id);
+        duong_cam_selected.value = props.duong_cam.data.
+        find(item => item.id === duong_cam_selected.value.id);
     }
 }
 const eventForEditBtn = () => {

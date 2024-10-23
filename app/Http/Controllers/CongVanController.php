@@ -39,21 +39,5 @@ class CongVanController extends Controller
         $validated = $request->validated();
         unset($validated['tai_lieu']);
         $cong_van = CongVan::updateOrCreate(['id' => $validated['id']],$validated);
-
-        if($request->hasFile('tai_lieu')) {
-            foreach ($request->file('tai_lieu') as $file) {
-                $originalName = $file->getClientOriginalName();
-                $type = $file->getClientOriginalExtension();
-                $file = $file->storeAs('files/1/cong_van', $originalName, 'public');
-
-                TaiLieu::create([
-                    'ten' => $originalName,
-                    'file' => $file,
-                    'loai' => $type,
-                    'cong_van_id' => $cong_van->cong_van_id,
-                    'danh_muc' => DanhMucTaiLieu::cong_van->value,
-                ]);
-            }
-        }
     }
 }

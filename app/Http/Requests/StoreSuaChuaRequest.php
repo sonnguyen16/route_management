@@ -32,7 +32,6 @@ class StoreSuaChuaRequest extends FormRequest
             'ngay_duyet' => 'required|date',
             'nguoi_duyet_id' => 'required|exists:users,id',
             'loai_sua_chua' => 'required|numeric',
-            'tai_lieu' => 'nullable',
         ];
     }
 

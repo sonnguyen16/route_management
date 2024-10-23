@@ -65,7 +65,8 @@ const onRefresh = () => {
         eventForEditBtn()
     })
     if (sua_chua_selected.value) {
-        sua_chua_selected.value = props.sua_chua.data.find(item => item.id === sua_chua_selected.value.id);
+        sua_chua_selected.value = props.sua_chua.data.
+        find(item => item.id === sua_chua_selected.value.id);
     }
 }
 const eventForEditBtn = () => {

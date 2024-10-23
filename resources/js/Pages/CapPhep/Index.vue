@@ -53,7 +53,8 @@ const onRefresh = () => {
         eventForEditBtn()
     })
     if(cap_phep_selected.value) {
-        cap_phep_selected.value = props.cap_phep.data.find(item => item.id === cap_phep_selected.value.id);
+        cap_phep_selected.value = props.cap_phep.data.
+        find(item => item.id === cap_phep_selected.value.id);
     }
 }
 const eventForEditBtn = () => {

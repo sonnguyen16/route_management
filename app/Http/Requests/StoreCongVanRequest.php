@@ -31,7 +31,6 @@ class StoreCongVanRequest extends FormRequest
             'nguoi_xu_ly_id' => 'required|exists:users,id',
             'trang_thai' => 'required|integer',
             'ghi_chu' => 'nullable|string',
-            'tai_lieu' => 'nullable',
         ];
     }
 

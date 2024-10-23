@@ -55,7 +55,8 @@ const onRefresh = () => {
         eventForEditBtn()
     })
     if(gioi_han_toc_do_selected.value) {
-        gioi_han_toc_do_selected.value = props.gioi_han_toc_do.data.find(item => item.id === gioi_han_toc_do_selected.value.id);
+        gioi_han_toc_do_selected.value = props.gioi_han_toc_do.data.
+        find(item => item.id === gioi_han_toc_do_selected.value.id);
     }
 }
 const eventForEditBtn = () => {
