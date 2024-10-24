@@ -52,13 +52,13 @@ let form = useForm({
 
 const dau_xa = computed(() => {
     if(form.diem_dau_huyen_id) {
-        return props.huyen.find(h => h.id === form.diem_dau_huyen_id).xa
+        return props.huyen.find(h => h.id == form.diem_dau_huyen_id).xa
     }
 })
 
 const cuoi_xa = computed(() => {
     if(form.diem_cuoi_huyen_id) {
-        return props.huyen.find(h => h.id === form.diem_cuoi_huyen_id).xa
+        return props.huyen.find(h => h.id == form.diem_cuoi_huyen_id).xa
     }
 })
 

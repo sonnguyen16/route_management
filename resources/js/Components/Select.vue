@@ -1,10 +1,10 @@
 <script setup>
 import InputError from "@/Components/InputError.vue";
 import Choices from "choices.js";
-import { defineProps, defineModel, onMounted, watch } from 'vue';
+import {defineProps, defineModel, onMounted, watch, onUnmounted} from 'vue';
 
 const props = defineProps({
-    options: Object, // Hoặc Array nếu options là mảng
+    options: Object,
     optionDefault: String,
     errors: String,
     id: String,
@@ -16,28 +16,28 @@ let choice = null;
 onMounted(() => {
     const selectElement = document.getElementById(props.id);
     choice = new Choices(selectElement);
+    choice.setChoices(props.options, 'id', props?.options?.[0]?.name ? 'name' : 'ten', true);
 });
 
 watch(() => props.options, (newOptions) => {
     if (choice) {
+        choice.setChoiceByValue('');
         choice.clearChoices();
-        choice.setChoices(newOptions, 'id', 'name', true);
+        choice.setChoices(newOptions, 'id', newOptions[0]?.name ? 'name' : 'ten', true);
         choice.setChoiceByValue(model.value);
     }
 });
 
 watch(() => model.value, () => {
-    choice.setChoiceByValue(model.value.toString());
+    choice.setChoiceByValue(model.value);
 });
+
 </script>
 
 <template>
     <div>
         <select :id="id" v-model="model" :class="['form-control', errors && 'border border-danger']">
             <option value="">{{ optionDefault }}</option>
-            <option v-for="option in options"
-                    :value="option.id"
-                    :key="option.id">{{ option?.name || option?.ten }}</option>
         </select>
         <InputError :message="errors" />
     </div>
