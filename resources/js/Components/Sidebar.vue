@@ -121,6 +121,20 @@ const isActive = (href) => {
                     </ul>
                 </li>
                 <li class="nav-item menu">
+                    <a href="/cau" class="nav-link">
+                        <p class="txt-color font-weight-bold">
+                            <img class="d-inline-block me-2" src="@/assets/img/ico.png" alt="icon">Quản lý cầu
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item menu">
+                    <a href="/den-giao-thong" class="nav-link">
+                        <p class="txt-color font-weight-bold">
+                            <img class="d-inline-block me-2" src="@/assets/img/ico.png" alt="icon">Quản lý đèn giao thông
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item menu">
                     <a href="#" class="nav-link">
                         <p class="txt-color font-weight-bold">
                             <img class="d-inline-block me-2" src="@/assets/img/ico.png" alt="icon">Quản lý sửa chữa
