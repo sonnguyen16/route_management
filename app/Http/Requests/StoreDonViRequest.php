@@ -24,6 +24,13 @@ class StoreDonViRequest extends FormRequest
         return [
             'id' => 'nullable',
             'ten' => ['required', 'string', 'max:255'],
+            'ma_so_thue' => 'nullable|string',
+            'dien_thoai' => 'nullable|string',
+            'fax' => 'nullable|string',
+            'dia_chi' => 'nullable|string',
+            'website' => 'nullable|string',
+            'lien_he' => 'nullable|string',
+            'email' => 'nullable|string',
             'loai' => ['required', 'integer'],
         ];
     }

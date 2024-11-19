@@ -3,14 +3,14 @@ import DropdownLink from "@/Components/DropdownLink.vue";
 </script>
 
 <template>
-    <nav class="main-header navbar navbar-expand navbar-light sticky-top border-bottom">
+    <nav class="main-header navbar navbar-expand backgroud-navbar navbar-light sticky-top border-bottom">
         <!-- Left navbar links -->
         <ul class="navbar-nav ml-3">
             <li class="nav-item d-lg-none d-block mt-0">
                 <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
             </li>
             <li class="navbar-brand d-flex align-items-center" href="#">
-                <h5 class="font-weight-bold d-md-inline d-none mb-0 text-primary">QUẢN LÝ HỆ THỐNG</h5>
+                <h5 class="font-weight-bold d-md-inline d-none mb-0 color-navbar">SỞ GIAO THÔNG BRVT</h5>
             </li>
         </ul>
 

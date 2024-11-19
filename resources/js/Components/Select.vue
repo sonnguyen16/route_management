@@ -23,7 +23,10 @@ watch(() => props.options, (newOptions) => {
     if (choice) {
         choice.setChoiceByValue('');
         choice.clearChoices();
-        choice.setChoices(newOptions, 'id', newOptions[0]?.name ? 'name' : 'ten', true);
+        if(newOptions) {
+            choice.setChoices(newOptions, 'id', newOptions[0]?.name ? 'name' : 'ten', true);
+        }
+        
         choice.setChoiceByValue(model.value);
     }
 });

@@ -7,6 +7,10 @@ const links = [
         href: "/map",
     },
     {
+        title: "Đơn vị",
+        href: "/don-vi",
+    },
+    {
         title: "Quản lý tuyến đường",
         href: "/tuyen-duong",
     },
@@ -60,6 +64,232 @@ const isActive = (href) => {
     class="main-sidebar sidebar-collapse sidebar-light-primary border-top border-right"
   >
     <div class="sidebar p-0">
+        <nav class="mt-3">
+            <ul class="nav nav-pills nav-child-indent nav-sidebar flex-column" data-widget="treeview" role="menu"
+                data-accordion="false">
+                <li class="nav-item menu">
+                    <a href="/map" class="nav-link">
+                        <p class="txt-color font-weight-bold">
+                            <img class="d-inline-block me-2" src="@/Assets/img/ico.png" alt="icon">Quản lý bản đồ
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item menu">
+                    <a href="#" class="nav-link">
+                        <p class="txt-color font-weight-bold">
+                            <img class="d-inline-block me-2" src="@/Assets/img/ico.png" alt="icon">Quản lý tuyến đường
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview ">
+                        <li class="nav-item ">
+                          <a href="tuyen-duong" class="nav-link ">
+                            <i class="fa-solid nav-icon"><img class="d-inline-block me-2" src="@/Assets/img/widgets.png" alt="icon"></i>
+                            <p> Tuyến đường</p>
+                          </a>
+                        </li>
+                        <li class="nav-item ">
+                          <a href="don-vi" class="nav-link ">
+                            <i class="fa-solid nav-icon"><img class="d-inline-block me-2" src="@/Assets/img/widgets.png" alt="icon"></i>
+                            <p> Đơn vị quản lý</p>
+                          </a>
+                        </li>
+                        <li class="nav-item ">
+                          <a href="tuyen-duong" class="nav-link ">
+                            <i class="fa-solid nav-icon"><img class="d-inline-block me-2" src="@/Assets/img/widgets.png" alt="icon"></i>
+                            <p> Danh sách xí nghiệp</p>
+                          </a>
+                        </li>
+                        <li class="nav-item ">
+                          <a href="/cau-hinh/loai-tuyen-duong" class="nav-link ">
+                            <i class="fa-solid nav-icon"><img class="d-inline-block me-2" src="@/Assets/img/widgets.png" alt="icon"></i>
+                            <p> Phân loại</p>
+                          </a>
+                        </li>
+                        <li class="nav-item ">
+                          <a href="/cau-hinh/phan-cap" class="nav-link ">
+                            <i class="fa-solid nav-icon"><img class="d-inline-block me-2" src="@/Assets/img/widgets.png" alt="icon"></i>
+                            <p> Phân cấp</p>
+                          </a>
+                        </li>
+                        <li class="nav-item ">
+                          <a href="/cau-hinh/loai-tuan-tra" class="nav-link ">
+                            <i class="fa-solid nav-icon"><img class="d-inline-block me-2" src="@/Assets/img/widgets.png" alt="icon"></i>
+                            <p> Loại tuần tra</p>
+                          </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item menu">
+                    <a href="#" class="nav-link">
+                        <p class="txt-color font-weight-bold">
+                            <img class="d-inline-block me-2" src="@/Assets/img/ico.png" alt="icon">Quản lý sửa chữa
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview ">
+                        <li class="nav-item ">
+                          <a href="sua-chua" class="nav-link ">
+                            <i class="fa-solid nav-icon"><img class="d-inline-block me-2" src="@/Assets/img/widgets.png" alt="icon"></i>
+                            <p> Tuyến đường sửa chữa</p>
+                          </a>
+                        </li>
+                        <li class="nav-item ">
+                          <a href="/cau-hinh/loai-sua-chua" class="nav-link ">
+                            <i class="fa-solid nav-icon"><img class="d-inline-block me-2" src="@/Assets/img/widgets.png" alt="icon"></i>
+                            <p> Loại sửa chữa</p>
+                          </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item menu">
+                    <a href="#" class="nav-link">
+                        <p class="txt-color font-weight-bold">
+                            <img class="d-inline-block me-2" src="@/Assets/img/ico.png" alt="icon">Quản lý công văn
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview ">
+                        <li class="nav-item ">
+                          <a href="sua-chua" class="nav-link ">
+                            <i class="fa-solid nav-icon"><img class="d-inline-block me-2" src="@/Assets/img/widgets.png" alt="icon"></i>
+                            <p> Danh sách công văn</p>
+                          </a>
+                        </li>
+                        <li class="nav-item ">
+                          <a href="/cau-hinh/loai-cong-van" class="nav-link ">
+                            <i class="fa-solid nav-icon"><img class="d-inline-block me-2" src="@/Assets/img/widgets.png" alt="icon"></i>
+                            <p> Loại công văn</p>
+                          </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item menu">
+                    <a href="#" class="nav-link">
+                        <p class="txt-color font-weight-bold">
+                            <img class="d-inline-block me-2" src="@/Assets/img/ico.png" alt="icon">Quản lý đường cấm
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview ">
+                        <li class="nav-item ">
+                          <a href="sua-chua" class="nav-link ">
+                            <i class="fa-solid nav-icon"><img class="d-inline-block me-2" src="@/Assets/img/widgets.png" alt="icon"></i>
+                            <p> Danh sách đường cấm</p>
+                          </a>
+                        </li>
+                        <li class="nav-item ">
+                          <a href="/cau-hinh/loai-cong-van" class="nav-link ">
+                            <i class="fa-solid nav-icon"><img class="d-inline-block me-2" src="@/Assets/img/widgets.png" alt="icon"></i>
+                            <p> Đơn vị quyết định</p>
+                          </a>
+                        </li>
+                        <li class="nav-item ">
+                          <a href="/cau-hinh/loai-cong-van" class="nav-link ">
+                            <i class="fa-solid nav-icon"><img class="d-inline-block me-2" src="@/Assets/img/widgets.png" alt="icon"></i>
+                            <p> Đơn vị thực hiện</p>
+                          </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item menu">
+                    <a href="#" class="nav-link">
+                        <p class="txt-color font-weight-bold">
+                            <img class="d-inline-block me-2" src="@/Assets/img/ico.png" alt="icon">Quản lý giám sát
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview ">
+                        <li class="nav-item ">
+                          <a href="giam-sat" class="nav-link ">
+                            <i class="fa-solid nav-icon"><img class="d-inline-block me-2" src="@/Assets/img/widgets.png" alt="icon"></i>
+                            <p> Danh sách đường</p>
+                          </a>
+                        </li>
+                        <li class="nav-item ">
+                          <a href="/cau-hinh/loai-cong-van" class="nav-link ">
+                            <i class="fa-solid nav-icon"><img class="d-inline-block me-2" src="@/Assets/img/widgets.png" alt="icon"></i>
+                            <p> Đơn vị giám sát</p>
+                          </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item menu">
+                    <a href="#" class="nav-link">
+                        <p class="txt-color font-weight-bold">
+                            <img class="d-inline-block me-2" src="@/Assets/img/ico.png" alt="icon">Quản lý giới hạn tốc độ
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview ">
+                        <li class="nav-item ">
+                          <a href="gioi-han-toc-do" class="nav-link ">
+                            <i class="fa-solid nav-icon"><img class="d-inline-block me-2" src="@/Assets/img/widgets.png" alt="icon"></i>
+                            <p> Danh sách đường giới hạn</p>
+                          </a>
+                        </li>
+                        <li class="nav-item ">
+                          <a href="/cau-hinh/loai-gioi-han" class="nav-link ">
+                            <i class="fa-solid nav-icon"><img class="d-inline-block me-2" src="@/Assets/img/widgets.png" alt="icon"></i>
+                            <p> Loại giới hạn</p>
+                          </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item menu">
+                    <a href="#" class="nav-link">
+                        <p class="txt-color font-weight-bold">
+                            <img class="d-inline-block me-2" src="@/Assets/img/ico.png" alt="icon">Quản lý cấp phép
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview ">
+                        <li class="nav-item ">
+                          <a href="gioi-han-toc-do" class="nav-link ">
+                            <i class="fa-solid nav-icon"><img class="d-inline-block me-2" src="@/Assets/img/widgets.png" alt="icon"></i>
+                            <p> Danh sách đường cấp phép</p>
+                          </a>
+                        </li>
+                        <li class="nav-item ">
+                          <a href="/cau-hinh/loai-gioi-han" class="nav-link ">
+                            <i class="fa-solid nav-icon"><img class="d-inline-block me-2" src="@/Assets/img/widgets.png" alt="icon"></i>
+                            <p> Đơn vị cấp phép</p>
+                          </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item menu">
+                    <a href="#" class="nav-link">
+                        <p class="txt-color font-weight-bold">
+                            <img class="d-inline-block me-2" src="@/Assets/img/ico.png" alt="icon">Cài đặt hệ thống
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview ">
+                        <li class="nav-item ">
+                          <a href="nguoi-dung" class="nav-link ">
+                            <i class="fa-solid nav-icon"><img class="d-inline-block me-2" src="@/Assets/img/widgets.png" alt="icon"></i>
+                            <p> Người dùng</p>
+                          </a>
+                        </li>
+                        <li class="nav-item ">
+                          <a href="" class="nav-link ">
+                            <i class="fa-solid nav-icon"><img class="d-inline-block me-2" src="@/Assets/img/widgets.png" alt="icon"></i>
+                            <p> Lịch sử hoạt động</p>
+                          </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item menu">
+                    <a href="/logout" class="nav-link">
+                        <p class="txt-color font-weight-bold">
+                            <img class="d-inline-block me-2" src="@/Assets/img/ico.png" alt="icon">Thoát phần mềm
+                        </p>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    <!--
       <nav class="">
         <ul
           class="nav nav-pills nav-child-indent nav-sidebar flex-column"
@@ -75,7 +305,7 @@ const isActive = (href) => {
                 :class="[isActive(link.href) && 'bg-gray-200']"
             />
         </ul>
-      </nav>
+      </nav> -->
     </div>
   </aside>
 </template>

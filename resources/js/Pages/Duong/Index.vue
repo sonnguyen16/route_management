@@ -19,6 +19,9 @@ const props = defineProps({
     tuyen_duong: Object,
     huyen: Object,
     don_vi: Object,
+    loai_tuyen_duong: Object,
+    phan_cap: Object,
+    loai_tuan_tra: Object,
 })
 
 const tuyen_duong_selected = ref(null);
@@ -36,18 +39,18 @@ const changePage = (page) => {
 const columns = [
     {field: 'id', label: 'STT'},
     {field: 'ten', label: 'Tên'},
-    {field: 'loai', label: 'Loại', enums: loaiOptions},
-    {field: 'ma_phan_cap', label: 'Mã phân cấp', enums: maPhanCapOptions},
-    {field: 'diem_dau_xa.name', label: 'Điểm đầu'},
-    {field: 'diem_cuoi_xa.name', label: 'Điểm cuối'},
+    {field: 'loai_tuyen_duong.ten', label: 'Loại đường', }, // enums: loaiOptions
+    {field: 'phan_cap.ten', label: 'Mã phân cấp'}, // enums: maPhanCapOptions},
+   // {field: 'diem_dau_xa.name', label: 'Điểm đầu'},
+   // {field: 'diem_cuoi_xa.name', label: 'Điểm cuối'},
     {field: 'chieu_dai', label: 'Chiều dài', align: 'center'},
-    {field: 'chieu_rong', label: 'Chiều rộng', align: 'center'},
-    {field: 'dien_tich', label: 'Diện tích'},
-    {field: 'loai_tuan_tra', label: 'Loại tuần tra', enums: loaiTuanTraOptions},
+   // {field: 'chieu_rong', label: 'Chiều rộng', align: 'center'},
+   // {field: 'dien_tich', label: 'Diện tích'},
+    {field: 'loai_tuan_tra.ten', label: 'Loại tuần tra'},// enums: loaiTuanTraOptions},
     {field: 'don_vi.ten', label: 'Đơn vị quản lý'},
-    {field: 'xi_nghiep', label: 'Xí nghiệp'},
+    // {field: 'xi_nghiep', label: 'Xí nghiệp'},
     {field: 'huyen.name', label: 'Huyện quản lý'},
-    {field: 'action', label: 'Hành động'},
+    {field: 'action', label: ''},
 ]
 
 const modal = useModal('modal');
@@ -104,7 +107,7 @@ const isEdit = ref(false);
 
 <template>
  <MainLayout>
-     <div class="py-3 px-4">
+     <div class="py-3 px-3"> <!--class="py-3 px-4"-->
          <div class="mb-3 flex justify-between">
              <button @click.prevent="openModal" class="btn btn-success">Thêm tuyến đường</button>
              <input v-model="search" class="border-gray-300 rounded-lg w-1/5" placeholder="Tìm kiếm tuyến đường">
@@ -125,9 +128,13 @@ const isEdit = ref(false);
          @refresh="onRefresh"
          :huyen="huyen"
          :key-modal="keyModal"
+         :loai_tuyen_duong="loai_tuyen_duong"
+         :loai_tuan_tra="loai_tuan_tra"
+         :phan_cap="phan_cap"
          :tuyen_duong="tuyen_duong_selected"
          :don_vi="don_vi"
          :is-edit="isEdit"
+         
      />
 </MainLayout>
 </template>

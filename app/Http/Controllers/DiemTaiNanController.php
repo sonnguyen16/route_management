@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\ToaDoKhac;
 use App\Models\TuyenDuong;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class BanDoController extends Controller
+class DiemTaiNanController extends Controller
 {
     public function index()
     {
@@ -19,8 +19,8 @@ class BanDoController extends Controller
             'don_vi',
             'toa_do'])->get();
         //    dd($tuyen_duong);
-        $toa_do_khac = ToaDoKhac::with('tai_lieu')->get();
-        return Inertia::render('Map/Index', compact('tuyen_duong', 'toa_do_khac'));
+        $toa_do_khac = ToaDoKhac::where('loai',4)->with('tai_lieu')->get();
+        return Inertia::render('DiemTaiNan/Index', compact('tuyen_duong', 'toa_do_khac'));
     }
 
     public function update_mota(Request $request)

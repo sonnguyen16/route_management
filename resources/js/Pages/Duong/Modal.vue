@@ -18,6 +18,9 @@ const props = defineProps({
     huyen: Object,
     tuyen_duong: Object,
     don_vi: Object,
+    loai_tuyen_duong: Object,
+    phan_cap: Object,
+    loai_tuan_tra: Object,
     isEdit: {
         type: Boolean,
         default: false
@@ -30,8 +33,8 @@ const emits = defineEmits(['closeModal', 'refresh', 'fileChange']);
 let form = useForm({
     id: '',
     ten: '',
-    loai: '',
-    ma_phan_cap: '',
+    loai_tuyen_duong_id: '',
+    phan_cap_id: '',
     diem_dau_huyen_id: '',
     diem_cuoi_huyen_id: '',
     diem_dau_lat: '',
@@ -43,7 +46,7 @@ let form = useForm({
     chieu_dai: '',
     chieu_rong: '',
     dien_tich: '',
-    loai_tuan_tra: '',
+    loai_tuan_tra_id: '',
     don_vi_id: '',
     xi_nghiep: '',
     huyen_id: '',
@@ -81,6 +84,7 @@ let formFile = useForm({
 })
 
 watch(() => props.keyModal, () => {
+    console.log('da vào');
     if(props.tuyen_duong) {
         Object.assign(form, props.tuyen_duong);
         formFile.tuyen_duong_id = props.tuyen_duong.id;
@@ -140,19 +144,19 @@ const uploadFiles = (files) => {
                                 <Input v-model="form.ten" :errors="form.errors.ten" />
                             </div>
                             <div class="form-group">
-                                <label for="loai_tuyen_duong">Loại</label>
-                                <Select v-model="form.loai"
-                                        :errors="form.errors.loai"
-                                        :options="loaiOptions"
-                                        id="loai"
+                                <label for="loai_tuyen_duong_id">Loại</label>
+                                <Select v-model="form.loai_tuyen_duong_id"
+                                        :errors="form.errors.loai_tuyen_duong_id"
+                                        :options="loai_tuyen_duong"
+                                        id="loai_tuyen_duong_id"
                                         option-default="Chọn loại"/>
                             </div>
                             <div class="form-group">
-                                <label for="ma_phan_cap">Mã phân cấp</label>
-                                <Select v-model="form.ma_phan_cap"
-                                        :errors="form.errors.ma_phan_cap"
-                                        :options="maPhanCapOptions"
-                                        id="ma_phan_cap"
+                                <label for="phan_cap_id">Mã phân cấp</label>
+                                <Select v-model="form.phan_cap_id"
+                                        :errors="form.errors.phan_cap_id"
+                                        :options="phan_cap"
+                                        id="phan_cap_id"
                                         option-default="Chọn mã phân cấp"/>
                             </div>
 
@@ -208,11 +212,11 @@ const uploadFiles = (files) => {
                             </div>
 
                             <div class="form-group">
-                                <label for="loai_tuan_tra">Loại tuần tra</label>
-                                <Select v-model="form.loai_tuan_tra"
-                                        :errors="form.errors.loai_tuan_tra"
-                                        :options="loaiTuanTraOptions"
-                                        id="loai_tuan_tra"
+                                <label for="loai_tuan_tra_id">Loại tuần tra</label>
+                                <Select v-model="form.loai_tuan_tra_id"
+                                        :errors="form.errors.loai_tuan_tra_id"
+                                        :options="loai_tuan_tra"
+                                        id="loai_tuan_tra_id"
                                         option-default="Chọn loại tuần tra"/>
                             </div>
 

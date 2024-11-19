@@ -120,7 +120,7 @@ th, td{
 @media screen and (min-width: 1024px) {
   .main-sidebar {
     z-index: 1000;
-    width: 270px;
+   /*  width: 270px; */
     top: 50px !important;
   }
 
@@ -129,7 +129,7 @@ th, td{
   }
 
   .content-wrapper {
-    margin-left: 270px !important;
+   /* margin-left: 270px !important; */
   }
 
   .sidebar-mini .main-sidebar .nav-link {
@@ -306,4 +306,10 @@ hr {
 }
 
 @media (max-width: 1199.98px) {
+}
+.backgroud-navbar{
+  background: #0c4ca3 !important;
+}
+.color-navbar{
+  color: #c3d0de !important;
 }

@@ -13,6 +13,10 @@ use App\Http\Controllers\CapPhepController;
 use App\Http\Controllers\DuongCamController;
 use App\Http\Controllers\CongVanController;
 use App\Http\Controllers\BanDoController;
+use App\Http\Controllers\CauHinhController;
+use App\Http\Controllers\DiemTaiNanController;
+use App\Http\Controllers\DenGiaoThongController;
+use App\Http\Controllers\CauController;
 
 Route::get('/', [AuthController::class, 'index'])->name('index');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
@@ -77,6 +81,23 @@ Route::prefix('map')->middleware('auth')->group(function () {
     Route::post('/update-mota', [BanDoController::class, 'update_mota'])->name('map.update-mota');
 });
 
+Route::prefix('cau-hinh')->middleware('auth') ->group(function () {
+    Route::get('/{loai}', [CauHinhController::class, 'index'])->name('cau-hinh.index');
+    Route::post('/store', [CauHinhController::class, 'store'])->name('cau-hinh.store');
+});
 
 
+Route::prefix('diem-tai-nan')->middleware('auth')->group(function () {
+    Route::get('/', [DiemTaiNanController::class, 'index'])->name('diem-tai-nan.index');
+    Route::post('/store', [DiemTaiNanController::class, 'store'])->name('diem-tai-nan.store');
+});
 
+Route::prefix('den-giao-thong')->middleware('auth')->group(function () {
+    Route::get('/', [DenGiaoThongController::class, 'index'])->name('den-giao-thong.index');
+    Route::post('/store', [DenGiaoThongController::class, 'store'])->name('den-giao-thong.store');
+});
+
+Route::prefix('cau')->middleware('auth')->group(function () {
+    Route::get('/', [CauController::class, 'index'])->name('cau.index');
+    Route::post('/store', [CauController::class, 'store'])->name('cau.store');
+});

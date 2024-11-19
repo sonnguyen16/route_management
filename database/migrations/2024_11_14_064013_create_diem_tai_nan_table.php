@@ -11,17 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('don_vi', function (Blueprint $table) {
+        Schema::create('diem_tai_nan', function (Blueprint $table) {
             $table->id();
             $table->string('ten');
-            $table->string('dia_chi');
             $table->string('dien_thoai');
-            $table->string('email');
-            $table->string('fax');
-            $table->string('website');
-            $table->string('ma_so_thue');
-            $table->string('lien_he');
-            $table->tinyInteger('loai')->default(1);
+            $table->string('dia_chi');
+            $table->string('ghi_chu');
+            $table->string('loai_diem_tai_nan_id');
+            $table->string('lng');
+            $table->string('lat');
+            $table->string('tuyen_duong_id');
             $table->timestamps();
         });
     }
@@ -31,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('don_vi');
+        Schema::dropIfExists('diem_tai_nan');
     }
 };
