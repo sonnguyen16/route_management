@@ -39,7 +39,7 @@ const columns = [
     {field: 'nam_khai_thac', label: 'Năm khai thác'},
     {field: 'kiem_dinh', label: 'Kiểm định'},
    // {field: 'tuyen_duong_id', label: 'Tuyến đường'},
-    {field: 'loai_cau_id', label: 'Loại cầu'},
+   // {field: 'loai_cau_id', label: 'Loại cầu'},
     {field: 'action', label: 'Hành động'},
 ]
 const modal = useModal('modal');
