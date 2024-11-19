@@ -74,7 +74,7 @@ const isActive = (href) => {
                         </p>
                     </a>
                 </li>
-                <li class="nav-item menu">
+                <li class="nav-item menu-open">
                     <a href="#" class="nav-link">
                         <p class="txt-color font-weight-bold">
                             <img class="d-inline-block me-2" src="@/assets/img/ico.png" alt="icon">Quản lý tuyến đường
@@ -141,7 +141,7 @@ const isActive = (href) => {
                         </p>
                     </a>
                 </li>
-                <li class="nav-item menu">
+                <li class="nav-item menu-open">
                     <a href="#" class="nav-link">
                         <p class="txt-color font-weight-bold">
                             <img class="d-inline-block me-2" src="@/assets/img/ico.png" alt="icon">Quản lý sửa chữa
@@ -163,7 +163,7 @@ const isActive = (href) => {
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item menu">
+                <li class="nav-item menu-open">
                     <a href="#" class="nav-link">
                         <p class="txt-color font-weight-bold">
                             <img class="d-inline-block me-2" src="@/assets/img/ico.png" alt="icon">Quản lý công văn
@@ -185,7 +185,7 @@ const isActive = (href) => {
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item menu">
+                <li class="nav-item menu-open">
                     <a href="#" class="nav-link">
                         <p class="txt-color font-weight-bold">
                             <img class="d-inline-block me-2" src="@/assets/img/ico.png" alt="icon">Quản lý đường cấm
@@ -213,7 +213,7 @@ const isActive = (href) => {
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item menu">
+                <li class="nav-item menu-open">
                     <a href="#" class="nav-link">
                         <p class="txt-color font-weight-bold">
                             <img class="d-inline-block me-2" src="@/assets/img/ico.png" alt="icon">Quản lý giám sát
@@ -235,7 +235,7 @@ const isActive = (href) => {
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item menu">
+                <li class="nav-item menu-open">
                     <a href="#" class="nav-link">
                         <p class="txt-color font-weight-bold">
                             <img class="d-inline-block me-2" src="@/assets/img/ico.png" alt="icon">Quản lý giới hạn tốc độ
@@ -257,7 +257,7 @@ const isActive = (href) => {
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item menu">
+                <li class="nav-item menu-open">
                     <a href="#" class="nav-link">
                         <p class="txt-color font-weight-bold">
                             <img class="d-inline-block me-2" src="@/assets/img/ico.png" alt="icon">Quản lý cấp phép
@@ -279,7 +279,7 @@ const isActive = (href) => {
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item menu">
+                <li class="nav-item menu-open">
                     <a href="#" class="nav-link">
                         <p class="txt-color font-weight-bold">
                             <img class="d-inline-block me-2" src="@/assets/img/ico.png" alt="icon">Cài đặt hệ thống
