@@ -135,6 +135,13 @@ const isActive = (href) => {
                     </a>
                 </li>
                 <li class="nav-item menu">
+                    <a href="/diem-tai-nan" class="nav-link">
+                        <p class="txt-color font-weight-bold">
+                            <img class="d-inline-block me-2" src="@/assets/img/ico.png" alt="icon">Điểm hay xảy ra tai nạn
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item menu">
                     <a href="#" class="nav-link">
                         <p class="txt-color font-weight-bold">
                             <img class="d-inline-block me-2" src="@/assets/img/ico.png" alt="icon">Quản lý sửa chữa

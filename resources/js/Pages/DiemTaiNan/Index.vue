@@ -44,7 +44,7 @@ onMounted(() => {
             props.tuyen_duong[0].toa_do[0].lng,
             props.tuyen_duong[0].toa_do[0].lat
         ],
-        zoom: 17,
+        zoom: 12,
     });
 
     // Thêm đường các các điểm km, cầu vào map
