@@ -150,7 +150,7 @@ const isActive = (href) => {
                     </a>
                     <ul class="nav nav-treeview ">
                         <li class="nav-item ">
-                          <a href="sua-chua" class="nav-link ">
+                          <a href="/sua-chua" class="nav-link ">
                             <i class="fa-solid nav-icon"><img class="d-inline-block me-2" src="@/assets/img/widgets.png" alt="icon"></i>
                             <p> Tuyến đường sửa chữa</p>
                           </a>
@@ -172,7 +172,7 @@ const isActive = (href) => {
                     </a>
                     <ul class="nav nav-treeview ">
                         <li class="nav-item ">
-                          <a href="sua-chua" class="nav-link ">
+                          <a href="cong-van" class="nav-link ">
                             <i class="fa-solid nav-icon"><img class="d-inline-block me-2" src="@/assets/img/widgets.png" alt="icon"></i>
                             <p> Danh sách công văn</p>
                           </a>
@@ -194,7 +194,7 @@ const isActive = (href) => {
                     </a>
                     <ul class="nav nav-treeview ">
                         <li class="nav-item ">
-                          <a href="sua-chua" class="nav-link ">
+                          <a href="/duong-cam" class="nav-link ">
                             <i class="fa-solid nav-icon"><img class="d-inline-block me-2" src="@/assets/img/widgets.png" alt="icon"></i>
                             <p> Danh sách đường cấm</p>
                           </a>
@@ -222,7 +222,7 @@ const isActive = (href) => {
                     </a>
                     <ul class="nav nav-treeview ">
                         <li class="nav-item ">
-                          <a href="giam-sat" class="nav-link ">
+                          <a href="/giam-sat" class="nav-link ">
                             <i class="fa-solid nav-icon"><img class="d-inline-block me-2" src="@/assets/img/widgets.png" alt="icon"></i>
                             <p> Danh sách đường</p>
                           </a>
@@ -244,7 +244,7 @@ const isActive = (href) => {
                     </a>
                     <ul class="nav nav-treeview ">
                         <li class="nav-item ">
-                          <a href="gioi-han-toc-do" class="nav-link ">
+                          <a href="/gioi-han-toc-do" class="nav-link ">
                             <i class="fa-solid nav-icon"><img class="d-inline-block me-2" src="@/assets/img/widgets.png" alt="icon"></i>
                             <p> Danh sách đường giới hạn</p>
                           </a>
@@ -266,7 +266,7 @@ const isActive = (href) => {
                     </a>
                     <ul class="nav nav-treeview ">
                         <li class="nav-item ">
-                          <a href="gioi-han-toc-do" class="nav-link ">
+                          <a href="cap-phep" class="nav-link ">
                             <i class="fa-solid nav-icon"><img class="d-inline-block me-2" src="@/assets/img/widgets.png" alt="icon"></i>
                             <p> Danh sách đường cấp phép</p>
                           </a>
