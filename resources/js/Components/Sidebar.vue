@@ -120,12 +120,32 @@ const isActive = (href) => {
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item menu">
-                    <a href="/cau" class="nav-link">
+                <li class="nav-item menu-open">
+                    <a href="#" class="nav-link">
                         <p class="txt-color font-weight-bold">
-                            <img class="d-inline-block me-2" src="@/assets/img/ico.png" alt="icon">Quản lý cầu
+                            <img class="d-inline-block me-2" src="@/assets/img/ico.png" alt="icon">Quản lý cầu  <i class="fas fa-angle-left right"></i>
                         </p>
                     </a>
+                    <ul class="nav nav-treeview ">
+                      <li class="nav-item ">
+                          <a href="/cau" class="nav-link ">
+                            <i class="fa-solid nav-icon"><img class="d-inline-block me-2" src="@/assets/img/widgets.png" alt="icon"></i>
+                            <p> Danh sách cầu</p>
+                          </a>
+                        </li>
+                        <li class="nav-item ">
+                          <a href="/cau-hinh/loai-ket-cau-nhip" class="nav-link ">
+                            <i class="fa-solid nav-icon"><img class="d-inline-block me-2" src="@/assets/img/widgets.png" alt="icon"></i>
+                            <p> Loại kết cấu nhịp</p>
+                          </a>
+                        </li>
+                        <li class="nav-item ">
+                          <a href="/cau-hinh/loai-cau" class="nav-link ">
+                            <i class="fa-solid nav-icon"><img class="d-inline-block me-2" src="@/assets/img/widgets.png" alt="icon"></i>
+                            <p> Loại cầu</p>
+                          </a>
+                        </li>
+                    </ul>
                 </li>
                 <li class="nav-item menu">
                     <a href="/den-giao-thong" class="nav-link">
