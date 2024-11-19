@@ -35,7 +35,7 @@ const columns = [
     {field: 'ly_trinh', label: 'Lý trình'},
     {field: 'chieu_rong', label: 'Chiều rộng'},
     {field: 'chieu_dai', label: 'Chiều dài'},
-    {field: 'loai_ket_cau_nhip.ten', label: 'Loại kết cấu nhịp'},
+   // {field: 'loai_ket_cau_nhip.ten', label: 'Loại kết cấu nhịp'},
     {field: 'nam_khai_thac', label: 'Năm khai thác'},
     {field: 'kiem_dinh', label: 'Kiểm định'},
     {field: 'tuyen_duong_id', label: 'Tuyến đường'},
