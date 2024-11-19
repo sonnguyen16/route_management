@@ -9,7 +9,7 @@ defineProps({
 
 <template>
     <a href="" class="nav-link">
-        <img class="d-inline-block me-2" src="@/Assets/img/ico.png" alt="icon">
+        <img class="d-inline-block me-2" src="@/assets/img/ico.png" alt="icon">
         <p>
             {{title}}
             <i class="fas fa-angle-left right" style="margin-right: 16px;"></i>
