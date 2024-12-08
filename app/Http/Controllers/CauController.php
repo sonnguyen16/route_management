@@ -12,12 +12,12 @@ class CauController extends Controller
 {
     public function index(Request $request)
     {
-        $cau = Cau::query();
-
+        $cau = Cau::with(['loai_ket_cau_nhip','tuyen_duong','loai_cau']);
         if($request->filled('search')){
             $cau = $cau->where('nut_giao', 'like', '%'.$request->search.'%');
         }
-        $cau = $cau->paginate(15);
+        $cau = $cau->paginate(18)->withQueryString();
+       
         $tuyen_duong = TuyenDuong::all();
         $loai_ket_cau_nhip = CauHinh::where('loai','loai_ket_cau_nhip')->get();
         $loai_cau = CauHinh::where('loai','loai_cau')->get();

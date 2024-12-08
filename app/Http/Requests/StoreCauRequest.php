@@ -24,31 +24,32 @@ class StoreCauRequest extends FormRequest
         return [
             'id' => 'nullable',
             'ten' => 'required|string|max:255',
-            'ly_trinh' => 'required|string|max:255',
+            'ly_trinh' => 'nullable',
             'chieu_dai' => 'nullable',
             'chieu_rong' => 'nullable',
             'loai_ket_cau_nhip_id' => 'nullable',
-            'nam_khai_thac' => 'required|string|max:255',
-            'tai_trong' => 'required|string|max:255',
-            'kiem_dinh' => 'required|string|max:255',
+            'nam_khai_thac' => 'nullable',
+            'tai_trong' => 'nullable',
+            'kiem_dinh' => 'nullable',
             'tuyen_duong_id' => 'nullable',
             'loai_cau_id' => 'nullable',
-            'lat' => 'required|string|max:255',
-            'lng' => 'required|string|max:255',
+            'vi_tri' => 'nullable',
+          //  'lat' => 'required|string|max:255',
+         //   'lng' => 'required|string|max:255',
         ];
     }
     public function messages(): array
     {
         return [
             'ten.required' => 'Tên không được để trống',            
-            'ly_trinh.required' => 'Lý trình không được để trống',
+           /*  'ly_trinh.required' => 'Lý trình không được để trống',
             'loai_ket_cau_nhip_id.required' => 'Loại kết cấu không để trống loại',
             'nam_khai_thac.required' => 'Năm khai thác không để trống loại',
             'tai_trong.required' => 'Tải trọng không để trống loại',
             'kiem_dinh.required' => 'Kiểm định không để trống loại',
             'nam_khai_thac.required' => 'Năm khai thác không để trống loại',
             'lat.required' => 'Tọa độ không để trống loại',
-            'lng.required' => 'Tọa độ hoạt động không để trống loại',
+            'lng.required' => 'Tọa độ hoạt động không để trống loại', */
         ];
     }
 }

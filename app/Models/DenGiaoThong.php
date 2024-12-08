@@ -16,8 +16,7 @@ class DenGiaoThong extends Model
         'so_pha_den',
         'thoi_gian_pha_den',
         'thoi_gian_hoat_dong',
-        'lat',
-        'lng',
+        'vi_tri',
         'isdelete'
     ];
 }

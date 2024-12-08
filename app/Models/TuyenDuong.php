@@ -26,10 +26,8 @@ class TuyenDuong extends Model
         'chieu_dai',
         'chieu_rong',
         'dien_tich',
-        'loai_tuan_tra_id',
+        'lo_gioi',
         'don_vi_id',
-        'xi_nghiep',
-        'huyen_id',
         'key',
     ];
 
@@ -81,8 +79,5 @@ class TuyenDuong extends Model
     {
         return $this->belongsTo(CauHinh::class, 'phan_cap_id');
     }
-    public function loai_tuan_tra()
-    {
-        return $this->belongsTo(CauHinh::class, 'loai_tuan_tra_id');
-    }
+    
 }

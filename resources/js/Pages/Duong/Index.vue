@@ -37,19 +37,18 @@ const changePage = (page) => {
 }
 
 const columns = [
+
     {field: 'id', label: 'STT'},
     {field: 'ten', label: 'Tên'},
-    {field: 'loai_tuyen_duong.ten', label: 'Loại đường', }, // enums: loaiOptions
+    {field: 'loai_tuyen_duong.ten',label: 'Loại đường', },
     {field: 'phan_cap.ten', label: 'Mã phân cấp'}, // enums: maPhanCapOptions},
-   // {field: 'diem_dau_xa.name', label: 'Điểm đầu'},
-   // {field: 'diem_cuoi_xa.name', label: 'Điểm cuối'},
+    {field: 'diem_dau_xa.name', label: 'Điểm đầu'},
+    {field: 'diem_cuoi_xa.name', label: 'Điểm cuối'},
     {field: 'chieu_dai', label: 'Chiều dài', align: 'center'},
-   // {field: 'chieu_rong', label: 'Chiều rộng', align: 'center'},
-   // {field: 'dien_tich', label: 'Diện tích'},
-    {field: 'loai_tuan_tra.ten', label: 'Loại tuần tra'},// enums: loaiTuanTraOptions},
+    {field: 'chieu_rong', label: 'Chiều rộng', align: 'center'},
+    {field: 'lo_gioi', label: 'Lộ giới'},
     {field: 'don_vi.ten', label: 'Đơn vị quản lý'},
     // {field: 'xi_nghiep', label: 'Xí nghiệp'},
-    {field: 'huyen.name', label: 'Huyện quản lý'},
     {field: 'action', label: ''},
 ]
 
@@ -113,10 +112,43 @@ const isEdit = ref(false);
              <input v-model="search" class="border-gray-300 rounded-lg w-1/5" placeholder="Tìm kiếm tuyến đường">
          </div>
          <div class="table-responsive">
-             <table :key="key"
+            <!--<table :key="key"
                     class="table table-striped text-2xl"
                     v-data="{ data: tuyen_duong.data, columns: columns }">
-             </table>
+             </table> -->
+             <table class="table table-striped text-2xl">
+                <thead>
+                    <tr>
+                    <th class="text-center">STT</th>
+                    <th class="text-left">Tên tuyến đường</th>
+                    <th class="text-left">Loại tuyến đường</th>
+                    <th class="text-left">Mã phân cấp</th>
+                    <th class="text-left">Điểm đầu/ cuối</th>
+                    <th class="text-center">Chiều dài</th>
+                    <th class="text-center">Chiều rộng</th>
+                    <th class="text-center">Lộ giới</th>
+                    <th class="text-center">Đơn vị quản lý</th>
+                    <th class="text-center">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(item,i) in tuyen_duong.data" :key="i">
+                    <td class="text-center" scope="row">{{ i+1 }}</td>  
+                    <td><a :data-id=item.id class="edit cursor-pointer" title="Sửa">{{ item.ten }}</a></td> 
+                    <td>{{ item.loai_tuyen_duong ? item.loai_tuyen_duong.ten : ''}}</td>  
+                    <td>{{ item.phan_cap ? item.phan_cap.ten : ''}}</td>  
+                    <td style="line-height: 1.5;">
+                        <a href="#">{{ item.diem_dau_xa ? item.diem_dau_xa.name : ''}}, {{ item.diem_dau_huyen ? item.diem_dau_huyen.name : ''}}</a><br>
+                        <a href="#">{{ item.diem_cuoi_xa ? item.diem_cuoi_xa.name : ''}}, {{ item.diem_cuoi_huyen ? item.diem_cuoi_huyen.name : ''}}</a>
+                    </td>  
+                    <td class="text-center">{{ item.chieu_dai }}</td>
+                    <td class="text-center">{{ item.chieu_rong }}</td>
+                    <td class="text-center">{{ item.lo_gioi }}</td>
+                    <td><a href="#">{{ item.don_vi ? item.don_vi.ten : ''}}</a></td> 
+                    <td class="text-center"><a :data-id=item.id class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
+                </tr>
+                </tbody>
+                </table>
          </div>
          <Pagination
              :all-data="tuyen_duong"
@@ -129,7 +161,6 @@ const isEdit = ref(false);
          :huyen="huyen"
          :key-modal="keyModal"
          :loai_tuyen_duong="loai_tuyen_duong"
-         :loai_tuan_tra="loai_tuan_tra"
          :phan_cap="phan_cap"
          :tuyen_duong="tuyen_duong_selected"
          :don_vi="don_vi"

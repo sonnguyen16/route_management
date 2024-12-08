@@ -22,6 +22,10 @@ class CauHinhController extends Controller
         $loai = str_replace('-','_',$request->loai);
         $ten = '';
        if($loai == 'loai_tuyen_duong') $ten = 'Thêm loại tuyến đường';
+       if($loai == 'phan_cap') $ten = 'Thêm mã phân cấp';
+       if($loai == 'loai_cau') $ten = 'Thêm loại cầu';
+       if($loai == 'loai_ket_cau_nhip') $ten = 'Thêm loại kế cấu nhịp';
+       
         return Inertia::render('CauHinh/Index', compact('cau_hinh','loai','ten'));
     }
 

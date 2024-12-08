@@ -24,22 +24,22 @@ class StoreDenGiaoThongRequest extends FormRequest
         return [
             'id' => 'nullable',
             'nut_giao' => 'required|string|max:255',
-            'so_pha_den' => 'required|string|max:255',
-            'thoi_gian_pha_den' => 'required|string|max:255',
-            'thoi_gian_hoat_dong' => 'required|string|max:255',
-            'lat' => 'required|string|max:255',
-            'lng' => 'required|string|max:255',
+            'so_pha_den' => 'nullable',
+            'thoi_gian_pha_den' => 'nullable',
+            'thoi_gian_hoat_dong' => 'nullable',
+            'vi_tri' => 'nullable',
         ];
     }
     public function messages(): array
     {
         return [
-            'nut_giao.required' => 'Nút giao không được để trống',            
+            'nut_giao.required' => 'Nút giao không được để trống',
+            /*            
             'so_pha_den.required' => 'Số pha đèn không được để trống',
             'thoi_gian_pha_den.required' => 'Thời gian pha đèn không để trống loại',
             'thoi_gian_hoat_dong.required' => 'Thời gian hoạt động không để trống loại',
             'lat.required' => 'Tọa độ không để trống loại',
-            'lng.required' => 'Tọa độ hoạt động không để trống loại',
+            'lng.required' => 'Tọa độ hoạt động không để trống loại', */
         ];
     }
 }

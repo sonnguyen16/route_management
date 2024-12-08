@@ -32,8 +32,6 @@ const columns = [
     {field: 'so_pha_den', label: 'Số pha đèn'},
     {field: 'thoi_gian_pha_den', label: 'Thời gian pha đèn'},
     {field: 'thoi_gian_hoat_dong', label: 'Thời gian hoạt động'},
-    {field: 'lat', label: 'Lat'},
-    {field: 'lng', label: 'Lng'},
     {field: 'action', label: 'Hành động'},
 ]
 const modal = useModal('modal');

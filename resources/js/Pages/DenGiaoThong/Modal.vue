@@ -24,8 +24,7 @@ const form = useForm({
     so_pha_den: '',
     thoi_gian_pha_den: '',
     thoi_gian_hoat_dong: '',
-    lat: '',
-    lng: ''
+    vi_tri: '',
 })
 
 const submit = () => {
@@ -95,17 +94,10 @@ const closeModal = () => {
                                 />
                             </div>
                             <div class="form-group">
-                                <label for="name">Lat</label>
+                                <label for="name">Vị trí</label>
                                 <Input
-                                    v-model="form.lat"
-                                    :errors="form.errors.lat"
-                                />
-                            </div>
-                            <div class="form-group">
-                                <label for="name">Lng</label>
-                                <Input
-                                    v-model="form.lng"
-                                    :errors="form.errors.lng"
+                                    v-model="form.vi_tri"
+                                    :errors="form.errors.vi_tri"
                                 />
                             </div>
                         </div>

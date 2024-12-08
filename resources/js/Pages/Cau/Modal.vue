@@ -33,6 +33,7 @@ const form = useForm({
     kiem_dinh: '',
     tuyen_duong_id: '',
     loai_cau_id: '',
+    vi_tri: '',
     lat: '',
     lng: ''
 })
@@ -83,6 +84,26 @@ const closeModal = () => {
                                 />
                             </div>
                             <div class="form-group">
+                                <label for="loai_cau_id">Loại cầu</label>
+                                <Select
+                                    v-model="form.loai_cau_id"
+                                    :options="loai_cau"
+                                    :errors="form.errors.loai_cau_id"
+                                    id="loai_cau_id"
+                                    option-default="Chọn loại cầu"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label for="loai_ket_cau_nhip_id">Loại kết cấu nhịp</label>
+                                <Select
+                                    v-model="form.loai_ket_cau_nhip_id"
+                                    :options="loai_ket_cau_nhip"
+                                    :errors="form.errors.loai_ket_cau_nhip_id"
+                                    id="loai_ket_cau_nhip_id"
+                                    option-default="Chọn loại kết cấu nhịp"
+                                />
+                            </div>
+                            <div class="form-group">
                                 <label for="name">Lý trình</label>
                                 <Input
                                     v-model="form.ly_trinh"
@@ -103,16 +124,7 @@ const closeModal = () => {
                                     :errors="form.errors.chieu_dai"
                                 />
                             </div>
-                            <div class="form-group">
-                                <label for="loai_ket_cau_nhip_id">Loại kết cấu nhịp</label>
-                                <Select
-                                    v-model="form.loai_ket_cau_nhip_id"
-                                    :options="loai_ket_cau_nhip"
-                                    :errors="form.errors.loai_ket_cau_nhip_id"
-                                    id="loai_ket_cau_nhip_id"
-                                    option-default="Chọn loại kết cấu nhịp"
-                                />
-                            </div>
+                            
                             <div class="form-group">
                                 <label for="name">Năm khai thác</label>
                                 <Input
@@ -128,7 +140,7 @@ const closeModal = () => {
                                 />
                             </div>
                             <div class="form-group">
-                                <label for="name">Kiểm định</label>
+                                <label for="name">Năm kiểm định</label>
                                 <Input
                                     v-model="form.kiem_dinh"
                                     :errors="form.errors.kiem_dinh"
@@ -144,17 +156,15 @@ const closeModal = () => {
                                     option-default="Chọn tuyến đường"
                                 />
                             </div>
+                            
                             <div class="form-group">
-                                <label for="loai_cau_id">Loại cầu</label>
-                                <Select
-                                    v-model="form.loai_cau_id"
-                                    :options="loai_cau"
-                                    :errors="form.errors.loai_cau_id"
-                                    id="loai_cau_id"
-                                    option-default="Chọn loại cầu"
+                                <label for="name">Vị trí</label>
+                                <Input
+                                    v-model="form.vi_tri"
+                                    :errors="form.errors.vi_tri"
                                 />
                             </div>
-                            <div class="form-group">
+                        <!--   <div class="form-group">
                                 <label for="name">Lat</label>
                                 <Input
                                     v-model="form.lat"
@@ -167,7 +177,7 @@ const closeModal = () => {
                                     v-model="form.lng"
                                     :errors="form.errors.lng"
                                 />
-                            </div>
+                            </div> --> 
                         </div>
                          <!-- Sidebar Actions -->
                          <div v-if="isEdit" class="col-md-4 bg-gray-100 p-3 flex flex-col">
@@ -179,7 +189,7 @@ const closeModal = () => {
                                         <div class="font-semibold">Admin</div>
                                         <div class="text-gray-500">
                                             <i class="fas fa-clock mr-1"></i>
-                                            {{ formatDate(den_giao_thong.created_at?.toString()) }}
+                                            {{ formatDate(cau.created_at?.toString()) }}
                                         </div>
                                     </div>
                                 </div>

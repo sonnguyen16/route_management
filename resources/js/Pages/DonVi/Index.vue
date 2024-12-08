@@ -29,12 +29,14 @@ const changePage = (page) => {
 
 const columns = [
     {field: 'id', label: 'ID'},
-    {field: 'ma_so_thue', label: 'Mã số thuế'},
+    //{field: 'ma_so_thue', label: 'Mã số thuế'},
     {field: 'ten', label: 'Tên'},
     {field: 'dia_chi', label: 'Địa chỉ'},
     {field: 'dien_thoai', label: 'Điện thoại'},
     {field: 'fax', label: 'Fax'},
     {field: 'email', label: 'Email'},
+    {field: 'website', label: 'Website'},
+    {field: 'lien_he', label: 'Liên hệ'},
     {field: 'action', label: 'Hành động'},
 ]
 
@@ -67,8 +69,9 @@ const eventForEditBtn = () => {
 
 const openModal = () => {
     don_vi_selected.value = null;
-    modal.showModal();
     isEdit.value = false;
+    modal.showModal();
+    
 }
 
 const search = ref('');
@@ -78,7 +81,7 @@ watch(search, (value) => {
 })
 
 const searchDebounce = debounce((value) => {
-    console.log('aaa');
+    
     router.visit(route('don-vi.index', {search: value, loai: props.loai}), {
         preserveState: true,
         onSuccess: () => {

@@ -83,21 +83,15 @@ const isActive = (href) => {
                     </a>
                     <ul class="nav nav-treeview ">
                         <li class="nav-item ">
-                          <a href="tuyen-duong" class="nav-link ">
+                          <a href="/tuyen-duong" class="nav-link ">
                             <i class="fa-solid nav-icon"><img class="d-inline-block me-2" src="@/assets/img/widgets.png" alt="icon"></i>
                             <p> Tuyến đường</p>
                           </a>
                         </li>
                         <li class="nav-item ">
-                          <a href="don-vi" class="nav-link ">
+                          <a href="/don-vi" class="nav-link ">
                             <i class="fa-solid nav-icon"><img class="d-inline-block me-2" src="@/assets/img/widgets.png" alt="icon"></i>
                             <p> Đơn vị quản lý</p>
-                          </a>
-                        </li>
-                        <li class="nav-item ">
-                          <a href="tuyen-duong" class="nav-link ">
-                            <i class="fa-solid nav-icon"><img class="d-inline-block me-2" src="@/assets/img/widgets.png" alt="icon"></i>
-                            <p> Danh sách xí nghiệp</p>
                           </a>
                         </li>
                         <li class="nav-item ">
@@ -112,12 +106,7 @@ const isActive = (href) => {
                             <p> Phân cấp</p>
                           </a>
                         </li>
-                        <li class="nav-item ">
-                          <a href="/cau-hinh/loai-tuan-tra" class="nav-link ">
-                            <i class="fa-solid nav-icon"><img class="d-inline-block me-2" src="@/assets/img/widgets.png" alt="icon"></i>
-                            <p> Loại tuần tra</p>
-                          </a>
-                        </li>
+                        
                     </ul>
                 </li>
                 <li class="nav-item menu-open">

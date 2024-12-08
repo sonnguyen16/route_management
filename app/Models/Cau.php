@@ -22,8 +22,7 @@ class Cau extends Model
         'kiem_dinh',
         'tuyen_duong_id',
         'loai_cau_id',
-        'lat',
-        'lng',
+        'vi_tri',
         'isdelete'
     ];
     public function loai_ket_cau_nhip()

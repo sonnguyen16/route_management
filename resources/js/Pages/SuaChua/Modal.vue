@@ -118,47 +118,6 @@ const uploadFiles = (files) => {
                                     option-default="Chọn tuyến đường"
                                 />
                             </div>
-
-                            <div class="form-group">
-                                <label for="loai_sua_chua">Loại sửa chữa</label>
-                                <Select
-                                    v-model="form.loai_sua_chua"
-                                    :options="loaiSuaChuaOptions"
-                                    :errors="form.errors.loai_sua_chua"
-                                    id="loai_sua_chua"
-                                    option-default="Chọn loại sửa chữa"
-                                />
-                            </div>
-
-                            <div class="form-group">
-                                <label for="tu_km">Từ km</label>
-                                <Input
-                                    v-model="form.tu_km"
-                                    type="number"
-                                    :errors="form.errors.tu_km"
-                                />
-                            </div>
-
-                            <div class="form-group">
-                                <label for="den_km">Đến km</label>
-                                <Input
-                                    v-model="form.den_km"
-                                    type="number"
-                                    :errors="form.errors.den_km"
-                                />
-                            </div>
-
-                            <div class="form-group">
-                                <label for="nguoi_duyet_id">Người duyệt</label>
-                                <Select
-                                    v-model="form.nguoi_duyet_id"
-                                    :options="nguoi_duyet"
-                                    :errors="form.errors.nguoi_duyet_id"
-                                    id="nguoi_duyet_id"
-                                    option-default="Chọn người duyệt"
-                                />
-                            </div>
-
                             <div class="form-group">
                                 <label for="don_vi_id">Đơn vị thi công</label>
                                 <Select
@@ -196,8 +155,73 @@ const uploadFiles = (files) => {
                                     :errors="form.errors.ngay_hoan_thanh"
                                 />
                             </div>
+                            <div v-if="isEdit" class="form-group">
+                                <label for="loai_sua_chua">Loại sửa chữa</label>
+                                <Select
+                                    v-model="form.loai_sua_chua"
+                                    :options="loaiSuaChuaOptions"
+                                    :errors="form.errors.loai_sua_chua"
+                                    id="loai_sua_chua"
+                                    option-default="Chọn loại sửa chữa"
+                                />
+                            </div>
 
+                            <div v-if="isEdit" class="form-group">
+                                <label for="tu_km">Từ km</label>
+                                <Input
+                                    v-model="form.tu_km"
+                                    type="number"
+                                    :errors="form.errors.tu_km"
+                                />
+                            </div>
 
+                            <div v-if="isEdit" class="form-group">
+                                <label for="den_km">Đến km</label>
+                                <Input
+                                    v-model="form.den_km"
+                                    type="number"
+                                    :errors="form.errors.den_km"
+                                />
+                            </div>
+                            <div class="form-group">
+                                
+                            </div>
+
+                            <table  class="table table-striped text-2xl">
+                                    <tr v-for="n in 5">
+                                        <td style="width: 400px;">
+                                            <select :options="loaiSuaChuaOptions" >
+                                            </select>
+                                           <!-- <Select
+                                                v-model="form.loai_sua_chua"                                          
+                                                :options="loaiSuaChuaOptions" 
+                                                :errors="form.errors.loai_sua_chua"                                              
+                                                option-default="Chọn loại sửa chữa"
+                                                id="loai_sua_chua"
+                                            />-->
+                                        </td>
+                                        <td>
+                                            <Input
+                                                type="text"
+                                            />
+                                           <!-- <Input
+                                                v-model="form.tu_km"
+                                                type="text"
+                                                :errors="form.errors.tu_km"
+                                            />-->
+                                        </td>
+                                        <td>
+                                            <Input
+                                                type="text"
+                                            />
+                                          <!--  <Input
+                                                v-model="form.den_km"
+                                                type="text"
+                                                :errors="form.errors.den_km"
+                                            />-->
+                                        </td>
+                                    </tr>
+                                </table>
                         </div>
 
                         <!-- Sidebar Actions -->

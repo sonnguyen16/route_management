@@ -45,11 +45,8 @@ let form = useForm({
     diem_cuoi_lng: '',
     chieu_dai: '',
     chieu_rong: '',
-    dien_tich: '',
-    loai_tuan_tra_id: '',
     don_vi_id: '',
-    xi_nghiep: '',
-    huyen_id: '',
+    lo_gioi: '',
 })
 
 
@@ -84,8 +81,7 @@ let formFile = useForm({
 })
 
 watch(() => props.keyModal, () => {
-    console.log('da vào');
-    if(props.tuyen_duong) {
+     if(props.tuyen_duong) {
         Object.assign(form, props.tuyen_duong);
         formFile.tuyen_duong_id = props.tuyen_duong.id;
         formFile.danh_muc = danhMucTaiLieuOptions.tuyen_duong;
@@ -144,7 +140,7 @@ const uploadFiles = (files) => {
                                 <Input v-model="form.ten" :errors="form.errors.ten" />
                             </div>
                             <div class="form-group">
-                                <label for="loai_tuyen_duong_id">Loại</label>
+                                <label for="loai_tuyen_duong_id">Loại tuyến đường</label>
                                 <Select v-model="form.loai_tuyen_duong_id"
                                         :errors="form.errors.loai_tuyen_duong_id"
                                         :options="loai_tuyen_duong"
@@ -207,18 +203,10 @@ const uploadFiles = (files) => {
                             </div>
 
                             <div class="form-group">
-                                <label for="dien_tich">Diện tích</label>
-                                <Input v-model="form.dien_tich" :errors="form.errors.dien_tich" />
+                                <label for="dien_tich">Lộ giới</label>
+                                <Input v-model="form.lo_gioi" :errors="form.errors.lo_gioi" />
                             </div>
 
-                            <div class="form-group">
-                                <label for="loai_tuan_tra_id">Loại tuần tra</label>
-                                <Select v-model="form.loai_tuan_tra_id"
-                                        :errors="form.errors.loai_tuan_tra_id"
-                                        :options="loai_tuan_tra"
-                                        id="loai_tuan_tra_id"
-                                        option-default="Chọn loại tuần tra"/>
-                            </div>
 
                             <div class="form-group">
                                 <label for="don_vi_quan_ly">Đơn vị quản lý</label>
@@ -229,19 +217,7 @@ const uploadFiles = (files) => {
                                         option-default="Chọn đơn vị"/>
                             </div>
 
-                            <div class="form-group">
-                                <label for="xi_nghiep">Xí nghiệp</label>
-                                <Input v-model="form.xi_nghiep" :errors="form.errors.xi_nghiep" />
-                            </div>
-
-                            <div class="form-group">
-                                <label for="huyen_id">Huyện</label>
-                                <Select v-model="form.huyen_id"
-                                        :errors="form.errors.huyen_id"
-                                        :options="huyen"
-                                        id="huyen"
-                                        option-default="Chọn huyện"/>
-                            </div>
+                           
                         </div>
 
                         <!-- Sidebar Actions -->

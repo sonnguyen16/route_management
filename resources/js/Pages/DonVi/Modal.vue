@@ -34,8 +34,9 @@ const form = useForm({
 const submit = () => {
     form.post(route('don-vi.store'), {
         onSuccess: () => {
-            closeModal()
-            emits('refresh')
+            closeModal();
+            emits('refresh');
+            form.reset();
         },
         onError: (err) => {
             console.log(err)
@@ -45,7 +46,7 @@ const submit = () => {
 
 watch(() => props.keyModal, () => {
     if(props.don_vi) {
-        Object.assign(form, props.don_vi);
+       Object.assign(form, props.don_vi);
     }else{
         form.reset();
     }
@@ -69,13 +70,13 @@ const closeModal = () => {
                     <div class="row">
                         <!-- Main Content -->
                         <div :class="['px-4 pt-4', isEdit ? 'col-md-8' : 'col-md-12']">
-                            <div class="form-group">
+                           <!-- <div class="form-group">
                                 <label for="name">Mã số thuế</label>
                                 <Input
                                     v-model="form.ma_so_thue"
                                     :errors="form.errors.ma_so_thue"
                                 />
-                            </div>
+                            </div> -->
                             <div class="form-group">
                                 <label for="name">Tên đơn vị</label>
                                 <Input

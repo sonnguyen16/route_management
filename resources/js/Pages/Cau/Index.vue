@@ -101,10 +101,44 @@ const searchDebounce = debounce((value) => {
              <input v-model="search" class="border-gray-300 rounded-lg w-1/5" placeholder="Tìm kiếm nút giao">
          </div>
          <div class="table-responsive">
-             <table :key="key"
+            <!-- <table :key="key"
                     class="table table-striped text-2xl"
                     v-data="{ data: cau.data, columns: columns }">
-             </table>
+             </table> -->
+             <table class="table table-striped text-2xl">
+                <thead>
+                    <tr style="line-height: 1.5;">
+                    <th class="text-center">STT</th>
+                    <th class="text-left">Tên cầu</th>
+                    <th class="text-left">Loại cầu</th>
+                    <th class="text-left">Loại kết<br>cấu nhịp</th>
+                    <th class="text-left">Lý trình</th>                    
+                    <th class="text-center">Chiều dài</th>
+                    <th class="text-left">Chiều rộng</th>
+                    <th class="text-center">Năm<br>khai thác</th>
+                    <th class="text-center">Tải trọng</th>
+                    <th class="text-center">Năm<br>kiểm định</th>
+                    <th class="text-center">Tuyến đường</th>
+                    <th class="text-center">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(item,i) in cau.data" :key="i">
+                    <td class="text-center" scope="row">{{ i+1 }}</td>  
+                    <td><a :data-id=item.id class="edit cursor-pointer" title="Sửa">{{ item.ten }}</a></td> 
+                    <td>{{ item.loai_cau ? item.loai_cau.ten : ''}}</td>  
+                    <td>{{ item.loai_ket_cau_nhip ? item.loai_ket_cau_nhip.ten : ''}}</td>  
+                    <td class="text-left">{{ item.ly_trinh }}</td> 
+                    <td class="text-center">{{ item.chieu_dai }} m</td> 
+                    <td class="text-center">{{ item.chieu_rong }} m</td>
+                    <td class="text-center">{{ item.nam_khai_thac }}</td>
+                    <td class="text-center">{{ item.tai_trong }} tấn</td>
+                    <td class="text-center">{{ item.kiem_dinh }}</td>
+                    <td>{{ item.tuyen_duong ? item.tuyen_duong.ten : ''}}</td>
+                    <td class="text-center"><a :data-id=item.id class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
+                </tr>
+                </tbody>
+                </table>
          </div>
          <Pagination
              :all-data="obj"
