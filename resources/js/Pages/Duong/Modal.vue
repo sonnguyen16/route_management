@@ -134,7 +134,7 @@ const uploadFiles = (files) => {
                 <div class="modal-body p-0">
                     <div class="row">
                         <!-- Main Content -->
-                        <div :class="['px-4 pt-4', isEdit ? 'col-md-8' : 'col-md-12']">
+                         <div :class="['px-4 pt-4', isEdit ? 'col-md-8' : 'col-md-12']">
                             <div class="form-group">
                                 <label for="ten_tuyen_duong">Tên đường</label>
                                 <Input v-model="form.ten" :errors="form.errors.ten" />

@@ -4,10 +4,12 @@ import {vData} from "@/Directives/v-data.js";
 import Pagination from "@/Components/Pagination.vue";
 import {router} from "@inertiajs/vue3";
 import Modal from "@/Pages/DuongCam/Modal.vue";
+import ModelDiemCam from "@/Pages/DuongCam/ModalDiemCam.vue";
 import {useModal} from "@/Hooks/useModal.js";
 import {nextTick, onMounted, ref, watch} from "vue";
 import {_TIME_DEBOUNCE} from "@/Constants/constants.js";
 import { debounce } from 'lodash';
+import Upload from "@/Components/UploadFile.vue";
 
 const props = defineProps({
     duong_cam: Object,
@@ -21,6 +23,8 @@ const key = ref(0);
 const keyModal = ref(0);
 const tu_ngay = ref('');
 const den_ngay = ref('');
+const diem_cam_selected = ref(null);
+
 const changePage = (page) => {
     router.visit(route('duong-cam.index', {
         page: page,
@@ -46,6 +50,7 @@ const columns = [
 ]
 
 const modal = useModal('modal');
+const Modeldiemcam = useModal('ModelDiemCam');
 
 onMounted(() => {
     eventForEditBtn()
@@ -120,6 +125,29 @@ const searchDebounce = debounce((value) => {
     });
 }, _TIME_DEBOUNCE)
 
+function themDiemCam(value) {
+  duong_cam_selected.value = props.duong_cam.data.find(item => item.id === value);
+  diem_cam_selected.value = null;
+ keyModal.value++
+ Modeldiemcam.showModal();
+}
+function suaDiemCam(value) {
+    console.log(value);
+    duong_cam_selected.value = props.duong_cam.data.find(item => item.id === value.duong_cam_id);
+    diem_cam_selected.value = value;
+    keyModal.value++
+    Modeldiemcam.showModal();
+
+}
+function deleteDiemCam(value) {
+    router.visit(route('duong-cam.deleteDiemCam', {id: value}), {
+        preserveState: true,
+        onSuccess: () => {
+            onRefresh()
+        }
+    });
+}
+
 </script>
 
 <template>
@@ -127,23 +155,73 @@ const searchDebounce = debounce((value) => {
      <div class="py-3 px-4">
          <div class="mb-3 flex justify-between">
              <div class="flex gap-5 items-center">
-                 <button @click.prevent="openModal" class="btn btn-success w-[200px]">Thêm đường cấm</button>
-                 <div class="flex items-center w-[300px] gap-2">
+                 <button @click.prevent="openModal" class="btn btn-success ">Thêm đường cấm</button> <!--w-[200px]-->
+                <!-- <div class="flex items-center w-[300px] gap-2">
                      <label class="mb-0" for="ngay_khoi_cong">Từ ngày</label>
                      <input v-model="tu_ngay" type="date" class="form-control flex-1" placeholder="Ngày khởi công"/>
                  </div>
                  <div class="flex items-center w-[300px] gap-2">
                      <label class="mb-0" for="ngay_hoan_thanh">Đến ngày</label>
                      <input v-model="den_ngay" type="date" class="form-control flex-1" placeholder="Ngày hoàn thành"/>
-                 </div>
+                 </div> -->
              </div>
              <input v-model="search" class="border-gray-300 rounded-lg w-1/5" placeholder="Tìm kiếm đường cấm">
          </div>
          <div class="table-responsive">
-             <table :key="key"
+            <table class="table table-striped text-2xl">
+                <thead>
+                    <tr>
+                    <th class="text-center">STT</th>
+                    <th class="text-left">Tên đường</th>
+                    <th class="text-left">Đơn vị quyết định</th>
+                    <th class="text-left">Đơn vị thực hiện</th>
+                    <th class="text-left">Nội dung cấm</th>
+                    <th class="text-center">Từ ngày</th>
+                    <th class="text-center">Đến ngày</th>
+                    <th class="text-center">Điểm cấm</th>
+                    <th class="text-center">File đính kèm</th>
+                    <th class="text-center">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(item,i) in duong_cam.data" :key="i">
+                    <td class="text-center" scope="row">{{ i+1 }}</td>  
+                    <td>{{ item.tuyen_duong ? item.tuyen_duong.ten : ''}}</td>  
+                    <td>{{ item.don_vi_quyet_dinh.ten ? item.don_vi_quyet_dinh.ten : ''}}</td>  
+                    <td>{{ item.don_vi_thuc_hien.ten ? item.don_vi_thuc_hien.ten : ''}}</td>  
+                   
+                    
+                    <td>{{ item.ly_do }}</td>
+                    <td class="text-center">{{ item.tu_ngay }}</td>
+                    <td class="text-center">{{ item.den_ngay }}</td>                  
+                    <td class="text-left" style="vertical-align: unset !important;">
+                        <div style="padding-left:10px"><a  @click.prevent="themDiemCam(item.id)"  class="newDiem cursor-pointer" title="Thêm điểm cấm"><i class="fas fa-plus mr-2"></i>Thêm điểm cấm</a></div>
+                        <table>
+                            <tr v-for="(a,i) in item.diem_cam" :key="i">
+                                <td ><!--<a :data-id=a.id class="editDiem cursor-pointer">-->
+                                   <a href="#"  @click.prevent="suaDiemCam(a)">  {{ i+1 }}.{{ a.noi_dung }}</a><!--</a>-->
+                                </td>
+                                <td>{{ 'km '+a.tu_km +' - km '+a.den_km }}</td>
+                               <td><a href="#" @click.prevent="deleteDiemCam(a)" class="cursor-pointer"><i class="fa fa-times-circle mr-1"></i></a></td>
+                            </tr>
+                        </table>
+                    </td>
+                        <td style="vertical-align: unset !important;">
+                            <Upload
+                                type="sua_chua"
+                                :danh_muc="item.id"
+                                :listFile ="item.tai_lieu"
+                                @refresh="onRefresh"
+                            />
+                        </td>
+                    <td class="text-center"><a :data-id=item.id class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
+                </tr>
+                </tbody>
+                </table>
+          <!--   <table :key="key"
                     class="table table-striped text-2xl"
                     v-data="{ data: duong_cam.data, columns: columns }">
-             </table>
+             </table> -->
          </div>
          <Pagination
              :all-data="duong_cam"
@@ -159,5 +237,12 @@ const searchDebounce = debounce((value) => {
          :duong_cam="duong_cam_selected"
          :don_vi="don_vi"
      />
+     <ModelDiemCam 
+      @close-modal="Modeldiemcam.hideModal"
+     :duong_cam="duong_cam_selected" 
+     :diem_cam="diem_cam_selected"
+     :key-modal="keyModal"
+     @refresh="onRefresh">
+    </ModelDiemCam>
 </MainLayout>
 </template>

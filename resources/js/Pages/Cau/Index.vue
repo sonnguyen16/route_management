@@ -97,7 +97,11 @@ const searchDebounce = debounce((value) => {
  <MainLayout>
      <div class="py-3 px-4">
          <div class="mb-3 flex justify-between">
+            <div>
              <button @click.prevent="openModal" class="btn btn-success">Thêm cầu</button>
+             <span style="padding-left: 10px;"><a :href="route('cau-hinh.index',{loai: 'loai-ket-cau-nhip'})" class="btn btn-success">Kết cấu nhịp</a></span>
+             <span style="padding-left: 10px;"><a :href="route('cau-hinh.index',{loai: 'loai-cau'})" class="btn btn-success">Loại cầu</a></span>
+            </div>
              <input v-model="search" class="border-gray-300 rounded-lg w-1/5" placeholder="Tìm kiếm nút giao">
          </div>
          <div class="table-responsive">

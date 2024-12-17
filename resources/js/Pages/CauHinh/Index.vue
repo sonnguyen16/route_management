@@ -13,6 +13,7 @@ const props = defineProps({
     cau_hinh: Object,
     loai: String,
     ten: String,
+    linkback: String,
 })
 const key = ref(0);
 const keyModal = ref(0);
@@ -85,7 +86,10 @@ const searchDebounce = debounce((value) => {
     <MainLayout>
         <div class="py-3 px-4">
             <div class="mb-3 flex justify-between">
-                <button @click.prevent="openModal" class="btn btn-success">{{ props.ten }}</button>
+                <div>
+                    <button @click.prevent="openModal" style="padding-left:10px" class="btn btn-success">{{ props.ten }}</button>
+                    <span style="padding-left:10px"><a :href="route(linkback)" class="btn btn-success">Trở lại</a></span>
+                </div>
                 <input v-model="search" class="border-gray-300 rounded-lg w-1/5" placeholder="Tìm kiếm">
             </div>
             <div class="table-responsive">

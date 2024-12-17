@@ -35,10 +35,13 @@ class DuongCam extends Model
     {
         return $this->belongsTo(DonVi::class, 'don_vi_thuc_hien_id');
     }
-
     public function tai_lieu()
     {
-        return $this->hasMany(TaiLieu::class, 'tuyen_duong_id', 'tuyen_duong_id')
-            ->where('danh_muc', DanhMucTaiLieu::duong_cam->value);
+        return $this->hasMany(TaiLieu::class, 'danh_muc', 'id')->where('isdelete',0);
+           // ->where('danh_muc', DanhMucTaiLieu::sua_chua->value);
+    }
+    public function diem_cam()
+    {
+        return $this->hasMany(DiemCam::class, 'duong_cam_id', 'id')->where('isdelete',0);
     }
 }

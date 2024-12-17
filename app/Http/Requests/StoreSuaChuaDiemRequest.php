@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreGioiHanTocDoRequest extends FormRequest
+class StoreSuaChuaDiemRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,10 +23,10 @@ class StoreGioiHanTocDoRequest extends FormRequest
     {
         return [
             'id' => 'nullable',
-            'tuyen_duong_id' => 'required|exists:tuyen_duong,id',
-            'noi_dung' => 'nullable',
-            'tu_ngay' => 'nullable',
-            'den_ngay' => 'nullable',
+            'sua_chua_id' => 'required|exists:sua_chua,id',
+            'tu_km' => '',
+            'den_km' => 'nullable',
+            'loai_sua_chua_id' => 'nullable',
         ];
     }
 
@@ -38,8 +38,8 @@ class StoreGioiHanTocDoRequest extends FormRequest
 
     public function messages(): array{
         return [
-            'tuyen_duong_id.required' => 'Tuyến đường không được để trống',
-            'tuyen_duong_id.exists' => 'Tuyến đường không tồn tại',
+            'sua_chua_id.required' => 'hạng mục sửa không được để trống',
+            'sua_chua_id.exists' => 'Sửa chữa không tồn tại',
         ];
     }
 }

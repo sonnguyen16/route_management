@@ -25,9 +25,9 @@ const emits = defineEmits(['closeModal', 'refresh', 'fileChange']);
 let form = useForm({
     id: '',
     tuyen_duong_id: '',
-    tu_km: '',
-    den_km: '',
-    toc_do: '',
+    tu_ngay: '',
+    den_ngay: '',
+    noi_dung: '',
     tai_lieu: [],
 })
 
@@ -112,32 +112,29 @@ const uploadFiles = (files) => {
                                     option-default="Chọn tuyến đường"
                                 />
                             </div>
-
-
                             <div class="form-group">
-                                <label for="tu_km">Từ km</label>
+                                <label for="toc_do">Nội dung</label>
                                 <Input
-                                    v-model="form.tu_km"
-                                    type="number"
-                                    :errors="form.errors.tu_km"
+                                    v-model="form.noi_dung"
+                                    :errors="form.errors.noi_dung"
                                 />
                             </div>
 
                             <div class="form-group">
-                                <label for="den_km">Đến km</label>
+                                <label for="tu_ngay">Từ ngày</label>
                                 <Input
-                                    v-model="form.den_km"
-                                    type="number"
-                                    :errors="form.errors.den_km"
+                                    v-model="form.tu_ngay"
+                                    type="datetime-local"
+                                    :errors="form.errors.tu_ngay"
                                 />
                             </div>
 
                             <div class="form-group">
-                                <label for="toc_do">Tốc độ</label>
+                                <label for="den_km">Đến ngày</label>
                                 <Input
-                                    v-model="form.toc_do"
-                                    type="number"
-                                    :errors="form.errors.toc_do"
+                                    v-model="form.den_ngay"
+                                    type="datetime-local"
+                                    :errors="form.errors.den_ngay"
                                 />
                             </div>
                         </div>

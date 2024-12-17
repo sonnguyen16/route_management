@@ -13,7 +13,7 @@ import {
     loaiTuanTraOptions,
     maPhanCapOptions
 } from "@/Constants/constants.js";
-
+import Upload from "@/Components/UploadFile.vue";
 
 const props = defineProps({
     tuyen_duong: Object,
@@ -108,7 +108,11 @@ const isEdit = ref(false);
  <MainLayout>
      <div class="py-3 px-3"> <!--class="py-3 px-4"-->
          <div class="mb-3 flex justify-between">
-             <button @click.prevent="openModal" class="btn btn-success">Thêm tuyến đường</button>
+            <span>
+                <button @click.prevent="openModal" class="btn btn-success">Thêm tuyến đường</button>
+               <span style="padding-left:10px"><a :href="route('cau-hinh.index',{loai: 'loai-tuyen-duong'})" class="btn btn-success">Phân loại</a></span>
+               <span style="padding-left:10px"><a :href="route('cau-hinh.index',{loai: 'phan-cap'})" class="btn btn-success">Phân cấp</a></span>
+            </span>
              <input v-model="search" class="border-gray-300 rounded-lg w-1/5" placeholder="Tìm kiếm tuyến đường">
          </div>
          <div class="table-responsive">
@@ -128,6 +132,7 @@ const isEdit = ref(false);
                     <th class="text-center">Chiều rộng</th>
                     <th class="text-center">Lộ giới</th>
                     <th class="text-center">Đơn vị quản lý</th>
+                    <th class="text-center">File đính kèm</th>
                     <th class="text-center">Thao tác</th>
                     </tr>
                 </thead>
@@ -145,6 +150,14 @@ const isEdit = ref(false);
                     <td class="text-center">{{ item.chieu_rong }}</td>
                     <td class="text-center">{{ item.lo_gioi }}</td>
                     <td><a href="#">{{ item.don_vi ? item.don_vi.ten : ''}}</a></td> 
+                    <td style="vertical-align: unset !important;">
+                            <Upload
+                                type="duong"
+                                :danh_muc="item.id"
+                                :listFile ="item.tai_lieu"
+                                @refresh="onRefresh"
+                            />
+                        </td>
                     <td class="text-center"><a :data-id=item.id class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
                 </tr>
                 </tbody>
