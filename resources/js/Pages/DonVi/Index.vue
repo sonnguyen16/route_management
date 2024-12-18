@@ -133,12 +133,12 @@ const searchDebounce = debounce((value) => {
                     <td>{{ item.lien_he }}</td>                    
                     <td style="vertical-align: unset !important;">
                         {{ item.id }} ttt
-                         <!--   <Upload
+                         <Upload
                                 type="don_vi"
                                 :danh_muc="i"
                                 :listFile ="item.tai_lieu"
                                 @refresh="onRefresh"
-                            /> -->
+                            />
                     </td>
                     <td class="text-center"><a :data-id=item.id class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
                 </tr>
