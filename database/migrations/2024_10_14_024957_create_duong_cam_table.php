@@ -17,8 +17,9 @@ return new class extends Migration
             $table->unsignedBigInteger('don_vi_quyet_dinh_id');
             $table->unsignedBigInteger('don_vi_thuc_hien_id');
             $table->dateTime('tu_ngay');
-            $table->dateTime('den_ngay');
+            $table->dateTime('den_ngay')->nullable();
             $table->string('ly_do');
+            $table->text('noi_dung');
             $table->timestamps();
 
             $table->foreign('tuyen_duong_id')->references('id')->on('tuyen_duong')->onDelete('cascade');

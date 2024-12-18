@@ -23,14 +23,14 @@ class StoreCongVanRequest extends FormRequest
     {
         return [
             'id' => 'nullable',
-            'ten' => 'required|string',
+            'ten' => 'required|string|max:255',
             'loai' => 'required|integer',
             'don_vi_id' => 'required|integer',
             'ngay_gui' => 'required|date',
             'ngay_nhan' => 'required|date',
             'nguoi_xu_ly_id' => 'required|exists:users,id',
             'trang_thai' => 'required|integer',
-            'ghi_chu' => 'nullable|string',
+            'ghi_chu' => 'nullable|string|max:255',
         ];
     }
 

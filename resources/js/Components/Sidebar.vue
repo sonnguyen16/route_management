@@ -35,10 +35,10 @@ const links = [
         title: "Quản lý cấp phép",
         href: "/cap-phep",
     },
-    // {
-    //     title: "Quản lý đơn vị",
-    //     href: "/don-vi",
-    // },
+    {
+        title: "Quản lý đơn vị",
+        href: "/don-vi",
+    },
     {
         title: "Quản lý người dùng",
         href: "/nguoi-dung",

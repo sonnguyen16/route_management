@@ -20,7 +20,7 @@ onMounted(() => {
 });
 
 watch(() => props.options, (newOptions) => {
-    if (choice) {
+    if (choice && newOptions) {
         choice.setChoiceByValue('');
         choice.clearChoices();
         choice.setChoices(newOptions, 'id', newOptions[0]?.name ? 'name' : 'ten', true);

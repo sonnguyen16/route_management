@@ -4,7 +4,7 @@ import {watch} from "vue";
 import Input from "@/Components/Input.vue";
 
 const props = defineProps({
-    nguoi_dung: Object,
+    don_vi: Object,
     keyModal: Number
 })
 
@@ -12,13 +12,12 @@ const emits = defineEmits(['closeModal', 'refresh']);
 
 const form = useForm({
     id: '',
-    name: '',
-    email: '',
-    password: '',
+    ten: '',
+    loai: 1,
 })
 
 const submit = () => {
-    form.post(route('nguoi-dung.store'), {
+    form.post(route('don-vi.store'), {
         onSuccess: () => {
             closeModal()
             emits('refresh')
@@ -30,8 +29,8 @@ const submit = () => {
 }
 
 watch(() => props.keyModal, () => {
-    if(props.nguoi_dung) {
-        Object.assign(form, props.nguoi_dung);
+    if(props.don_vi) {
+        Object.assign(form, props.don_vi);
     }else{
         form.reset();
     }
@@ -58,24 +57,8 @@ const closeModal = () => {
                             <div class="form-group">
                                 <label for="name">Tên</label>
                                 <Input
-                                    v-model="form.name"
-                                    :errors="form.errors.name"
-                                />
-                            </div>
-
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                               <Input
-                                   v-model="form.email"
-                                   :errors="form.errors.email"
-                                 />
-                            </div>
-
-                            <div class="form-group">
-                                <label for="password">Mật khẩu</label>
-                                <Input
-                                    v-model="form.password"
-                                    :errors="form.errors.password"
+                                    v-model="form.ten"
+                                    :errors="form.errors.ten"
                                 />
                             </div>
                         </div>

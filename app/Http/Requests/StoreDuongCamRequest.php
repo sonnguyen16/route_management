@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreDuongCamRequest extends FormRequest
@@ -17,7 +18,7 @@ class StoreDuongCamRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array|string>
      */
     public function rules(): array
     {
@@ -27,8 +28,9 @@ class StoreDuongCamRequest extends FormRequest
             'don_vi_quyet_dinh_id' => 'required|integer',
             'don_vi_thuc_hien_id' => 'required|integer',
             'tu_ngay' => 'required|date',
-            'den_ngay' => 'required|date',
-            'ly_do' => 'required|string',
+            'den_ngay' => 'nullable|date',
+            'ly_do' => 'required|string|max:255',
+            'noi_dung' => 'nullable|string',
         ];
     }
 

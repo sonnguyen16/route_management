@@ -75,7 +75,7 @@ onMounted(() => {
                 isSheetOpen.value = true;
                 selectedRoute.value = route;
             } else {
-                map.setPaintProperty(clickedRoute.layer.id, "line-color", "#0000ff");
+                map.setPaintProperty(clickedRoute.layer.id, "line-color", "#00ff00");
                 isSheetOpen.value = false;
                 selectedRoute.value = null;
             }

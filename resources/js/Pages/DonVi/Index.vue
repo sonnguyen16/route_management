@@ -7,16 +7,16 @@ import {nextTick, onMounted, ref, watch} from "vue";
 import {debounce} from "lodash";
 import {_TIME_DEBOUNCE} from "@/Constants/constants.js";
 import {useModal} from "@/Hooks/useModal.js";
-import Modal from "@/Pages/NguoiDung/Modal.vue";
+import Modal from "@/Pages/DonVi/Modal.vue";
 
 const props = defineProps({
-    nguoi_dung: Object,
+    don_vi: Object,
 })
 const key = ref(0);
 const keyModal = ref(0);
-const nguoi_dung_selected = ref(null);
+const don_vi_selected = ref(null);
 const changePage = (page) => {
-    router.visit(route('nguoi-dung.index', {page: page, ten_duong: search.value}), {
+    router.visit(route('don-vi.index', {page: page, ten_duong: search.value}), {
         preserveState: true,
         onSuccess: () => {
             onRefresh()
@@ -26,8 +26,7 @@ const changePage = (page) => {
 
 const columns = [
     {field: 'id', label: 'ID'},
-    {field: 'name', label: 'Tên'},
-    {field: 'email', label: 'Email'},
+    {field: 'ten', label: 'Tên'},
     {field: 'action', label: 'Hành động'},
 ]
 
@@ -44,22 +43,22 @@ const onRefresh = () => {
     nextTick(() => {
         eventForEditBtn()
     })
-    if (nguoi_dung_selected.value) {
-        nguoi_dung_selected.value = props.nguoi_dung.data.
-        find(item => item.id === nguoi_dung_selected.value.id);
+    if (don_vi_selected.value) {
+        don_vi_selected.value = props.don_vi.data.
+        find(item => item.id === don_vi_selected.value.id);
     }
 }
 const eventForEditBtn = () => {
     $('.edit').click(function () {
         const id = $(this).data('id');
-        nguoi_dung_selected.value = props.nguoi_dung.data.find(item => item.id === id);
+        don_vi_selected.value = props.don_vi.data.find(item => item.id === id);
         keyModal.value++
         modal.showModal();
     });
 }
 
 const openModal = () => {
-    nguoi_dung_selected.value = null;
+    don_vi_selected.value = null;
     modal.showModal();
 }
 
@@ -70,7 +69,7 @@ watch(search, (value) => {
 })
 
 const searchDebounce = debounce((value) => {
-    router.visit(route('nguoi-dung.index', {search: value}), {
+    router.visit(route('don-vi.index', {search: value}), {
         preserveState: true,
         onSuccess: () => {
             onRefresh()
@@ -84,22 +83,22 @@ const searchDebounce = debounce((value) => {
     <MainLayout>
         <div class="py-3 px-4">
             <div class="mb-3 flex justify-between">
-                <button @click.prevent="openModal" class="btn btn-success">Thêm người dùng</button>
-                <input v-model="search" class="border-gray-300 rounded-lg w-1/5" placeholder="Tìm kiếm người dùng">
+                <button @click.prevent="openModal" class="btn btn-success">Thêm đơn vị</button>
+                <input v-model="search" class="border-gray-300 rounded-lg w-1/5" placeholder="Tìm kiếm đơn vị">
             </div>
             <div class="table-responsive">
-                <table :key="key" v-data="{ data: nguoi_dung.data, columns: columns }"
+                <table :key="key" v-data="{ data: don_vi.data, columns: columns }"
                 class="table table-striped text-2xl">
                 </table>
             </div>
             <Pagination
-                :all-data="nguoi_dung"
+                :all-data="don_vi"
                 @changePage="changePage"
             />
         </div>
         <Modal
             :keyModal="keyModal"
-            :nguoi_dung="nguoi_dung_selected"
+            :don_vi="don_vi_selected"
             @closeModal="modal.hideModal"
             @refresh="onRefresh"
             />
