@@ -18,6 +18,9 @@ const props = defineProps({
     huyen: Object,
     tuyen_duong: Object,
     don_vi: Object,
+    loai_tuyen_duong: Object,
+    phan_cap: Object,
+    loai_tuan_tra: Object,
     isEdit: {
         type: Boolean,
         default: false
@@ -30,8 +33,8 @@ const emits = defineEmits(['closeModal', 'refresh', 'fileChange']);
 let form = useForm({
     id: '',
     ten: '',
-    loai: '',
-    ma_phan_cap: '',
+    loai_tuyen_duong_id: '',
+    phan_cap_id: '',
     diem_dau_huyen_id: '',
     diem_cuoi_huyen_id: '',
     diem_dau_lat: '',
@@ -42,11 +45,8 @@ let form = useForm({
     diem_cuoi_lng: '',
     chieu_dai: '',
     chieu_rong: '',
-    dien_tich: '',
-    loai_tuan_tra: '',
     don_vi_id: '',
-    xi_nghiep: '',
-    huyen_id: '',
+    lo_gioi: '',
 })
 
 
@@ -81,7 +81,7 @@ let formFile = useForm({
 })
 
 watch(() => props.keyModal, () => {
-    if(props.tuyen_duong) {
+     if(props.tuyen_duong) {
         Object.assign(form, props.tuyen_duong);
         formFile.tuyen_duong_id = props.tuyen_duong.id;
         formFile.danh_muc = danhMucTaiLieuOptions.tuyen_duong;
@@ -128,31 +128,31 @@ const uploadFiles = (files) => {
     <div class="modal fade" id="modal" >
         <div
             class="modal-dialog modal-dialog-centered"
-            :class="[isEdit ? 'modal-xl' : 'modal-lg']"
+            :class="[isEdit ? 'modal-lg' : 'modal-lg']"
         >
             <div class="modal-content">
                 <div class="modal-body p-0">
                     <div class="row">
                         <!-- Main Content -->
-                        <div :class="['px-4 pt-4', isEdit ? 'col-md-8' : 'col-md-12']">
+                         <div :class="['px-4 pt-4', isEdit ? 'col-md-12' : 'col-md-12']">
                             <div class="form-group">
                                 <label for="ten_tuyen_duong">Tên đường</label>
                                 <Input v-model="form.ten" :errors="form.errors.ten" />
                             </div>
                             <div class="form-group">
-                                <label for="loai_tuyen_duong">Loại</label>
-                                <Select v-model="form.loai"
-                                        :errors="form.errors.loai"
-                                        :options="loaiOptions"
-                                        id="loai"
+                                <label for="loai_tuyen_duong_id">Loại tuyến đường</label>
+                                <Select v-model="form.loai_tuyen_duong_id"
+                                        :errors="form.errors.loai_tuyen_duong_id"
+                                        :options="loai_tuyen_duong"
+                                        id="loai_tuyen_duong_id"
                                         option-default="Chọn loại"/>
                             </div>
                             <div class="form-group">
-                                <label for="ma_phan_cap">Mã phân cấp</label>
-                                <Select v-model="form.ma_phan_cap"
-                                        :errors="form.errors.ma_phan_cap"
-                                        :options="maPhanCapOptions"
-                                        id="ma_phan_cap"
+                                <label for="phan_cap_id">Mã phân cấp</label>
+                                <Select v-model="form.phan_cap_id"
+                                        :errors="form.errors.phan_cap_id"
+                                        :options="phan_cap"
+                                        id="phan_cap_id"
                                         option-default="Chọn mã phân cấp"/>
                             </div>
 
@@ -203,18 +203,10 @@ const uploadFiles = (files) => {
                             </div>
 
                             <div class="form-group">
-                                <label for="dien_tich">Diện tích</label>
-                                <Input v-model="form.dien_tich" :errors="form.errors.dien_tich" />
+                                <label for="dien_tich">Lộ giới</label>
+                                <Input v-model="form.lo_gioi" :errors="form.errors.lo_gioi" />
                             </div>
 
-                            <div class="form-group">
-                                <label for="loai_tuan_tra">Loại tuần tra</label>
-                                <Select v-model="form.loai_tuan_tra"
-                                        :errors="form.errors.loai_tuan_tra"
-                                        :options="loaiTuanTraOptions"
-                                        id="loai_tuan_tra"
-                                        option-default="Chọn loại tuần tra"/>
-                            </div>
 
                             <div class="form-group">
                                 <label for="don_vi_quan_ly">Đơn vị quản lý</label>
@@ -225,54 +217,12 @@ const uploadFiles = (files) => {
                                         option-default="Chọn đơn vị"/>
                             </div>
 
-                            <div class="form-group">
-                                <label for="xi_nghiep">Xí nghiệp</label>
-                                <Input v-model="form.xi_nghiep" :errors="form.errors.xi_nghiep" />
-                            </div>
-
-                            <div class="form-group">
-                                <label for="huyen_id">Huyện</label>
-                                <Select v-model="form.huyen_id"
-                                        :errors="form.errors.huyen_id"
-                                        :options="huyen"
-                                        id="huyen"
-                                        option-default="Chọn huyện"/>
-                            </div>
+                           
                         </div>
 
-                        <!-- Sidebar Actions -->
-                        <div v-if="isEdit" class="col-md-4 bg-gray-100 p-3 flex flex-col">
-                            <div class="mb-3">
-                                <div class="flex items-center space-x-2">
-                                    <img src="@/assets/img/avatar.jpg"
-                                         alt="Avatar" class="rounded-full w-12 h-12">
-                                    <div>
-                                        <div class="font-semibold">Admin</div>
-                                        <div class="text-gray-500">
-                                            <i class="fas fa-clock mr-1"></i>
-                                            {{ formatDate(tuyen_duong.created_at?.toString()) }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <Upload
-                                @file-change="uploadFiles"
-                                @submit="submit"
-                                @close="closeModal"
-                            />
-                            <div class="font-bold mt-4 ">Tệp đã tải lên</div>
-                            <div class="flex-1 overflow-y-auto max-h-[550px] mt-2">
-                                <File v-for="file in uploadedFiles"
-                                      :key="file.id"
-                                      :file="file"
-                                      @remove-file-upload="removeFileUploaded"
-                                      @refresh="emits('refresh')"
-                                />
-                            </div>
-                        </div>
                     </div>
                 </div>
-                <div v-if="!isEdit" class="modal-footer">
+                <div  class="modal-footer">
                     <button @click.prevent="submit" type="submit" class="btn btn-success">Lưu</button>
                     <button @click.prevent="closeModal" type="reset"
                             class="btn btn-secondary ml-2">

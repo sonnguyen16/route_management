@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('tuyen_duong', function (Blueprint $table) {
             $table->id();
             $table->string('ten');
-            $table->tinyInteger('loai');
-            $table->tinyInteger('ma_phan_cap');
+            $table->tinyInteger('loai_tuyen_duong_id');
+            $table->tinyInteger('phan_cap_id');
             $table->tinyInteger('diem_dau_huyen_id');
             $table->tinyInteger('diem_dau_xa_id');
             $table->double('diem_dau_lat', 8, 6);

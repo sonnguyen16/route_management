@@ -13,6 +13,10 @@ use App\Http\Controllers\CapPhepController;
 use App\Http\Controllers\DuongCamController;
 use App\Http\Controllers\CongVanController;
 use App\Http\Controllers\BanDoController;
+use App\Http\Controllers\CauHinhController;
+use App\Http\Controllers\DiemTaiNanController;
+use App\Http\Controllers\DenGiaoThongController;
+use App\Http\Controllers\CauController;
 
 Route::get('/', [AuthController::class, 'index'])->name('index');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
@@ -39,7 +43,9 @@ Route::prefix('don-vi')->middleware('auth')->group(function () {
 
 Route::prefix('sua-chua')->middleware('auth')->group(function () {
     Route::get('/', [SuaChuaController::class, 'index'])->name('sua-chua.index');
-    Route::post('/store', [SuaChuaController::class, 'store'])->name('sua-chua.store');
+    Route::post('/store', [SuaChuaController::class, 'store'])->name('sua-chua.store');    
+    Route::post('/storeDiem', [SuaChuaController::class, 'storeDiem'])->name('sua-chua.storeDiem');
+    Route::get('/delete-diem/{id}', [SuaChuaController::class, 'deleteDiem'])->name('sua-chua.deleteDiem');
 });
 
 Route::prefix('cong-van')->middleware('auth')->group(function () {
@@ -50,6 +56,8 @@ Route::prefix('cong-van')->middleware('auth')->group(function () {
 Route::prefix('gioi-han-toc-do')->middleware('auth')->group(function () {
     Route::get('/', [GioiHanTocDoController::class, 'index'])->name('gioi-han-toc-do.index');
     Route::post('/store', [GioiHanTocDoController::class, 'store'])->name('gioi-han-toc-do.store');
+    Route::post('/storeDiemGioiHanTocDo', [GioiHanTocDoController::class, 'storeDiemGioiHanTocDo'])->name('gioi-han-toc-do.storeDiemGioiHanTocDo');
+    Route::get('/delete/diem-gioi-han-toc-do', [GioiHanTocDoController::class, 'deleteDiemGioiHanTocDo'])->name('gioi-han-toc-do.deleteDiemGioiHanTocDo');
 });
 
 Route::prefix('cap-phep')->middleware('auth')->group(function () {
@@ -65,6 +73,8 @@ Route::prefix('giam-sat')->middleware('auth')->group(function () {
 Route::prefix('duong-cam')->middleware('auth')->group(function () {
     Route::get('/', [DuongCamController::class, 'index'])->name('duong-cam.index');
     Route::post('/store', [DuongCamController::class, 'store'])->name('duong-cam.store');
+    Route::post('/storeDiemCam', [DuongCamController::class, 'storeDiemCam'])->name('duong-cam.storeDiemCam');
+    Route::get('/delete/diem-cam', [DuongCamController::class, 'deleteDiemCam'])->name('duong-cam.deleteDiemCam');
 });
 
 Route::prefix('nguoi-dung')->middleware('auth') ->group(function () {
@@ -77,6 +87,23 @@ Route::prefix('map')->middleware('auth')->group(function () {
     Route::post('/update-mota', [BanDoController::class, 'update_mota'])->name('map.update-mota');
 });
 
+Route::prefix('cau-hinh')->middleware('auth') ->group(function () {
+    Route::get('/{loai}', [CauHinhController::class, 'index'])->name('cau-hinh.index');
+    Route::post('/store', [CauHinhController::class, 'store'])->name('cau-hinh.store');
+});
 
 
+Route::prefix('diem-tai-nan')->middleware('auth')->group(function () {
+    Route::get('/', [DiemTaiNanController::class, 'index'])->name('diem-tai-nan.index');
+    Route::post('/store', [DiemTaiNanController::class, 'store'])->name('diem-tai-nan.store');
+});
 
+Route::prefix('den-giao-thong')->middleware('auth')->group(function () {
+    Route::get('/', [DenGiaoThongController::class, 'index'])->name('den-giao-thong.index');
+    Route::post('/store', [DenGiaoThongController::class, 'store'])->name('den-giao-thong.store');
+});
+
+Route::prefix('cau')->middleware('auth')->group(function () {
+    Route::get('/', [CauController::class, 'index'])->name('cau.index');
+    Route::post('/store', [CauController::class, 'store'])->name('cau.store');
+});

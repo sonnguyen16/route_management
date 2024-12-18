@@ -23,7 +23,12 @@ export const vData = {
                     let value = item;
 
                     fieldPath.forEach(field => {
-                        value = value[field];
+                        try { 
+                            value = value[field];
+                        }catch {
+                            value = '';
+                        }
+                       
                     });
 
 
@@ -33,7 +38,8 @@ export const vData = {
                     } else{
                         if(column.enums){
                             const enumValue = column.enums.find(enumItem => enumItem.id === value);
-                            td.textContent = enumValue ? enumValue.name : '';
+                                td.textContent = enumValue ? enumValue.name : '';
+                            
                         }else{
                             if(column.field.includes("ngay")){
                                 td.textContent = new Date(value).toLocaleDateString();

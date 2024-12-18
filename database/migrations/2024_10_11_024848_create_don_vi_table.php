@@ -14,6 +14,13 @@ return new class extends Migration
         Schema::create('don_vi', function (Blueprint $table) {
             $table->id();
             $table->string('ten');
+            $table->string('dia_chi');
+            $table->string('dien_thoai');
+            $table->string('email');
+            $table->string('fax');
+            $table->string('website');
+            $table->string('ma_so_thue');
+            $table->string('lien_he');
             $table->tinyInteger('loai')->default(1);
             $table->timestamps();
         });

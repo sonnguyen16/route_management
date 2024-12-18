@@ -20,5 +20,6 @@ class TaiLieu extends Model
         'loai',
         'dung_luong',
         'mo_ta',
+        'type',
     ];
 }

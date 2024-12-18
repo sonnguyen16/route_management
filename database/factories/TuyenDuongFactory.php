@@ -35,10 +35,10 @@ class TuyenDuongFactory extends Factory
             'chieu_dai' => fake()->randomFloat(2, 0, 100),
             'chieu_rong' => fake()->randomFloat(2, 0, 100),
             'dien_tich' => fake()->randomFloat(2, 0, 100),
-            'loai_tuan_tra' => fake()->randomElement([1, 2, 3]),
+          //  'loai_tuan_tra' => fake()->randomElement([1, 2, 3]),
             'don_vi_id' => 1,
-            'xi_nghiep' => fake()->name(),
-            'huyen_id' => fake()->randomElement([1, 2]),
+           // 'xi_nghiep' => fake()->name(),
+          //  'huyen_id' => fake()->randomElement([1, 2]),
         ];
     }
 }

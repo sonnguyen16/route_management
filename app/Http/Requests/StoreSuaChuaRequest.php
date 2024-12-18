@@ -27,11 +27,7 @@ class StoreSuaChuaRequest extends FormRequest
             'don_vi_id' => 'required|exists:don_vi,id',
             'ngay_khoi_cong' => 'required|date',
             'ngay_hoan_thanh' => 'required|date',
-            'tu_km' => 'required|numeric',
-            'den_km' => 'required|numeric',
             'ngay_duyet' => 'required|date',
-            'nguoi_duyet_id' => 'required|exists:users,id',
-            'loai_sua_chua' => 'required|numeric',
         ];
     }
 
@@ -51,16 +47,9 @@ class StoreSuaChuaRequest extends FormRequest
             'ngay_khoi_cong.date' => 'Ngày khởi công không đúng định dạng',
             'ngay_hoan_thanh.required' => 'Ngày hoàn thành không được để trống',
             'ngay_hoan_thanh.date' => 'Ngày hoàn thành không đúng định dạng',
-            'tu_km.required' => 'Từ km không được để trống',
-            'tu_km.numeric' => 'Từ km phải là số',
-            'den_km.required' => 'Đến km không được để trống',
-            'den_km.numeric' => 'Đến km phải là số',
             'ngay_duyet.required' => 'Ngày duyệt không được để trống',
             'ngay_duyet.date' => 'Ngày duyệt không đúng định dạng',
-            'nguoi_duyet_id.required' => 'Người duyệt không được để trống',
-            'nguoi_duyet_id.exists' => 'Người duyệt không tồn tại',
-            'loai_sua_chua.required' => 'Loại sửa chữa không được để trống',
-            'loai_sua_chua.numeric' => 'Loại sửa chữa phải là số',
+
         ];
     }
 }

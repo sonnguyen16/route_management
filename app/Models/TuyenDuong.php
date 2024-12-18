@@ -13,8 +13,8 @@ class TuyenDuong extends Model
     protected $table = 'tuyen_duong';
     protected $fillable = [
         'ten',
-        'loai',
-        'ma_phan_cap',
+        'loai_tuyen_duong_id',
+        'phan_cap_id',
         'diem_dau_huyen_id',
         'diem_dau_xa_id',
         'diem_dau_lat',
@@ -26,17 +26,16 @@ class TuyenDuong extends Model
         'chieu_dai',
         'chieu_rong',
         'dien_tich',
-        'loai_tuan_tra',
+        'lo_gioi',
         'don_vi_id',
-        'xi_nghiep',
-        'huyen_id',
         'key',
     ];
 
     public function tai_lieu()
     {
-        return $this->hasMany(TaiLieu::class)
-            ->where('danh_muc', DanhMucTaiLieu::tuyen_duong->value);
+        return $this->hasMany(TaiLieu::class, 'danh_muc', 'id')->where('isdelete',0)->where('type','duong');
+        // return $this->hasMany(TaiLieu::class)
+          //  ->where('danh_muc', DanhMucTaiLieu::tuyen_duong->value);
     }
 
     public function huyen()
@@ -73,4 +72,13 @@ class TuyenDuong extends Model
     {
         return $this->hasMany(ToaDo::class, 'duong', 'key');
     }
+    public function loai_tuyen_duong()
+    {
+        return $this->belongsTo(CauHinh::class, 'loai_tuyen_duong_id');
+    }
+    public function phan_cap()
+    {
+        return $this->belongsTo(CauHinh::class, 'phan_cap_id');
+    }
+    
 }

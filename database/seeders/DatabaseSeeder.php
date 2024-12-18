@@ -28,8 +28,8 @@ class DatabaseSeeder extends Seeder
 //        TuyenDuong::factory(100)->create();
         DB::table('tuyen_duong')->insert([
             'ten' => 'Đường Võ Nguyên Giáp',
-            'loai' => 1,
-            'ma_phan_cap' => 1,
+            'loai_tuyen_duong_id' => 1,
+            'phan_cap_id' => 1,
             'diem_dau_huyen_id' => 1,
             'diem_dau_xa_id' => 1,
             'diem_dau_lat' => 10.123456,

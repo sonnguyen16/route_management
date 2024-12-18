@@ -57,4 +57,4 @@ export const iconFileTypes = {
 
 export const _TIME_DEBOUNCE = 300;
 
-export const MEDIA_ENDPOINT = '/storage/';
+export const MEDIA_ENDPOINT = '/storage/';// /storage/

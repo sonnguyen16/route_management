@@ -7,16 +7,18 @@ use Inertia\Inertia;
 use App\Http\Requests\StoreDonViRequest;
 use App\Models\DonVi;
 
+
 class DonViController extends Controller
 {
     public function index(Request $request)
     {
-        $don_vi = DonVi::query();
+        $obj = DonVi::with(['tai_lieu']);
         if($request->filled('search')){
-            $don_vi->where('ten', 'like', '%'.$request->search.'%');
+            $obj = $obj->where('ten', 'like', '%'.$request->search.'%');
         }
-        $don_vi = $don_vi->paginate(15);
-        return Inertia::render('DonVi/Index', compact('don_vi'));
+        $obj = $obj->where('loai', 1);
+        $obj = $obj->paginate(15);
+        return Inertia::render('DonVi/Index', compact('obj'));
     }
 
     public function store(StoreDonViRequest $request)

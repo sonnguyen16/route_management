@@ -14,29 +14,35 @@ const model = defineModel();
 let choice = null;
 
 onMounted(() => {
+   // model.value = 19;
+    console.log(`gia trị 1: ${model.value}`);
     const selectElement = document.getElementById(props.id);
     choice = new Choices(selectElement);
     choice.setChoices(props.options, 'id', props?.options?.[0]?.name ? 'name' : 'ten', true);
 });
 
 watch(() => props.options, (newOptions) => {
-    if (choice && newOptions) {
+   if (choice) {
         choice.setChoiceByValue('');
         choice.clearChoices();
-        choice.setChoices(newOptions, 'id', newOptions[0]?.name ? 'name' : 'ten', true);
+        if(newOptions) {
+            choice.setChoices(newOptions, 'id', newOptions[0]?.name ? 'name' : 'ten', true);
+        }
+       console.log(`gia trị 2: ${model.value}`);
         choice.setChoiceByValue(model.value);
     }
 });
 
 watch(() => model.value, () => {
     choice.setChoiceByValue(model.value);
+    console.log(`gia trị: ${model.value}`);
 });
 
 </script>
 
 <template>
     <div>
-        <select :id="id" v-model="model" :class="['form-control', errors && 'border border-danger']">
+       <select :id="id" v-model="model" :class="['form-control', errors && 'border border-danger']">
             <option value="">{{ optionDefault }}</option>
         </select>
         <InputError :message="errors" />
