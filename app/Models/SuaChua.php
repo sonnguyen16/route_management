@@ -41,7 +41,7 @@ class SuaChua extends Model
 
     public function tai_lieu()
     {
-        return $this->hasMany(TaiLieu::class, 'danh_muc', 'id')->where('isdelete',0);
+        return $this->hasMany(TaiLieu::class, 'danh_muc', 'id')->where('isdelete',0)->where('type','sua_chua');
            // ->where('danh_muc', DanhMucTaiLieu::sua_chua->value);
     }
     public function sua_chua_diem()

@@ -208,7 +208,7 @@ function deleteDiemCam(value) {
                     </td>
                         <td style="vertical-align: unset !important;">
                             <Upload
-                                type="sua_chua"
+                                type="duong_cam"
                                 :danh_muc="item.id"
                                 :listFile ="item.tai_lieu"
                                 @refresh="onRefresh"

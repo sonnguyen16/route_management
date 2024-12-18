@@ -22,4 +22,8 @@ class DonVi extends Model
         'lien_he',
         'loai'
     ];
+    public function tai_lieu()
+    {
+        return $this->hasMany(TaiLieu::class, 'danh_muc', 'id')->where('isdelete',0)->where('type','don_vi');
+    }
 }

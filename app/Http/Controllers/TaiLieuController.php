@@ -23,8 +23,9 @@ class TaiLieuController extends Controller
 
     public function store(StoreTaiLieuRequest $request)
     {
+       
         $validated = $request->validated();
-
+       
         if($request->hasFile('file')) {
             foreach ($request->file('file') as $file) {
                 $originalName = $file->getClientOriginalName();
@@ -39,6 +40,7 @@ class TaiLieuController extends Controller
                     'ten' => $originalName,
                     'file' => $file,
                     'loai' => $type,
+                    'type' => $request->type,
                     'tuyen_duong_id' => $validated['tuyen_duong_id'] ?? null,
                     'cong_van_id' => $validated['cong_van_id'] ?? null,
                     'toa_do_id' => $validated['toa_do_id'] ?? null,

@@ -11,7 +11,7 @@ class DonViController extends Controller
 {
     public function index(Request $request)
     {
-        $obj = DonVi::query();;
+        $obj = DonVi::with(['tai_lieu']);
         if($request->filled('search')){
             $obj = $obj->where('ten', 'like', '%'.$request->search.'%');
         }

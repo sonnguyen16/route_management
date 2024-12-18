@@ -37,7 +37,7 @@ class DuongCam extends Model
     }
     public function tai_lieu()
     {
-        return $this->hasMany(TaiLieu::class, 'danh_muc', 'id')->where('isdelete',0);
+        return $this->hasMany(TaiLieu::class, 'danh_muc', 'id')->where('isdelete',0)->where('type','duong_cam');;
            // ->where('danh_muc', DanhMucTaiLieu::sua_chua->value);
     }
     public function diem_cam()

@@ -220,7 +220,7 @@ function deleteDiem(id) {
                         </td>
                         <td style="vertical-align: unset !important;">
                             <Upload
-                                type="duong_cam"
+                                type="sua_chua"
                                 :danh_muc="item.id"
                                 :listFile ="item.tai_lieu"
                                 @refresh="onRefresh"

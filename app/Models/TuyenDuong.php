@@ -33,7 +33,7 @@ class TuyenDuong extends Model
 
     public function tai_lieu()
     {
-        return $this->hasMany(TaiLieu::class, 'danh_muc', 'id')->where('isdelete',0);
+        return $this->hasMany(TaiLieu::class, 'danh_muc', 'id')->where('isdelete',0)->where('type','duong');
         // return $this->hasMany(TaiLieu::class)
           //  ->where('danh_muc', DanhMucTaiLieu::tuyen_duong->value);
     }

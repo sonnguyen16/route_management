@@ -8,7 +8,7 @@ import {debounce} from "lodash";
 import {_TIME_DEBOUNCE} from "@/Constants/constants.js";
 import {useModal} from "@/Hooks/useModal.js";
 import Modal from "@/Pages/DonVi/Modal.vue";
-
+import Upload from "@/Components/UploadFile.vue";
 const props = defineProps({
     obj: Object,
     loai: String,
@@ -18,6 +18,9 @@ const key = ref(0);
 const keyModal = ref(0);
 const don_vi_selected = ref(null);
 const isEdit = ref(false);
+const files = ref([]);
+const key1 = ref(1);
+const key2 = ref(2);
 const changePage = (page) => {
     router.visit(route('don-vi.index', {page: page, ten_duong: search.value}), {
         preserveState: true,
@@ -43,6 +46,9 @@ const columns = [
 const modal = useModal('modal');
 
 onMounted(() => {
+    files[1] = 1;
+    files[2] = 2;
+    files[3] = 3;
     eventForEditBtn()
 })
 
@@ -100,9 +106,49 @@ const searchDebounce = debounce((value) => {
                 <input v-model="search" class="border-gray-300 rounded-lg w-1/5" placeholder="Tìm kiếm">
             </div>
             <div class="table-responsive">
+                <table class="table table-striped text-2xl">
+                <thead>
+                    <tr>
+                    <th class="text-center">STT</th>
+                    <th class="text-left">Tên đơn vị</th>
+                    <th class="text-left">Địa chỉ</th>
+                    <th class="text-left">Điện thoại</th>
+                    <th class="text-left">Fax</th>
+                    <th class="text-center">Email</th>
+                    <th class="text-center">Website</th>
+                    <th class="text-center">Liên hệ</th>
+                    <th class="text-center">File đính kèm</th>
+                    <th class="text-center">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(item,i) in obj.data" :key="i">
+                    <td class="text-center" scope="row">{{ i+1 }}</td>  
+                    <td>{{ item.ten }}</td>
+                    <td>{{ item.dia_chi }}</td>
+                    <td>{{ item.dien_thoai }}</td>
+                    <td>{{ item.fax }}</td>
+                    <td>{{ item.email }}</td>
+                    <td>{{ item.website }}</td>
+                    <td>{{ item.lien_he }}</td>                    
+                    <td style="vertical-align: unset !important;">
+                        {{ item.id }} ttt
+                         <!--   <Upload
+                                type="don_vi"
+                                :danh_muc="i"
+                                :listFile ="item.tai_lieu"
+                                @refresh="onRefresh"
+                            /> -->
+                    </td>
+                    <td class="text-center"><a :data-id=item.id class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
+                </tr>
+                </tbody>
+                </table>
+                <!--
                 <table :key="key" v-data="{ data: obj.data, columns: columns }"
                 class="table table-striped text-2xl">
                 </table>
+                -->
             </div>
             <Pagination
                 :all-data="obj"
@@ -117,5 +163,15 @@ const searchDebounce = debounce((value) => {
             @refresh="onRefresh"
             :is-edit="isEdit"
             />
+            <Upload
+                                type="don_vi"
+                                :danh_muc="key1"
+                                :listFile ="null"
+                            />
+                            <Upload
+                                type="don_vi"
+                                :danh_muc="key2"
+                                :listFile ="null"
+                            />           
     </MainLayout>
 </template>
