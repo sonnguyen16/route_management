@@ -135,7 +135,7 @@ const searchDebounce = debounce((value) => {
                         {{ item.id }} ttt
                          <Upload
                                 type="don_vi"
-                                :danh_muc="i"
+                                :danh_muc="item.id"
                                 :listFile ="item.tai_lieu"
                                 @refresh="onRefresh"
                             />

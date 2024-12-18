@@ -36,7 +36,7 @@ const onFileChange = (e) => {
     formFile.type = props.type;
     console.log('aaa');
     console.log(formFile.danh_muc);
-    /*
+
     formFile.post(route('tai-lieu.store'), {
         onSuccess: () => {
             emits('refresh')
@@ -44,7 +44,7 @@ const onFileChange = (e) => {
         onError: (err) => {
             console.log(err)
         }
-    }) */
+    }) 
    // emits('fileChange', e.target.files);
 }
 
@@ -63,10 +63,8 @@ const removeFileUploaded = (id) => {
         <label style="font-weight: normal;color: #007bff;" for="file"
                class="cursor-pointer border-0 w-full text-start rounded-md mb-0">
             <i class="fa fa-paperclip mr-2"></i>
-            Tải lên tệp {{ props.danh_muc }}
+            Tải lên tệp {{ formFile.danh_muc }}
         </label>
-        <Input v-model="formFile.danh_muc"/>
-       
         <input  @change="onFileChange" id="file" type="file" class="hidden" multiple>
         <div class="flex-1 overflow-y-auto max-h-[280px] mt-2">
                                 <File v-for="file in props.listFile"
