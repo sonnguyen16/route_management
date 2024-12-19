@@ -1,6 +1,7 @@
 <template>
     <MainLayout>
         <div class="cont">
+        {{  props.tuyen_duong }}
             <div ref="mapContainer" class="map-container"></div>
             <Popup :selectedRoute="selectedRoute"
                    :is-sheet-open="isSheetOpen"
@@ -40,8 +41,8 @@ onMounted(() => {
         container: mapContainer.value,
         style: "mapbox://styles/mapbox/streets-v12",
         center: [
-            props.tuyen_duong[0].toa_do[0].lng,
-            props.tuyen_duong[0].toa_do[0].lat
+           props.tuyen_duong[0].toa_do[0].lng,
+           props.tuyen_duong[0].toa_do[0].lat
         ],
         zoom: 17,
     });
@@ -49,7 +50,6 @@ onMounted(() => {
     // Thêm đường các các điểm km, cầu vào map
     map.on("load", () => {
         addAllRoutes();
-
         for (let i = 0; i < props.toa_do_khac?.length ; i++) {
             const img_url = props.toa_do_khac[i]?.loai === 2 ? '/bridge.png' : '/Km3.png';
             const iconId = props.toa_do_khac[i]?.loai === 2 ? 'bridge-marker-icon' : 'km-marker-icon';

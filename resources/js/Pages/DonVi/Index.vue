@@ -119,7 +119,7 @@ input.onchange = e => {
     })
 }
 const chooseFile = (id) => {
-//  formFile.danh_muc = id;
+formFile.danh_muc = id;
 keyModal
   input.click();
 }

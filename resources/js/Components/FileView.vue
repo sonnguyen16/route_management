@@ -52,7 +52,7 @@ const addDetail = () => {
                 :src="MEDIA_ENDPOINT + file.file"
                 style="width: 20px; height: 15px;"
                 alt="image"
-                ><i v-else class="fa text-[80px] text-gray-500" :class="[iconFileTypes[file.loai]]"></i>
+                ><i v-else class="fa text-[30px] text-gray-500" :class="[iconFileTypes[file.loai]]"></i>
             </td>
             <td>
                 <a :href="MEDIA_ENDPOINT + file.file"
