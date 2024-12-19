@@ -1,8 +1,7 @@
 <template>
     <MainLayout>
         <div class="cont">
-        {{  props.tuyen_duong }}
-            <div ref="mapContainer" class="map-container"></div>
+        <div ref="mapContainer" class="map-container"></div>
             <Popup :selectedRoute="selectedRoute"
                    :is-sheet-open="isSheetOpen"
                    @close-sheet="closeSheet"
