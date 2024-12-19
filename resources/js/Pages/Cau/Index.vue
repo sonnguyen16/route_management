@@ -2,12 +2,13 @@
 import MainLayout from "@/Layouts/MainLayout.vue";
 import {vData} from "@/Directives/v-data.js";
 import Pagination from "@/Components/Pagination.vue";
-import {router} from "@inertiajs/vue3";
+import {router, useForm} from "@inertiajs/vue3";
 import Modal from "@/Pages/Cau/Modal.vue";
 import {useModal} from "@/Hooks/useModal.js";
 import {nextTick, onMounted, ref, watch} from "vue";
 import { debounce } from 'lodash';
 import {_TIME_DEBOUNCE, maPhanCapOptions} from "@/Constants/constants.js";
+import Upload from "@/Components/UploadFile.vue";
 
 const props = defineProps({
     cau: Object,
@@ -91,6 +92,32 @@ const searchDebounce = debounce((value) => {
     });
 }, _TIME_DEBOUNCE)
 
+// upload hình ảnh
+let formFile = useForm({
+    type: '',
+    danh_muc: '',
+    file: []
+})
+var input = document.createElement('input');
+input.type = 'file';
+input.multiple = true;
+input.onchange = e => { 
+   formFile.file = e.target.files;
+   formFile.type = 'cau';
+   formFile.post(route('tai-lieu.store'), {
+        onSuccess: () => {
+            onRefresh();
+        },
+        onError: (err) => {
+            console.log(err)
+        }
+    })
+}
+const chooseFile = (id) => {
+    formFile.danh_muc = id;
+    input.click();
+}
+// ket thuc
 </script>
 
 <template>
@@ -123,6 +150,7 @@ const searchDebounce = debounce((value) => {
                     <th class="text-center">Tải trọng</th>
                     <th class="text-center">Năm<br>kiểm định</th>
                     <th class="text-center">Tuyến đường</th>
+                    <th class="text-center">File đính kèm</th>
                     <th class="text-center">Thao tác</th>
                     </tr>
                 </thead>
@@ -139,6 +167,17 @@ const searchDebounce = debounce((value) => {
                     <td class="text-center">{{ item.tai_trong }} tấn</td>
                     <td class="text-center">{{ item.kiem_dinh }}</td>
                     <td>{{ item.tuyen_duong ? item.tuyen_duong.ten : ''}}</td>
+                    <td style="vertical-align: unset !important;">
+                        <label style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(item.id)"
+                            class="cursor-pointer border-0 w-full text-start rounded-md mb-0">
+                            <i class="fa fa-paperclip mr-2"></i>
+                            Tải lên tệp
+                        </label>
+                        <Upload
+                            :listFile ="item.tai_lieu"
+                            @refresh="onRefresh"
+                        />
+                    </td>
                     <td class="text-center"><a :data-id=item.id class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
                 </tr>
                 </tbody>

@@ -93,13 +93,13 @@ const uploadFiles = (files) => {
     <div class="modal fade" id="modal">
         <div
             class="modal-dialog modal-dialog-centered"
-            :class="[isEdit ? 'modal-xl' : 'modal-lg']"
+            :class="[isEdit ? 'modal-lg' : 'modal-lg']"
         >
             <div class="modal-content">
                 <div class="modal-body p-0">
                     <div class="row">
                         <!-- Main Content -->
-                        <div :class="['px-4 pt-4', isEdit ? 'col-md-8' : 'col-md-12']">
+                        <div :class="['px-4 pt-4', isEdit ? 'col-md-12' : 'col-md-12']">
                             <div class="form-group">
                                 <label for="loai_tuyen_duong">Tuyến đường</label>
                                 <Select v-model="form.tuyen_duong_id"
@@ -130,39 +130,10 @@ const uploadFiles = (files) => {
                             </div>
                         </div>
 
-                        <!-- Sidebar Actions -->
-                        <div v-if="isEdit" class="col-md-4 bg-gray-100 p-3 flex flex-col">
-                            <div class="mb-3">
-                                <div class="flex items-center space-x-2">
-                                    <img src="@/assets/img/avatar.jpg"
-                                         alt="Avatar" class="rounded-full w-12 h-12">
-                                    <div>
-                                        <div class="font-semibold">Admin</div>
-                                        <div class="text-gray-500">
-                                            <i class="fas fa-clock mr-1"></i>
-                                            {{ formatDate(cap_phep.created_at.toString()) }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <Upload
-                                @file-change="uploadFiles"
-                                @submit="submit"
-                                @close="closeModal"
-                            />
-                            <div class="font-bold mt-4 ">Tệp đã tải lên</div>
-                            <div class="flex-1 overflow-y-auto max-h-[200px] mt-2">
-                                <File v-for="file in uploadedFiles"
-                                      :key="file.id"
-                                      :file="file"
-                                      @remove-file-upload="removeFileUploaded"
-                                      @refresh="emits('refresh')"
-                                />
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
-                <div v-if="!isEdit" class="modal-footer">
+                <div class="modal-footer">
                     <button @click.prevent="submit" type="submit" class="btn btn-success">Lưu</button>
                     <button @click.prevent="closeModal" type="reset"
                             class="btn btn-secondary ml-2">

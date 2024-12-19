@@ -2,7 +2,7 @@
 import MainLayout from "@/Layouts/MainLayout.vue";
 import {vData} from "@/Directives/v-data.js";
 import Pagination from "@/Components/Pagination.vue";
-import {router} from "@inertiajs/vue3";
+import {router, useForm} from "@inertiajs/vue3";
 import Modal from "@/Pages/SuaChua/Modal.vue";
 import ModelHangMuc from "@/Pages/SuaChua/ModelHangMuc.vue";
 import {useModal} from "@/Hooks/useModal.js";
@@ -160,6 +160,34 @@ function deleteDiem(id) {
     });
 }
 
+
+
+// upload hình ảnh
+let formFile = useForm({
+    type: '',
+    danh_muc: '',
+    file: []
+})
+var input = document.createElement('input');
+input.type = 'file';
+input.multiple = true;
+input.onchange = e => { 
+   formFile.file = e.target.files;
+   formFile.type = 'sua_chua';
+   formFile.post(route('tai-lieu.store'), {
+        onSuccess: () => {
+            onRefresh();
+        },
+        onError: (err) => {
+            console.log(err)
+        }
+    })
+}
+const chooseFile = (id) => {
+  formFile.danh_muc = id;
+  input.click();
+}
+// ket thuc
 </script>
 
 <template>
@@ -219,10 +247,13 @@ function deleteDiem(id) {
                         </table>
                         </td>
                         <td style="vertical-align: unset !important;">
+                            <label style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(item.id)"
+                            class="cursor-pointer border-0 w-full text-start rounded-md mb-0">
+                            <i class="fa fa-paperclip mr-2"></i>
+                            Tải lên tệp
+                        </label>
                             <Upload
-                                type="sua_chua"
-                                :danh_muc="item.id"
-                                :listFile ="item.tai_lieu"
+                               :listFile ="item.tai_lieu"
                                 @refresh="onRefresh"
                             />
                         </td>

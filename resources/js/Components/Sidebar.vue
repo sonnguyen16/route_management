@@ -77,7 +77,7 @@ const isActive = (href) => {
                 <li class="nav-item menu">
                     <a :href="route('don-vi.index')" class="nav-link">
                         <p class="txt-color font-weight-bold">
-                            <img class="d-inline-block me-2" src="@/assets/img/ico.png" alt="icon">Đơn vị quản lý
+                            <img class="d-inline-block me-2" src="@/assets/img/ico.png" alt="icon">Quản lý đơn vị
                         </p>
                     </a>
                 </li>
@@ -144,13 +144,14 @@ const isActive = (href) => {
                         </p>
                     </a>
                 </li>
+                <!--
                 <li class="nav-item menu">
                     <a :href="route('diem-tai-nan.index')" class="nav-link">
                         <p class="txt-color font-weight-bold">
                             <img class="d-inline-block me-2" src="@/assets/img/ico.png" alt="icon">Điểm hay xảy ra tai nạn
                         </p>
                     </a>
-                </li>
+                </li> -->
                 <li class="nav-item menu">
                     <a :href="route('nguoi-dung.index')" class="nav-link">
                         <p class="txt-color font-weight-bold">

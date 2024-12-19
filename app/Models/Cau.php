@@ -37,4 +37,8 @@ class Cau extends Model
     {
         return $this->belongsTo(CauHinh::class, 'loai_cau_id');
     }
+    public function tai_lieu()
+    {
+        return $this->hasMany(TaiLieu::class, 'danh_muc', 'id')->where('isdelete',0)->where('type','cau');
+    }
 }

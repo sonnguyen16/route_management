@@ -2,13 +2,14 @@
 import MainLayout from "@/Layouts/MainLayout.vue";
 import {vData} from "@/Directives/v-data.js";
 import Pagination from "@/Components/Pagination.vue";
-import {router} from "@inertiajs/vue3";
+import {router, useForm} from "@inertiajs/vue3";
 import Modal from "@/Pages/TocDo/Modal.vue";
 import ModalDiemGioiHanTocDo from "@/Pages/TocDo/ModalDiemGioiHanTocDo.vue";
 import {useModal} from "@/Hooks/useModal.js";
 import {nextTick, onMounted, ref, watch} from "vue";
 import {_TIME_DEBOUNCE, loaiOptions, maPhanCapOptions} from "@/Constants/constants.js";
 import { debounce } from 'lodash';
+import Upload from "@/Components/UploadFile.vue";
 
 const props = defineProps({
     gioi_han_toc_do: Object,
@@ -115,6 +116,33 @@ function deleteDiemGioiHanTocDo(value) {
     });
 }
 
+
+// upload hình ảnh
+let formFile = useForm({
+    type: '',
+    danh_muc: '',
+    file: []
+})
+var input = document.createElement('input');
+input.type = 'file';
+input.multiple = true;
+input.onchange = e => { 
+   formFile.file = e.target.files;
+   formFile.type = 'gioi_han_toc_do';
+   formFile.post(route('tai-lieu.store'), {
+        onSuccess: () => {
+            onRefresh();
+        },
+        onError: (err) => {
+            console.log(err)
+        }
+    })
+}
+const chooseFile = (id) => {
+    formFile.danh_muc = id;
+    input.click();
+}
+// ket thuc
 </script>
 
 <template>
@@ -161,12 +189,16 @@ function deleteDiemGioiHanTocDo(value) {
                         </table>
                         </td>
                         <td style="vertical-align: unset !important;">
+                            <label style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(item.id)"
+                                class="cursor-pointer border-0 w-full text-start rounded-md mb-0">
+                                <i class="fa fa-paperclip mr-2"></i>
+                                Tải lên tệp
+                            </label>
                             <Upload
-                                type="gioi_han_toc_do"
-                                :danh_muc="item.id"
                                 :listFile ="item.tai_lieu"
                                 @refresh="onRefresh"
                             />
+                         
                         </td>
                     <td class="text-center"><a :data-id=item.id class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
                 </tr>

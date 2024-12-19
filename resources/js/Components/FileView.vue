@@ -61,8 +61,8 @@ const addDetail = () => {
                 {{ file.ten }}
                 </a>
             </td>
-            <td>
-                <button v-if="enableDelete" @click="emits('removeFileUpload', file.id)"
+            <td class="text-right" >
+                <button v-if="enableDelete" @click="emits('removeFileUpload', file.id)" style="padding-right: 5px;"
                         class="hover:text-indigo-500 border-0 p-[1px] rounded-md text-gray-500 actions">
                     Xóa
                 </button>

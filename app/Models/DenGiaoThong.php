@@ -17,6 +17,11 @@ class DenGiaoThong extends Model
         'thoi_gian_pha_den',
         'thoi_gian_hoat_dong',
         'vi_tri',
-        'isdelete'
+        'isdelete',
+        'tai_lieu',
     ];
+    public function tai_lieu()
+    {
+        return $this->hasMany(TaiLieu::class, 'danh_muc', 'id')->where('isdelete',0)->where('type','den_giao_thong');
+    }
 }

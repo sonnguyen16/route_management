@@ -31,7 +31,8 @@ class CapPhep extends Model
 
     public function tai_lieu()
     {
-        return $this->hasMany(TaiLieu::class, 'tuyen_duong_id', 'tuyen_duong_id')
-            ->where('danh_muc', DanhMucTaiLieu::cap_phep->value);
+        return $this->hasMany(TaiLieu::class, 'danh_muc', 'id')->where('isdelete',0)->where('type','cap_phep');
+      //  return $this->hasMany(TaiLieu::class, 'tuyen_duong_id', 'tuyen_duong_id')
+      //      ->where('danh_muc', DanhMucTaiLieu::cap_phep->value);
     }
 }

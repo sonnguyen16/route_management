@@ -11,8 +11,12 @@ class DenGiaoThongController extends Controller
 {
     public function index(Request $request)
     {
-        $den_giao_thong = DenGiaoThong::query();
+        $den_giao_thong = DenGiaoThong::with([
+            'tai_lieu']);;
 
+
+
+        
         if($request->filled('search')){
             $den_giao_thong = $den_giao_thong->where('nut_giao', 'like', '%'.$request->search.'%');
         }

@@ -12,7 +12,7 @@ class CauController extends Controller
 {
     public function index(Request $request)
     {
-        $cau = Cau::with(['loai_ket_cau_nhip','tuyen_duong','loai_cau']);
+        $cau = Cau::with(['loai_ket_cau_nhip','tuyen_duong','loai_cau','tai_lieu']);
         if($request->filled('search')){
             $cau = $cau->where('nut_giao', 'like', '%'.$request->search.'%');
         }

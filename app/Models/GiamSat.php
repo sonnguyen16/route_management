@@ -15,6 +15,7 @@ class GiamSat extends Model
     protected $fillable = [
         'tuyen_duong_id',
         'don_vi_id',
+        'tai_lieu',
     ];
 
     public function tuyen_duong()
@@ -26,10 +27,9 @@ class GiamSat extends Model
     {
         return $this->belongsTo(DonVi::class, 'don_vi_id');
     }
-
     public function tai_lieu()
     {
-        return $this->hasMany(TaiLieu::class, 'tuyen_duong_id', 'tuyen_duong_id')
-            ->where('danh_muc', DanhMucTaiLieu::giam_sat->value);
+        return $this->hasMany(TaiLieu::class, 'danh_muc', 'id')->where('isdelete',0)->where('type','giam_sat');
     }
+   
 }

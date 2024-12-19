@@ -2,12 +2,13 @@
 import MainLayout from "@/Layouts/MainLayout.vue";
 import {vData} from "@/Directives/v-data.js";
 import Pagination from "@/Components/Pagination.vue";
-import {router} from "@inertiajs/vue3";
+import {router, useForm} from "@inertiajs/vue3";
 import Modal from "@/Pages/GiamSat/Modal.vue";
 import {useModal} from "@/Hooks/useModal.js";
 import {nextTick, onMounted, ref, watch} from "vue";
 import { debounce } from 'lodash';
 import {_TIME_DEBOUNCE, maPhanCapOptions} from "@/Constants/constants.js";
+import Upload from "@/Components/UploadFile.vue";
 
 const props = defineProps({
     giam_sat: Object,
@@ -89,6 +90,33 @@ const searchDebounce = debounce((value) => {
     });
 }, _TIME_DEBOUNCE)
 
+
+// upload hình ảnh
+let formFile = useForm({
+    type: '',
+    danh_muc: '',
+    file: []
+})
+var input = document.createElement('input');
+input.type = 'file';
+input.multiple = true;
+input.onchange = e => { 
+   formFile.file = e.target.files;
+   formFile.type = 'giam_sat';
+   formFile.post(route('tai-lieu.store'), {
+        onSuccess: () => {
+            onRefresh();
+        },
+        onError: (err) => {
+            console.log(err)
+        }
+    })
+}
+const chooseFile = (id) => {
+    formFile.danh_muc = id;
+    input.click();
+}
+// ket thuc
 </script>
 
 <template>
@@ -99,10 +127,50 @@ const searchDebounce = debounce((value) => {
              <input v-model="search" class="border-gray-300 rounded-lg w-1/5" placeholder="Tìm kiếm giám sát">
          </div>
          <div class="table-responsive">
-             <table :key="key"
+            <table class="table table-striped text-2xl">
+                <thead>
+                    <tr>
+                    <th class="text-center">STT</th>
+                    <th class="text-left">Tên đường</th>
+                    <th class="text-left">Mã phân cấp</th>
+                    <th class="text-left">Điểm đầu</th>
+                    <th class="text-left">Điểm cuối</th>
+                    <th class="text-center">Chiều dài</th>
+                    <th class="text-center">Đơn vị giám sát</th>
+                    <th class="text-center">File đính kèm</th>
+                    <th class="text-center">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(item,i) in giam_sat.data" :key="i">
+                    <td class="text-center" scope="row">{{ i+1 }}</td>
+                    <td>{{ item.tuyen_duong.ten }}</td>
+                    <td>{{ item.tuyen_duong.ma_phan_cap }}</td>
+                    <td>{{ item.tuyen_duong.diem_dau_xa ? item.tuyen_duong.diem_dau_xa.name : ''}}</td>
+                    <td>{{ item.tuyen_duong.diem_cuoi_xa ? item.tuyen_duong.diem_cuoi_xa.name :'' }}</td>
+                    <td>{{ item.tuyen_duong.chieu_dai }}</td>
+                    <td>{{ item.tuyen_duong.chieu_rong }}</td>
+                    <td>{{ item.don_vi.ten }}</td>
+                    <td style="vertical-align: unset !important;">
+                        <label style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(item.id)"
+                            class="cursor-pointer border-0 w-full text-start rounded-md mb-0">
+                            <i class="fa fa-paperclip mr-2"></i>
+                            Tải lên tệp
+                        </label>
+                        <Upload
+                            :listFile ="item.tai_lieu"
+                            @refresh="onRefresh"
+                        />
+                    </td>
+                    <td class="text-center"><a :data-id=item.id class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
+                </tr>
+                </tbody>
+                </table>
+            <!-- <table :key="key"
                     class="table table-striped text-2xl"
                     v-data="{ data: giam_sat.data, columns: columns }">
              </table>
+             -->
          </div>
          <Pagination
              :all-data="giam_sat"
