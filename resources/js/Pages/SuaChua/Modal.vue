@@ -56,9 +56,8 @@ let formFile = useForm({
 })
 
 watch(() => props.keyModal, () => {
-    console.log('abc1');
+    
     if(props.sua_chua) {
-        console.log('abc');
         Object.assign(form, props.sua_chua);
         formFile.tuyen_duong_id = props.sua_chua.tuyen_duong_id;
         formFile.danh_muc = danhMucTaiLieuOptions.sua_chua;

@@ -22,17 +22,17 @@ let form = useForm({
 })
 
 watch(() => props.keyModal, () => {
-  if(props.sua_chua) {
-        form.sua_chua_id = props.sua_chua.id;
+  if(props.sua_chua) {        
         if(props.sua_chua_diem) {
          Object.assign(form, props.sua_chua_diem);
          form.errors.loai_sua_chua_id = "";
+         
         } else {
           form.loai_sua_chua_id = null;
           form.tu_km = "";
           form.den_km = "";
         }
-       
+        form.sua_chua_id = props.sua_chua.id;
     }else{
         form.reset();
     }
@@ -43,6 +43,8 @@ const closeModal = () => {
     form.clearErrors();
 }
 const submit = () => {
+  //  console.log(props.sua_chua);
+    form.sua_chua_id = props.sua_chua.id;
     form.post(route('sua-chua.storeDiem'), {
         onSuccess: () => {
             closeModal()
