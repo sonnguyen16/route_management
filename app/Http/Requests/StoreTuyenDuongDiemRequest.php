@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreSuaChuaDiemRequest extends FormRequest
+class StoreTuyenDuongDiemRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,26 +23,19 @@ class StoreSuaChuaDiemRequest extends FormRequest
     {
         return [
             'id' => 'nullable',
-            'sua_chua_id' => 'required|exists:sua_chua,id',
+            'tuyen_duong_id' => 'nullable|Int',
+            'noi_dung' => 'nullable',
             'tu_km' => 'nullable',
             'den_km' => 'nullable',
-            'loai_sua_chua_id' => 'nullable',
-            'ngay_khoi_cong' => 'nullable|date',
-            'ngay_hoan_thanh' => 'nullable|date',
-            'ngay_duyet' => 'nullable|date',
+            'chieu_rong' => 'nullable',
         ];
     }
 
-    /**
-     * Get the error messages for the defined validation rules.
-     *
-     * @return array<string, string>
-     */
-
-    public function messages(): array{
+    public function messages(): array
+    {
         return [
-            'sua_chua_id.required' => 'hạng mục sửa không được để trống',
-            'sua_chua_id.exists' => 'Sửa chữa không tồn tại',
+            'ten.required' => 'Tên không được để trống',
+            'tuyen_duong_id.required' => 'Loại không được để trống',
         ];
     }
 }

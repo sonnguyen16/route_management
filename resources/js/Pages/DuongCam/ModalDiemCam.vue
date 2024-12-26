@@ -18,6 +18,8 @@ let form = useForm({
     noi_dung: '',
     tu_km: '',
     den_km: '',
+    tu_ngay: '',
+    den_ngay: '',
 })
 
 watch(() => props.keyModal, () => {
@@ -30,6 +32,8 @@ watch(() => props.keyModal, () => {
           form.vi_tri = "";
           form.tu_km = "";
           form.den_km = "";
+          form.tu_ngay = "";
+          form.den_ngay = "";
         }
        
     }else{
@@ -75,6 +79,7 @@ const submit = () => {
                                 id="noi_dung"
                               />
                           </div>
+                          
                           <div class="form-group">
                               <label for="tu_km">Từ km</label>
                               <Input
@@ -95,6 +100,31 @@ const submit = () => {
                                 id="den_km"
                               />
                           </div>
+                          <div class="form-group">
+                                <label for="tu_ngay">Từ ngày</label>
+                                <Input
+                                    v-model="form.tu_ngay"
+                                    type="datetime-local"
+                                    :errors="form.errors.tu_ngay"
+                                />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="den_ngay">Đến ngày</label>
+                                <Input
+                                    v-model="form.den_ngay"
+                                    type="datetime-local"
+                                    :errors="form.errors.den_ngay"
+                                />
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="ly_do">Nội dung cấm</label>
+                                <Input
+                                    v-model="form.ly_do"
+                                    :errors="form.errors.ly_do"
+                                />
+                            </div>
                       </div>
                   </div>
               </div>

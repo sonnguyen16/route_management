@@ -6,7 +6,9 @@ use App\Models\DonVi;
 use App\Models\DuongCam;
 use App\Models\DiemCam;
 use App\Http\Requests\StoreDuongCamRequest;
+use App\Http\Requests\StoreDuongCamDiemRequest;
 use App\Models\TuyenDuong;
+use App\Models\TuyenDuongDiem;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\TaiLieu;
@@ -51,22 +53,15 @@ class DuongCamController extends Controller
         $duong_cam = DuongCam::updateOrCreate(['id' => $validated['id']],$validated);
     }
 
-    public function storeDiemCam(Request $request)
+    public function storeDiemCam(StoreDuongCamDiemRequest $request)
     {
-        if(isset($request->id)) {
-            $obj = DiemCam::find($request->id);
-        } else {
-            $obj = new DiemCam;
-        }
-        $obj->duong_cam_id = $request->duong_cam_id;
-        $obj->noi_dung = $request->noi_dung;
-        $obj->tu_km = $request->tu_km;
-        $obj->den_km = $request->den_km;
-        $obj->save();
+
+        $validated = $request->validated();
+        $duong_cam = DiemCam::updateOrCreate(['id' => $validated['id']],$validated);
     }
-    public function deleteDiemCam(Request $request)
+    public function deleteDiem(Request $request)
     {
-        $obj = DiemCam::find($request->id);
+        $obj = TuyenDuongDiem::find($request->id);
         $obj->isdelete = 1;
         $obj->save();
     }

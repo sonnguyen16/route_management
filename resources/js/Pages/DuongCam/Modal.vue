@@ -135,31 +135,8 @@ const uploadFiles = (files) => {
                                 />
                             </div>
 
-                            <div class="form-group">
-                                <label for="ly_do">Nội dung cấm</label>
-                                <Input
-                                    v-model="form.ly_do"
-                                    :errors="form.errors.ly_do"
-                                />
-                            </div>
 
-                            <div class="form-group">
-                                <label for="tu_ngay">Từ ngày</label>
-                                <Input
-                                    v-model="form.tu_ngay"
-                                    type="datetime-local"
-                                    :errors="form.errors.tu_ngay"
-                                />
-                            </div>
-
-                            <div class="form-group">
-                                <label for="den_ngay">Đến ngày</label>
-                                <Input
-                                    v-model="form.den_ngay"
-                                    type="datetime-local"
-                                    :errors="form.errors.den_ngay"
-                                />
-                            </div>
+                            
                         </div>
 
                     </div>

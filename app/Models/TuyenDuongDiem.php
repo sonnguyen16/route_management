@@ -6,24 +6,22 @@ use App\Enums\DanhMucTaiLieu;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class DiemCam extends Model
+class TuyenDuongDiem extends Model
 {
     use HasFactory;
 
-    protected $table = 'diem_cam';
+    protected $table = 'tuyen_duong_diem';
 
     protected $fillable = [
-        'duong_cam_id',
+        'id',
+        'tuyen_duong_id',
         'noi_dung',
-        'tu_ngay',
-        'den_ngay',
         'tu_km',
         'den_km',
+        'chieu_rong',
     ];
-
     public function tuyen_duong()
     {
-        return $this->belongsTo(DuongCam::class, 'duong_cam_id');
+        return $this->belongsTo(TuyenDuong::class, 'tuyen_duong_id');
     }
-
 }

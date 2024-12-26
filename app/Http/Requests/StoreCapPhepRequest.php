@@ -24,9 +24,11 @@ class StoreCapPhepRequest extends FormRequest
         return [
             'id' => 'nullable',
             'tuyen_duong_id' => 'required|exists:tuyen_duong,id',
-            'don_vi_id' => 'required|exists:don_vi,id',
-            'so_cap_phep' => 'required|string',
-            'ngay_cap_phep' => 'required|date',
+            'don_vi_id' => 'nullable', // 'required|exists:don_vi,id',
+            'so_cap_phep' => 'nullable',
+            'ngay_cap_phep' => 'nullable',
+            'ngay_het_han' => 'nullable',
+            'noi_dung' => 'nullable',
         ];
     }
 
@@ -40,12 +42,12 @@ class StoreCapPhepRequest extends FormRequest
         return [
             'tuyen_duong_id.required' => 'Tuyến đường không được để trống',
             'tuyen_duong_id.exists' => 'Tuyến đường không tồn tại',
-            'don_vi_id.required' => 'Đơn vị không được để trống',
+           /* 'don_vi_id.required' => 'Đơn vị không được để trống',
             'don_vi_id.exists' => 'Đơn vị không tồn tại',
             'so_cap_phep.required' => 'Số cấp phép không được để trống',
             'so_cap_phep.string' => 'Số cấp phép phải là chuỗi',
             'ngay_cap_phep.required' => 'Ngày cấp phép không được để trống',
-            'ngay_cap_phep.date' => 'Ngày cấp phép phải là ngày',
+            'ngay_cap_phep.date' => 'Ngày cấp phép phải là ngày', */
         ];
     }
 }

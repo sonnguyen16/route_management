@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Enums\DanhMucTaiLieu;
 use App\Models\TaiLieu;
 use App\Models\TuyenDuong;
+use App\Models\TuyenDuongDiem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use App\Models\Huyen;
 use App\Http\Requests\StoreTuyenDuongRequest;
+use App\Http\Requests\StoreTuyenDuongDiemRequest;
 use App\Models\DonVi;
 use App\Models\CauHinh;
 
@@ -17,7 +19,7 @@ class TuyenDuongController extends Controller
 {
     public function index(Request $request)
     {
-        $tuyen_duong = TuyenDuong::with(['diem_dau_xa','diem_dau_huyen','diem_cuoi_huyen','diem_cuoi_xa','huyen', 'tai_lieu', 'don_vi', 'loai_tuyen_duong','phan_cap']);
+        $tuyen_duong = TuyenDuong::with(['diem_dau_xa','diem_dau_huyen','diem_cuoi_huyen','diem_cuoi_xa','huyen', 'tai_lieu', 'don_vi', 'loai_tuyen_duong','phan_cap','tuyen_duong_diem']);
 
         if($request->filled('ten_duong')){
             $tuyen_duong = $tuyen_duong->where('ten', 'like', '%'.request('ten_duong').'%');
@@ -36,4 +38,16 @@ class TuyenDuongController extends Controller
         $validated['key'] = Str::slug($validated['ten']);
         TuyenDuong::updateOrCreate(['id' => $validated['id']], $validated);
     }
+    public function storeDiem(StoreTuyenDuongDiemRequest $request)
+    {
+        $validated = $request->validated();
+        TuyenDuongDiem::updateOrCreate(['id' => $validated['id']], $validated);
+    }
+    public function deleteDiem(Request $request)
+    {
+        $obj = TuyenDuongDiem::find($request->id);
+        $obj->isdelete = 1;
+        $obj->save();
+    }
+    
 }

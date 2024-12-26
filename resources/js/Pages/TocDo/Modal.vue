@@ -56,8 +56,14 @@ watch(() => props.keyModal, () => {
         formFile.danh_muc = danhMucTaiLieuOptions.toc_do;
         uploadedFiles.value = props.gioi_han_toc_do.tai_lieu;
     }else{
-        form.reset();
-        formFile.reset();
+        console.log('acd');
+        form.id = '';
+        form.tuyen_duong_id = '';
+        form.tu_ngay = '';
+        form.den_ngay = '';
+        form.noi_dung = '';
+    //    form.reset();
+      //  formFile.reset();
     }
 })
 const closeModal = () => {
@@ -120,23 +126,6 @@ const uploadFiles = (files) => {
                                 />
                             </div>
 
-                            <div class="form-group">
-                                <label for="tu_ngay">Từ ngày</label>
-                                <Input
-                                    v-model="form.tu_ngay"
-                                    type="datetime-local"
-                                    :errors="form.errors.tu_ngay"
-                                />
-                            </div>
-
-                            <div class="form-group">
-                                <label for="den_km">Đến ngày</label>
-                                <Input
-                                    v-model="form.den_ngay"
-                                    type="datetime-local"
-                                    :errors="form.errors.den_ngay"
-                                />
-                            </div>
                         </div>
 
                     </div>

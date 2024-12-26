@@ -10,6 +10,7 @@ import {nextTick, onMounted, ref, watch} from "vue";
 import {_TIME_DEBOUNCE} from "@/Constants/constants.js";
 import { debounce } from 'lodash';
 import Upload from "@/Components/UploadFile.vue";
+import moment from "moment";
 
 const props = defineProps({
     duong_cam: Object,
@@ -140,7 +141,7 @@ function suaDiemCam(value) {
 
 }
 function deleteDiemCam(value) {
-    router.visit(route('duong-cam.deleteDiemCam', {id: value}), {
+    router.visit(route('tuyen-duong.deleteDiem', {id: value}), {
         preserveState: true,
         onSuccess: () => {
             onRefresh()
@@ -200,37 +201,43 @@ const chooseFile = (id) => {
                 <thead>
                     <tr>
                     <th class="text-center">STT</th>
-                    <th class="text-left">Tên đường</th>
-                    <th class="text-left">Đơn vị quyết định</th>
-                    <th class="text-left">Đơn vị thực hiện</th>
-                    <th class="text-left">Nội dung cấm</th>
-                    <th class="text-center">Từ ngày</th>
-                    <th class="text-center">Đến ngày</th>
-                    <th class="text-center">Điểm cấm</th>
+                    <th class="text-center">Nội dung</th>
                     <th class="text-center">File đính kèm</th>
                     <th class="text-center">Thao tác</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="(item,i) in duong_cam.data" :key="i">
-                    <td class="text-center" scope="row">{{ i+1 }}</td>  
-                    <td>{{ item.tuyen_duong ? item.tuyen_duong.ten : ''}}</td>  
-                    <td>{{ item.don_vi_quyet_dinh.ten ? item.don_vi_quyet_dinh.ten : ''}}</td>  
-                    <td>{{ item.don_vi_thuc_hien.ten ? item.don_vi_thuc_hien.ten : ''}}</td>  
-                   
-                    
-                    <td>{{ item.ly_do }}</td>
-                    <td class="text-center">{{ item.tu_ngay }}</td>
-                    <td class="text-center">{{ item.den_ngay }}</td>                  
+                    <td class="text-center" scope="row">{{ i+1 }}</td>
                     <td class="text-left" style="vertical-align: unset !important;">
+                        <div>
+                            Tuyến đường: <b>{{ item.tuyen_duong ? item.tuyen_duong.ten : ''}}</b><br>
+                            Đơn vị quyết định: <b>{{ item.don_vi_quyet_dinh.ten ? item.don_vi_quyet_dinh.ten : ''}}</b><br>
+                            Đơn vị thực hiện: <b>{{ item.don_vi_thuc_hien.ten ? item.don_vi_thuc_hien.ten : ''}}</b>
+                        </div>
                         <div style="padding-left:10px"><a  @click.prevent="themDiemCam(item.id)"  class="newDiem cursor-pointer" title="Thêm điểm cấm"><i class="fas fa-plus mr-2"></i>Thêm điểm cấm</a></div>
-                        <table>
+                        <table v-if="item.diem_cam.length > 0" style="width: 100%;">
+                            <tr>
+                                <th class="text-left">Điểm cấm</th>
+                                <th class="text-center">Từ km</th>
+                                <th class="text-center">Đến km</th>
+                                <th class="text-center" style="min-width:100px;">Từ ngày</th>
+                                <th class="text-center" style="min-width:100px;">Đến ngày</th>
+                                <th class="text-center" style="min-width:100px;">Nội dung</th>
+                                <th></th>
+                                <th></th>
+                                </tr>
                             <tr v-for="(a,i) in item.diem_cam" :key="i">
                                 <td ><!--<a :data-id=a.id class="editDiem cursor-pointer">-->
                                    <a href="#"  @click.prevent="suaDiemCam(a)">  {{ i+1 }}.{{ a.noi_dung }}</a><!--</a>-->
                                 </td>
-                                <td>{{ 'km '+a.tu_km +' - km '+a.den_km }}</td>
-                               <td><a href="#" @click.prevent="deleteDiemCam(a)" class="cursor-pointer"><i class="fa fa-times-circle mr-1"></i></a></td>
+                                <td><span v-if="a.tu_km">{{ 'km '+a.tu_km}}</span></td>
+                                <td><span v-if="a.den_km">{{ 'km '+a.den_km }}</span></td>
+                                <td class="text-center"><span v-if="a.tu_ngay">{{ moment(a.tu_ngay).format("DD/MM/YYYY HH:mm") }}</span></td>
+                                <td class="text-center"><span v-if="a.den_ngay">{{ moment(a.den_ngay).format("DD/MM/YYYY HH:mm") }}</span></td>
+                                <td><span >{{ a.noi_dung }}</span></td>
+                                <td><a href="#" @click.prevent="deleteDiemCam(a)" class="cursor-pointer"><i class="fa fa-times-circle mr-1"></i></a></td>
+                               <td><a href="#" @click.prevent="suaDiemCam(a)" class=" cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
                             </tr>
                         </table>
                     </td>
@@ -243,6 +250,7 @@ const chooseFile = (id) => {
                             <Upload
                                 :listFile ="item.tai_lieu"
                                 @refresh="onRefresh"
+                                
                             />
                         </td>
                     <td class="text-center"><a :data-id=item.id class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>

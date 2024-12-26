@@ -28,6 +28,8 @@ Route::get('/logout', [AuthController::class, 'destroy'])->name('logout');
 Route::prefix('tuyen-duong')->middleware('auth')->group(function () {
     Route::get('/', [TuyenDuongController::class, 'index'])->name('tuyen-duong.index');
     Route::post('/store', [TuyenDuongController::class, 'store'])->name('tuyen-duong.store');
+    Route::post('/storeDiem', [TuyenDuongController::class, 'storeDiem'])->name('tuyen-duong.storeDiem');
+    Route::get('/delete-diem/{id}', [TuyenDuongController::class, 'deleteDiem'])->name('tuyen-duong.deleteDiem');
 });
 
 Route::prefix('tai-lieu')->middleware('auth')->group(function () {

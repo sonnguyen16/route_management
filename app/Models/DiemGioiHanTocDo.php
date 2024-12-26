@@ -15,6 +15,8 @@ class DiemGioiHanTocDo extends Model
     protected $fillable = [
         'gioi_han_toc_do_id',
         'noi_dung',
+        'tu_km',
+        'den_km',
         'tu_ngay',
         'den_ngay',
     ];

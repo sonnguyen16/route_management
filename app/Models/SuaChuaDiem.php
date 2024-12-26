@@ -18,6 +18,9 @@ class SuaChuaDiem extends Model
         'loai_sua_chua_id',
         'tu_km',
         'den_km',
+        'ngay_duyet',
+        'ngay_khoi_cong',
+        'ngay_hoan_thanh',
     ];
     public function loai_sua_chua()
     {

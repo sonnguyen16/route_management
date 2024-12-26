@@ -15,13 +15,6 @@ class SuaChua extends Model
     protected $fillable = [
         'tuyen_duong_id',
         'don_vi_id',
-        'ngay_khoi_cong',
-        'ngay_hoan_thanh',
-        'tu_km',
-        'den_km',
-        'ngay_duyet',
-        'nguoi_duyet_id',
-        'loai_sua_chua',
     ];
 
     public function tuyen_duong()

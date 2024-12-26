@@ -30,6 +30,7 @@ class StoreCauRequest extends FormRequest
             'loai_ket_cau_nhip_id' => 'nullable',
             'nam_khai_thac' => 'nullable',
             'tai_trong' => 'nullable',
+            'trong_tai_khai_thac' => 'nullable',
             'kiem_dinh' => 'nullable',
             'tuyen_duong_id' => 'nullable',
             'loai_cau_id' => 'nullable',

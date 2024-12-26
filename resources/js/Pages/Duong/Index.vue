@@ -4,6 +4,7 @@ import {vData} from "@/Directives/v-data.js";
 import Pagination from "@/Components/Pagination.vue";
 import {router, useForm} from "@inertiajs/vue3";
 import Modal from "@/Pages/Duong/Modal.vue";
+import ModalDiem from "@/Pages/Duong/ModalDuongDiem.vue";
 import {useModal} from "@/Hooks/useModal.js";
 import {nextTick, onMounted, ref, watch} from "vue";
 import {debounce} from "lodash";
@@ -25,6 +26,7 @@ const props = defineProps({
 })
 
 const tuyen_duong_selected = ref(null);
+const tuyen_duong_diem_selected = ref(null);
 const keyModal = ref(0);
 const key = ref(0);
 const changePage = (page) => {
@@ -53,7 +55,7 @@ const columns = [
 ]
 
 const modal = useModal('modal');
-
+const modeldiem = useModal('ModalDuongDiem');
 onMounted(() => {
     eventForEditBtn()
 })
@@ -102,7 +104,28 @@ const searchDebounce = debounce((value) => {
 
 const isEdit = ref(false);
 
+function themDuongDiem(value) {
+  console.log(value);
+  tuyen_duong_selected.value = value;
+  tuyen_duong_diem_selected.value = null;
+  keyModal.value++
+  modeldiem.showModal();
+}
+function SuaDuongDiem(value) {
+ tuyen_duong_selected.value = props.tuyen_duong.data.find(item => item.id === value.tuyen_duong_id);
+ tuyen_duong_diem_selected.value = value;
+ keyModal.value++
+ modeldiem.showModal();
+}
 
+function deleteDiemCam(id) {
+    router.visit(route('tuyen-duong.deleteDiem', {id: id}), {
+        preserveState: true,
+        onSuccess: () => {
+            onRefresh()
+        }
+    });
+}
 // upload hình ảnh
 let formFile = useForm({
     type: '',
@@ -174,7 +197,29 @@ const chooseFile = (id) => {
                         <a href="#">{{ item.diem_cuoi_xa ? item.diem_cuoi_xa.name : ''}}, {{ item.diem_cuoi_huyen ? item.diem_cuoi_huyen.name : ''}}</a>
                     </td>
                     <td class="text-center">{{ item.chieu_dai }}</td>
-                    <td class="text-center">{{ item.chieu_rong }}</td>
+                    <td class="text-left">
+                        <div style="padding-left:10px"><a  @click.prevent="themDuongDiem(item)"  class="newDiem cursor-pointer" title="Thêm điểm cấm"><i class="fas fa-plus mr-2"></i>Thêm chiều rộng</a></div>
+                        <table v-if="item.tuyen_duong_diem.length > 0" style="width: 100%;">
+                            <tr>
+                                <th class="text-left">Đoạn đường</th>
+                                <th class="text-center">Từ km</th>
+                                <th class="text-center">Đến km</th>
+                                <th class="text-center" style="min-width:100px;">Chiều rộng</th>
+                                <th></th>
+                                <th></th>
+                                </tr>
+                            <tr v-for="(a,i) in item.tuyen_duong_diem" :key="i">
+                                <td class="text-left">
+                                   <a href="#"  @click.prevent="SuaDuongDiem(a)">  {{ i+1 }}.{{ a.noi_dung }}</a>
+                                </td>
+                                <td><span v-if="a.tu_km">{{ 'km '+a.tu_km}}</span></td>
+                                <td><span v-if="a.den_km">{{ 'km '+a.den_km }}</span></td>
+                                <td><span >{{ a.chieu_rong }}</span></td>
+                                <td><a href="#" @click.prevent="deleteDiemCam(a)" class="cursor-pointer"><i class="fa fa-times-circle mr-1"></i></a></td>
+                               <td><a href="#" @click.prevent="SuaDuongDiem(a)" class=" cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
+                            </tr>
+                        </table>
+                    </td>
                     <td class="text-center">{{ item.lo_gioi }}</td>
                     <td><a href="#">{{ item.don_vi ? item.don_vi.ten : ''}}</a></td>
                     <td style="vertical-align: unset !important;">
@@ -209,6 +254,14 @@ const chooseFile = (id) => {
          :don_vi="don_vi"
          :is-edit="isEdit"
 
+     />
+     <ModalDiem
+         @close-modal="modeldiem.hideModal"
+         @refresh="onRefresh"
+         :key-modal="keyModal"
+         :tuyen_duong="tuyen_duong_selected"
+         :tuyen_duong_diem="tuyen_duong_diem_selected"
+         :is-edit="isEdit"
      />
 </MainLayout>
 </template>

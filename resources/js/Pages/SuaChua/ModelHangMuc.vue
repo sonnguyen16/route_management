@@ -19,6 +19,9 @@ let form = useForm({
     loai_sua_chua_id: '',
     tu_km: '',
     den_km: '',
+    ngay_duyet: '',
+    ngay_khoi_cong: '',
+    ngay_hoan_thanh: ''
 })
 
 watch(() => props.keyModal, () => {
@@ -31,6 +34,9 @@ watch(() => props.keyModal, () => {
           form.loai_sua_chua_id = null;
           form.tu_km = "";
           form.den_km = "";
+          form.ngay_duyet = '';
+          form.ngay_khoi_cong = '';
+          form.ngay_hoan_thanh ='';
         }
         form.sua_chua_id = props.sua_chua.id;
     }else{
@@ -79,6 +85,32 @@ const submit = () => {
                               />
                           </div>
                           <div class="form-group">
+                                <label for="ngay_duyet">Ngày duyệt</label>
+                                <Input
+                                    v-model="form.ngay_duyet"
+                                    type="date"
+                                    :errors="form.errors.ngay_duyet"
+                                />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="ngay_khoi_cong">Ngày khởi công</label>
+                                <Input
+                                    v-model="form.ngay_khoi_cong"
+                                    type="date"
+                                    :errors="form.errors.ngay_khoi_cong"
+                                />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="ngay_hoan_thanh">Ngày hoàn thành</label>
+                                <Input
+                                    v-model="form.ngay_hoan_thanh"
+                                    type="date"
+                                    :errors="form.errors.ngay_hoan_thanh"
+                                />
+                            </div>
+                          <div class="form-group">
                               <label for="tu_km_id">Từ km</label>
                               <Input
                                 v-model="form.tu_km"
@@ -111,3 +143,10 @@ const submit = () => {
       </div>
   </div>
 </template>
+<style scoped>
+.form-group {
+    display: grid;
+    grid-template-columns: 3fr 10fr!important;
+    margin-bottom: 0;
+}
+</style>

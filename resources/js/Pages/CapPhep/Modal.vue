@@ -27,6 +27,8 @@ const form = useForm({
     tuyen_duong_id: '',
     so_cap_phep: '',
     ngay_cap_phep: '',
+    ngay_het_han: '',
+    noi_dung: '',
 })
 
 const submit = () => {
@@ -127,6 +129,17 @@ const uploadFiles = (files) => {
                                 <Input v-model="form.ngay_cap_phep"
                                        type="date"
                                        :errors="form.errors.ngay_cap_phep"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="ngay_cap_phep">Ngày hết hạn</label>
+                                <Input v-model="form.ngay_het_han"
+                                       type="date"
+                                       :errors="form.errors.ngay_het_han"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="so_cap_phep">Nội dung</label>
+                                <Input v-model="form.noi_dung"
+                                       :errors="form.errors.noi_dung"/>
                             </div>
                         </div>
 

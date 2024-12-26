@@ -80,5 +80,10 @@ class TuyenDuong extends Model
     {
         return $this->belongsTo(CauHinh::class, 'phan_cap_id');
     }
+
+    public function tuyen_duong_diem()
+    {
+        return $this->hasMany(TuyenDuongDiem::class, 'tuyen_duong_id')->where('isdelete',0);
+    }
     
 }

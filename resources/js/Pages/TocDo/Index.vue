@@ -10,7 +10,7 @@ import {nextTick, onMounted, ref, watch} from "vue";
 import {_TIME_DEBOUNCE, loaiOptions, maPhanCapOptions} from "@/Constants/constants.js";
 import { debounce } from 'lodash';
 import Upload from "@/Components/UploadFile.vue";
-
+import moment from "moment";
 const props = defineProps({
     gioi_han_toc_do: Object,
     tuyen_duong: Object,
@@ -71,6 +71,7 @@ const eventForEditBtn = () => {
 }
 
 const openModal = () => {
+    keyModal.value++
     gioi_han_toc_do_selected.value = null;
     isEdit.value = false;
     modal.showModal();
@@ -156,11 +157,6 @@ const chooseFile = (id) => {
             <table class="table table-striped text-2xl">
                 <thead>
                     <tr>
-                    <th class="text-center">STT</th>
-                    <th class="text-left">Tên đường</th>
-                    <th class="text-left">Nội dung</th>
-                    <th class="text-left">Từ ngày</th>
-                    <th class="text-left">Đến ngày</th>
                     <th class="text-center">Vị trí giới hạn</th>
                     <th class="text-center">File đính kèm</th>
                     <th class="text-center">Thao tác</th>
@@ -168,26 +164,35 @@ const chooseFile = (id) => {
                 </thead>
                 <tbody>
                     <tr v-for="(item,i) in gioi_han_toc_do.data" :key="i">
-                    <td class="text-center" scope="row">{{ i+1 }}</td>  
-                    <td>{{ item.tuyen_duong ? item.tuyen_duong.ten : ''}}</td>  
-                    <td>{{ item.noi_dung}}</td>  
-                    
-                    <td class="text-center">{{ item.tu_ngay }}</td>
-                    <td class="text-center">{{ item.den_ngay }}</td>
-                   
-                    <td class="text-left" style="vertical-align: unset !important;">
-                        <div style="padding-left:10px"><a @click.prevent="themDiemGioiHanTocDovalue(item.id)" class="newDiem cursor-pointer" title="Sửa"><i class="fas fa-plus mr-2"></i>Thêm mới vị trí</a></div>
-                        <table>
+                   <td class="text-left" style="vertical-align: unset !important;">
+                        <div><b>{{ i+1 }}. {{ item.tuyen_duong ? item.tuyen_duong.ten : ''}}</b></div>
+                        
+                        <table v-if="item.diem_gioi_han_toc_do.length > 0" style="width: 100%;">
+                            <tr>
+                            <th class="text-left">Điểm giới hạn</th>
+                            <th class="text-left">Từ km</th>
+                            <th class="text-left">Đến km</th>
+                            <th class="text-center">Từ ngày</th>
+                            <th class="text-center">Đến ngày</th>
+                            <th class="text-center">Nội dung</th>
+                            <th class="text-center"></th>
+                            <th class="text-center"></th>
+                            </tr>
                             <tr v-for="(a,i) in item.diem_gioi_han_toc_do" :key="i">
                                 <td >
                                    <a href="#" @click.prevent="suaDiemGioiHanTocDo(a)"> {{ i+1 }}.{{ a.toc_do }}</a>
                                 </td>
-                                <td>Km {{ a.tu_km }}+</td>
-                                <td>Km {{ a.den_km }}+</td>
+                                <td class="text-center"><span v-if="a.tu_km">{{ 'km '+a.tu_km}}</span></td>
+                                <td class="text-center"><span v-if="a.den_km">{{ 'km '+a.den_km }}</span></td>
+                                <td class="text-center"><span v-if="a.tu_ngay">{{ moment(a.tu_ngay).format("DD/MM/YYYY HH:mm") }}</span></td>
+                                <td class="text-center"><span v-if="a.den_ngay">{{ moment(a.den_ngay).format("DD/MM/YYYY HH:mm") }}</span></td>
+                                <td class="text-center">{{ a.noi_dung}}</td>
                                 <td><a href="#" @click.prevent="deleteDiemGioiHanTocDo(a.id)" class="cursor-pointer"><i class="fa fa-times-circle mr-1"></i></a></td>
+                                <td><a href="#" @click.prevent="suaDiemGioiHanTocDo(a)" class=" cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
                             </tr>
                         </table>
-                        </td>
+                        <div style="padding-left:10px"><a @click.prevent="themDiemGioiHanTocDovalue(item.id)" class="newDiem cursor-pointer" title="Sửa"><i class="fas fa-plus mr-2"></i>Thêm mới vị trí</a></div>
+                       </td>
                         <td style="vertical-align: unset !important;">
                             <label style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(item.id)"
                                 class="cursor-pointer border-0 w-full text-start rounded-md mb-0">

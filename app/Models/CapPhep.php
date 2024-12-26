@@ -16,7 +16,9 @@ class CapPhep extends Model
         'tuyen_duong_id',
         'don_vi_id',
         'so_cap_phep',
-        'ngay_cap_phep'
+        'ngay_cap_phep',
+        'ngay_het_han',
+        'noi_dung'
     ];
 
     public function tuyen_duong()

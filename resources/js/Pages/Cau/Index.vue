@@ -147,7 +147,8 @@ const chooseFile = (id) => {
                     <th class="text-center">Chiều dài</th>
                     <th class="text-left">Chiều rộng</th>
                     <th class="text-center">Năm<br>khai thác</th>
-                    <th class="text-center">Tải trọng</th>
+                    <th class="text-center">Tải trọng thiết kế</th>
+                    <th class="text-center">Tải trọng khai thác</th>
                     <th class="text-center">Năm<br>kiểm định</th>
                     <th class="text-center">Tuyến đường</th>
                     <th class="text-center">File đính kèm</th>
@@ -165,6 +166,7 @@ const chooseFile = (id) => {
                     <td class="text-center">{{ item.chieu_rong }} m</td>
                     <td class="text-center">{{ item.nam_khai_thac }}</td>
                     <td class="text-center">{{ item.tai_trong }} tấn</td>
+                    <td class="text-center">{{ item.trong_tai_khai_thac }} tấn</td>
                     <td class="text-center">{{ item.kiem_dinh }}</td>
                     <td>{{ item.tuyen_duong ? item.tuyen_duong.ten : ''}}</td>
                     <td style="vertical-align: unset !important;">

@@ -130,35 +130,6 @@ const uploadFiles = (files) => {
                                     option-default="Chọn đơn vị thi công"
                                 />
                             </div>
-
-                            <div class="form-group">
-                                <label for="ngay_duyet">Ngày duyệt</label>
-                                <Input
-                                    v-model="form.ngay_duyet"
-                                    type="date"
-                                    :errors="form.errors.ngay_duyet"
-                                />
-                            </div>
-
-                            <div class="form-group">
-                                <label for="ngay_khoi_cong">Ngày khởi công</label>
-                                <Input
-                                    v-model="form.ngay_khoi_cong"
-                                    type="date"
-                                    :errors="form.errors.ngay_khoi_cong"
-                                />
-                            </div>
-
-                            <div class="form-group">
-                                <label for="ngay_hoan_thanh">Ngày hoàn thành</label>
-                                <Input
-                                    v-model="form.ngay_hoan_thanh"
-                                    type="date"
-                                    :errors="form.errors.ngay_hoan_thanh"
-                                />
-                            </div>
-
-                           
                             <div class="form-group">
                                 
                             </div>

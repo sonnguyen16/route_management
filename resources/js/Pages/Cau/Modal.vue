@@ -30,6 +30,7 @@ const form = useForm({
     loai_ket_cau_nhip_id: '',
     nam_khai_thac: '',
     tai_trong: '',
+    trong_tai_khai_thac: '',
     kiem_dinh: '',
     tuyen_duong_id: '',
     loai_cau_id: '',
@@ -133,10 +134,17 @@ const closeModal = () => {
                                 />
                             </div>
                             <div class="form-group">
-                                <label for="name">Tải trọng</label>
+                                <label for="name">Tải trọng thiết kế</label>
                                 <Input
                                     v-model="form.tai_trong"
                                     :errors="form.errors.tai_trong"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Tải trọng khai thác</label>
+                                <Input
+                                    v-model="form.trong_tai_khai_thac"
+                                    :errors="form.errors.trong_tai_khai_thac"
                                 />
                             </div>
                             <div class="form-group">

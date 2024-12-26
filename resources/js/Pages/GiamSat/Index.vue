@@ -132,7 +132,6 @@ const chooseFile = (id) => {
                     <tr>
                     <th class="text-center">STT</th>
                     <th class="text-left">Tên đường</th>
-                    <th class="text-left">Mã phân cấp</th>
                     <th class="text-left">Điểm đầu</th>
                     <th class="text-left">Điểm cuối</th>
                     <th class="text-center">Chiều dài</th>
@@ -145,11 +144,9 @@ const chooseFile = (id) => {
                     <tr v-for="(item,i) in giam_sat.data" :key="i">
                     <td class="text-center" scope="row">{{ i+1 }}</td>
                     <td>{{ item.tuyen_duong.ten }}</td>
-                    <td>{{ item.tuyen_duong.ma_phan_cap }}</td>
-                    <td>{{ item.tuyen_duong.diem_dau_xa ? item.tuyen_duong.diem_dau_xa.name : ''}}</td>
+                   <td>{{ item.tuyen_duong.diem_dau_xa ? item.tuyen_duong.diem_dau_xa.name : ''}}</td>
                     <td>{{ item.tuyen_duong.diem_cuoi_xa ? item.tuyen_duong.diem_cuoi_xa.name :'' }}</td>
                     <td>{{ item.tuyen_duong.chieu_dai }}</td>
-                    <td>{{ item.tuyen_duong.chieu_rong }}</td>
                     <td>{{ item.don_vi.ten }}</td>
                     <td style="vertical-align: unset !important;">
                         <label style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(item.id)"

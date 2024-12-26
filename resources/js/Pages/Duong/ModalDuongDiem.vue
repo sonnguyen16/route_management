@@ -6,35 +6,31 @@ import Select from "@/Components/Select.vue";
 import {ref, watch } from "vue";
 const props = defineProps({
   show: Boolean,
-  diem_gioi_han_toc_do: Object,
-  gioi_han_toc_do: Object,
+  tuyen_duong: Object,
+  tuyen_duong_diem: Object,
   keyModal: Number
 })
 
 const emits = defineEmits(['closeModal', 'refresh', 'fileChange']);
 let form = useForm({
     id: '',
-    gioi_han_toc_do_id: '',
-    toc_do: '',
+    tuyen_duong_id: '',
+    noi_dung: '',
     tu_km: '',
     den_km: '',
-    tu_ngay: '',
-    den_ngay: '',
-    noi_dung: '',
+    chieu_rong: '',
 })
 
 watch(() => props.keyModal, () => {
-  if(props.gioi_han_toc_do) {
-        form.gioi_han_toc_do_id = props.gioi_han_toc_do.id;
-        if(props.diem_gioi_han_toc_do) {
-         Object.assign(form, props.diem_gioi_han_toc_do);
+  if(props.tuyen_duong) {
+        form.tuyen_duong_id = props.tuyen_duong.id;
+        if(props.tuyen_duong_diem) {
+         Object.assign(form, props.tuyen_duong_diem);
         } else {
-          form.toc_do = "";
+          form.noi_dung = "";
           form.tu_km = "";
           form.den_km = "";
-          form.tu_ngay = "";
-          form.den_ngay = "";
-          form.noi_dung = "";
+          form.chieu_rong = "";
         }
        
     }else{
@@ -47,7 +43,7 @@ const closeModal = () => {
     form.clearErrors();
 }
 const submit = () => {
-    form.post(route('gioi-han-toc-do.storeDiemGioiHanTocDo'), {
+    form.post(route('tuyen-duong.storeDiem'), {
         onSuccess: () => {
             closeModal()
             emits('refresh')
@@ -57,10 +53,11 @@ const submit = () => {
         }
     })
 }
+
 </script>
 
 <template>
-  <div class="modal fade" id="ModalDiemGioiHanTocDo">
+  <div class="modal fade" id="ModalDuongDiem">
       <div
           class="modal-dialog modal-dialog-centered modal-lg"  style="max-width: 600px;"
      >
@@ -71,15 +68,16 @@ const submit = () => {
                       
                       <div :class="['px-4 pt-4', isEdit ? 'col-md-12' : 'col-md-12']">
                           <div class="form-group">
-                              <label for="toc_do">Điểm giới hạn tốc độ</label>
+                              <label for="noi_dung">Đoạn đường</label>
                               <Input
-                                v-model="form.toc_do"
+                                v-model="form.noi_dung"
                                 type="text"
-                                :errors="form.errors.toc_do"
-                                placeholder="Điểm giới hạn tốc độ"
-                                id="toc_do"
+                                :errors="form.errors.noi_dung"
+                                placeholder="Đoạn đường"
+                                id="noi_dung"
                               />
                           </div>
+                          
                           <div class="form-group">
                               <label for="tu_km">Từ km</label>
                               <Input
@@ -100,33 +98,14 @@ const submit = () => {
                                 id="den_km"
                               />
                           </div>
-                          <div class="form-group">
-                                <label for="tu_ngay">Từ ngày</label>
+                            
+                            <div class="form-group">
+                                <label for="chieu_rong">Chiều rộng</label>
                                 <Input
-                                    v-model="form.tu_ngay"
-                                    type="datetime-local"
-                                    :errors="form.errors.tu_ngay"
+                                    v-model="form.chieu_rong"
+                                    :errors="form.errors.chieu_rong"
                                 />
                             </div>
-
-                            <div class="form-group">
-                                <label for="den_ngay">Đến ngày</label>
-                                <Input
-                                    v-model="form.den_ngay"
-                                    type="datetime-local"
-                                    :errors="form.errors.den_ngay"
-                                />
-                            </div>
-                            <div class="form-group">
-                              <label for="toc_do">Nội dung</label>
-                              <Input
-                                v-model="form.noi_dung"
-                                type="text"
-                                :errors="form.errors.noi_dung"
-                                placeholder="Nội dung"
-                                id="toc_do"
-                              />
-                          </div>
                       </div>
                   </div>
               </div>
@@ -141,11 +120,3 @@ const submit = () => {
       </div>
   </div>
 </template>
-<style scoped>
-.form-group {
-    display: grid
-;
-    grid-template-columns: 3fr 10fr!important;
-    margin-bottom: 0;
-}
-</style>

@@ -18,6 +18,7 @@ class Cau extends Model
         'chieu_dai',
         'loai_ket_cau_nhip_id',
         'nam_khai_thac',
+        'trong_tai_khai_thac',
         'tai_trong',
         'kiem_dinh',
         'tuyen_duong_id',

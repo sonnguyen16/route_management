@@ -9,6 +9,7 @@ import {nextTick, onMounted, ref, watch} from "vue";
 import { debounce } from 'lodash';
 import {_TIME_DEBOUNCE} from "@/Constants/constants.js";
 import Upload from "@/Components/UploadFile.vue";
+import moment from "moment";
 
 const props = defineProps({
     cap_phep: Object,
@@ -133,6 +134,8 @@ const chooseFile = (id) => {
                     <th class="text-left">Đơn vị cấp phép</th>
                     <th class="text-left">Số cấp phép</th>
                     <th class="text-left">Ngày cấp phép</th>
+                    <th class="text-left">Ngày hết hạn</th>
+                    <th class="text-center">Nội dung</th>
                     <th class="text-center">File đính kèm</th>
                     <th class="text-center">Thao tác</th>
                     </tr>
@@ -143,7 +146,9 @@ const chooseFile = (id) => {
                     <td>{{ item.tuyen_duong.ten }}</td>
                     <td>{{ item.don_vi.ten }}</td>
                     <td>{{ item.so_cap_phep }}</td>
-                    <td>{{ item.ngay_cap_phep }}</td>
+                    <td><span v-if="item.ngay_cap_phep">{{ moment(item.ngay_cap_phep).format("DD/MM/YYYY") }}</span></td>
+                    <td><span v-if="item.ngay_het_han">{{ moment(item.ngay_het_han).format("DD/MM/YYYY") }}</span></td>
+                    <td>{{ item.noi_dung }}</td>
                     <td style="vertical-align: unset !important;">
                         <label style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(item.id)"
                             class="cursor-pointer border-0 w-full text-start rounded-md mb-0">

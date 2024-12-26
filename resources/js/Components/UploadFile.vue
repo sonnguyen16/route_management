@@ -18,7 +18,7 @@ const removeFileUploaded = (id) => {
 </script>
 
 <template>
-    <div class="space-y-2">        
+    <div class="space-y-2" >        
         <div class="flex-1 overflow-y-auto max-h-[280px] mt-2">
             <File v-for="file in props.listFile"
                 :key="file.id"

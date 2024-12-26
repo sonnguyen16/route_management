@@ -20,6 +20,7 @@
     "dependencies": {
         "choices.js": "^11.0.2",
         "lodash": "^4.17.21",
-        "mapbox-gl": "^3.7.0"
+        "mapbox-gl": "^3.7.0",
+        "moment": "^2.30.1"
     }
 }

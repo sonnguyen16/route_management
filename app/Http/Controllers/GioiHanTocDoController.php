@@ -47,6 +47,9 @@ class GioiHanTocDoController extends Controller
         $obj->toc_do = $request->toc_do;
         $obj->tu_km = $request->tu_km;
         $obj->den_km = $request->den_km;
+        $obj->tu_ngay = $request->tu_ngay;
+        $obj->den_ngay = $request->den_ngay;
+        $obj->noi_dung = $request->noi_dung;
         $obj->save();
     }
     public function deleteDiemGioiHanTocDo(Request $request)

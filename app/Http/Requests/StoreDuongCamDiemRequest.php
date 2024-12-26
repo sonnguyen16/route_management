@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreSuaChuaRequest extends FormRequest
+class StoreDuongCamDiemRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -17,14 +18,18 @@ class StoreSuaChuaRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array|string>
      */
     public function rules(): array
     {
         return [
             'id' => 'nullable',
-            'tuyen_duong_id' => 'required|exists:tuyen_duong,id',
-            'don_vi_id' => 'required|exists:don_vi,id',
+            'duong_cam_id' => 'required|integer',
+            'noi_dung' => 'nullable',
+            'den_km' => 'nullable', //'required|string',
+            'tu_km' => 'nullable',
+            'tu_ngay' => 'nullable', //'required|date',
+            'den_ngay' => 'nullable', // 'required|date',
         ];
     }
 
@@ -36,10 +41,8 @@ class StoreSuaChuaRequest extends FormRequest
 
     public function messages(): array{
         return [
-            'tuyen_duong_id.required' => 'Tuyến đường không được để trống',
-            'tuyen_duong_id.exists' => 'Tuyến đường không tồn tại',
-            'don_vi_id.required' => 'Đơn vị không được để trống',
-            'don_vi_id.exists' => 'Đơn vị không tồn tại',
+            'duong_cam_id.required' => 'Tuyến đường không được để trống',
+            'duong_cam_id.integer' => 'Tuyến đường phải là số'
         ];
     }
 }
