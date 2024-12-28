@@ -121,8 +121,8 @@ const submit = () => {
                             <div class="form-group">
                                 <label for="ly_do">Nội dung cấm</label>
                                 <Input
-                                    v-model="form.ly_do"
-                                    :errors="form.errors.ly_do"
+                                    v-model="form.noi_dung"
+                                    :errors="form.errors.noi_dung"
                                 />
                             </div>
                       </div>
