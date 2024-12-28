@@ -40,7 +40,7 @@ const addDetail = () => {
         }
     })
 }
-
+//
 </script>
 
 <template>
