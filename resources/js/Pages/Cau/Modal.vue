@@ -56,6 +56,21 @@ watch(() => props.keyModal, () => {
         Object.assign(form, props.cau);
     }else{
         form.reset();
+        form.id = "";
+        form.ten = "";
+        form.ly_trinh = "";
+        form.chieu_rong = "";
+        form.chieu_dai = "";
+        form.loai_ket_cau_nhip_id = "";
+        form.nam_khai_thac = "";
+        form.tai_trong = "";
+        form.trong_tai_khai_thac = "";
+        form.kiem_dinh = "";
+        form.tuyen_duong_id = "";
+        form.loai_cau_id = "";
+        form.vi_tri = "";
+        form.lat = "";
+        form.lng = "";
     }
 })
 const closeModal = () => {

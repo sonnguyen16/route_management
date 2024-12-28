@@ -44,6 +44,12 @@ watch(() => props.keyModal, () => {
         Object.assign(form, props.den_giao_thong);
     }else{
         form.reset();
+        form.id = "";
+        form.nut_giao = "";
+        form.so_pha_den = "";
+        form.thoi_gian_pha_den = "";
+        form.thoi_gian_hoat_dong = "";
+        form.vi_tri = "";
     }
 })
 const closeModal = () => {

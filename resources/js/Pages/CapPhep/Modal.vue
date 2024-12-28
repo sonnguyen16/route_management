@@ -58,6 +58,13 @@ watch(() => props.keyModal, () => {
     }else{
         form.reset();
         formFile.reset();
+        form.id = "";
+        form.don_vi_id = "";
+        form.tuyen_duong_id = "";
+        form.so_cap_phep = "";
+        form.ngay_cap_phep = "";
+        form.ngay_het_han = "";
+        form.noi_dung = "";
     }
 })
 const closeModal = () => {

@@ -65,6 +65,18 @@ watch(() => props.keyModal, () => {
     }else{
         form.reset();
         formFile.reset();
+
+        form.id = "";
+        form.tuyen_duong_id = "";
+        form.loai_sua_chua = "";
+        form.tu_km = "";
+        form.den_km = "";
+        form.ngay_duyet = "";
+        form.nguoi_duyet_id = "";
+        form.ngay_khoi_cong = "";
+        form.ngay_hoan_thanh = "";
+        form.don_vi_id = "";
+        form.tai_lieu = [];
     }
 })
 const closeModal = () => {

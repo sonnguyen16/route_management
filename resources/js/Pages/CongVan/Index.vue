@@ -75,6 +75,7 @@ const eventForEditBtn = () => {
 }
 
 const openModal = () => {
+    keyModal.value++
     cong_van_selected.value = null;
     isEdit.value = false;
     modal.showModal();

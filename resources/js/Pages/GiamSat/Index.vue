@@ -70,6 +70,7 @@ const eventForEditBtn = () => {
 }
 
 const openModal = () => {
+    keyModal.value++
     giam_sat_selected.value = null;
     isEdit.value = false;
     modal.showModal();

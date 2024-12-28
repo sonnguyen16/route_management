@@ -82,6 +82,7 @@ const eventForEditBtn = () => {
 }
 
 const openModal = () => {
+    keyModal.value++
     tuyen_duong_selected.value = null;
     isEdit.value = false;
     modal.showModal();

@@ -60,6 +60,15 @@ watch(() => props.keyModal, () => {
     }else{
         form.reset();
         formFile.reset();
+        form.id = "";
+        form.ten = "";
+        form.loai = "";
+        form.don_vi_id = "";
+        form.ngay_gui = "";
+        form.ngay_nhan = "";
+        form.nguoi_xu_ly_id = "";
+        form.trang_thai = "";
+        form.ghi_chu = "";
     }
 })
 const closeModal = () => {

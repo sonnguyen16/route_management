@@ -79,6 +79,7 @@ const eventForEditBtn = () => {
 }
 
 const openModal = () => {
+    keyModal.value++;
     duong_cam_selected.value = null;
     isEdit.value = false;
     modal.showModal();

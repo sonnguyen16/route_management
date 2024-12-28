@@ -63,7 +63,7 @@ const onRefresh = () => {
 const eventForEditBtn = () => {
     $('.edit').click(function () {
         const id = $(this).data('id');
-        console.log(id);
+        
         cau_selected.value = props.cau.data.find(item => item.id === id);
         isEdit.value = true;
         keyModal.value++
@@ -72,6 +72,7 @@ const eventForEditBtn = () => {
 }
 
 const openModal = () => {
+    keyModal.value++
     cau_selected.value = null;
     isEdit.value = false;
     modal.showModal();

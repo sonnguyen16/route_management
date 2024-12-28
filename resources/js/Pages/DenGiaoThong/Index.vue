@@ -55,7 +55,7 @@ const onRefresh = () => {
 const eventForEditBtn = () => {
     $('.edit').click(function () {
         const id = $(this).data('id');
-        console.log(id);
+        
         den_giao_thong_selected.value = props.den_giao_thong.data.find(item => item.id === id);
         isEdit.value = true;
         keyModal.value++
@@ -64,6 +64,7 @@ const eventForEditBtn = () => {
 }
 
 const openModal = () => {
+    keyModal.value++
     den_giao_thong_selected.value = null;
     isEdit.value = false;
     modal.showModal();

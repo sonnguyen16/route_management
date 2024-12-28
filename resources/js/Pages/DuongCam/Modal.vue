@@ -58,6 +58,13 @@ watch(() => props.keyModal, () => {
     }else{
         form.reset();
         formFile.reset();
+        form.id = "";
+        form.tuyen_duong_id  = "";
+        form.don_vi_quyet_dinh_id  = "";
+        form.don_vi_thuc_hien_id  = "";
+        form.tu_ngay = "";
+        form.den_ngay = "";
+        form.ly_do = "";
     }
 })
 const closeModal = () => {

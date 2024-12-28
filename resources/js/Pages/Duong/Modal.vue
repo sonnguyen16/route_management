@@ -89,6 +89,25 @@ watch(() => props.keyModal, () => {
     }else{
         form.reset();
         formFile.reset();
+        
+          form.id = "";
+          form.ten = "";
+          form.loai_tuyen_duong_id = "";
+          form.phan_cap_id = "";
+          form.diem_dau_huyen_id = "";
+          form.diem_cuoi_huyen_id = "";
+          form.diem_dau_lat = "";
+          form.diem_dau_lng = "";
+          form.diem_dau_xa_id = "";
+          form.diem_cuoi_xa_id = "";
+          form.diem_cuoi_lat = "";
+          form.diem_cuoi_lng = "";
+          form.chieu_dai = "";
+          form.chieu_rong = "";
+          form.don_vi_id = "";
+          form.lo_gioi = "";
+       
+      
     }
 })
 

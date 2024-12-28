@@ -53,6 +53,9 @@ watch(() => props.keyModal, () => {
     }else{
         form.reset();
         formFile.reset();
+        form.id = "";
+        form.don_vi_id = "";
+        form.tuyen_duong_id = "";
     }
 })
 const closeModal = () => {

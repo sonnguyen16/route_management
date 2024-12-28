@@ -88,6 +88,7 @@ const eventForEditBtn = () => {
 }
 
 const openModal = () => {
+    keyModal.value++
     sua_chua_selected.value = null;
     isEdit.value = false;
     modal.showModal();
