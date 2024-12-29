@@ -130,7 +130,7 @@ const uploadFiles = (files) => {
                                 <Input v-model="form.so_cap_phep"
                                        :errors="form.errors.so_cap_phep"/>
                             </div>
-
+<!--
                             <div class="form-group">
                                 <label for="ngay_cap_phep">Ngày cấp phép</label>
                                 <Input v-model="form.ngay_cap_phep"
@@ -142,7 +142,7 @@ const uploadFiles = (files) => {
                                 <Input v-model="form.ngay_het_han"
                                        type="date"
                                        :errors="form.errors.ngay_het_han"/>
-                            </div>
+                            </div> -->
                             <div class="form-group">
                                 <label for="so_cap_phep">Nội dung</label>
                                 <Input v-model="form.noi_dung"

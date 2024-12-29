@@ -44,7 +44,7 @@ const addDetail = () => {
 </script>
 
 <template>
-<div class="hover:bg-gray-200"> <!-- rounded p-1-->
+<div class="hover:bg-gray-200"> <!-- rounded p-1-->    
     <table style="width: 100%;;">
         <tr>
             <td>
@@ -58,15 +58,16 @@ const addDetail = () => {
                 <a :href="MEDIA_ENDPOINT + file.file"
                    target="_blank"
                    class="hover:text-indigo-500 border-0 p-[1px] rounded-md text-gray-500 actions">
-                {{ file.ten }}
-                </a>
+                {{ file.ten }} 
+                </a> <a v-if="enableDelete" @click="emits('removeFileUpload', file.id)" class="cursor-pointer"> <i class="fa fa-times-circle mr-1"></i></a>
             </td>
+            <!--
             <td class="text-right" >
                 <button v-if="enableDelete" @click="emits('removeFileUpload', file.id)" style="padding-right: 5px;"
                         class="hover:text-indigo-500 border-0 p-[1px] rounded-md text-gray-500 actions">
                     Xóa
                 </button>
-            </td>
+            </td> -->
         </tr>
     </table>
 </div>

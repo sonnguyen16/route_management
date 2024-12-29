@@ -20,7 +20,7 @@
         <div class="wrapper">
             <Navbar/>
             <Sidebar/>
-            <div class="content-wrapper">
+            <div class="content-wrapper" style="margin-left: 190px;">
                 <section class="content" >
                     <slot/>
                 </section>

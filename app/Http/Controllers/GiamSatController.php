@@ -21,6 +21,7 @@ class GiamSatController extends Controller
             'tuyen_duong',
             'tuyen_duong.diem_dau_xa',
             'tuyen_duong.diem_cuoi_xa',
+            'tuyen_duong.loai_tuyen_duong',
             'don_vi']);
 
         if($request->filled('ten_duong')){

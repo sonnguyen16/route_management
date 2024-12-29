@@ -133,11 +133,11 @@ const chooseFile = (id) => {
                     <tr>
                     <th class="text-center">STT</th>
                     <th class="text-left">Tên đường</th>
-                    <th class="text-left">Điểm đầu</th>
-                    <th class="text-left">Điểm cuối</th>
-                    <th class="text-center">Chiều dài</th>
-                    <th class="text-center">Đơn vị giám sát</th>
-                    <th class="text-center">File đính kèm</th>
+                    <th class="text-left">Loại tuyến đường</th>
+                    <th class="text-left">Chiều dài</th>
+                    <th class="text-left">Lộ giới</th>
+                    <th class="text-left">Đơn vị giám sát</th>
+                    <th class="text-left">File đính kèm</th>
                     <th class="text-center">Thao tác</th>
                     </tr>
                 </thead>
@@ -145,20 +145,20 @@ const chooseFile = (id) => {
                     <tr v-for="(item,i) in giam_sat.data" :key="i">
                     <td class="text-center" scope="row">{{ i+1 }}</td>
                     <td>{{ item.tuyen_duong.ten }}</td>
-                   <td>{{ item.tuyen_duong.diem_dau_xa ? item.tuyen_duong.diem_dau_xa.name : ''}}</td>
-                    <td>{{ item.tuyen_duong.diem_cuoi_xa ? item.tuyen_duong.diem_cuoi_xa.name :'' }}</td>
-                    <td>{{ item.tuyen_duong.chieu_dai }}</td>
+                   <td>{{ item.tuyen_duong.loai_tuyen_duong ? item.tuyen_duong.loai_tuyen_duong.ten : ''}}</td>
+                    <td>{{ item.tuyen_duong.chieu_dai }} km</td>
+                    <td>{{ item.tuyen_duong.lo_gioi }}</td>
                     <td>{{ item.don_vi.ten }}</td>
                     <td style="vertical-align: unset !important;">
+                        <Upload
+                            :listFile ="item.tai_lieu"
+                            @refresh="onRefresh"
+                        />
                         <label style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(item.id)"
                             class="cursor-pointer border-0 w-full text-start rounded-md mb-0">
                             <i class="fa fa-paperclip mr-2"></i>
                             Tải lên tệp
                         </label>
-                        <Upload
-                            :listFile ="item.tai_lieu"
-                            @refresh="onRefresh"
-                        />
                     </td>
                     <td class="text-center"><a :data-id=item.id class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
                 </tr>

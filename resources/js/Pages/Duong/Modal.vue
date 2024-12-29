@@ -216,10 +216,6 @@ const uploadFiles = (files) => {
                                 <Input v-model="form.chieu_dai" :errors="form.errors.chieu_dai" />
                             </div>
 
-                            <div class="form-group">
-                                <label for="chieu_rong">Chiều rộng</label>
-                                <Input v-model="form.chieu_rong" :errors="form.errors.chieu_rong" />
-                            </div>
 
                             <div class="form-group">
                                 <label for="dien_tich">Lộ giới</label>

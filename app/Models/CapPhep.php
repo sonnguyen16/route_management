@@ -30,7 +30,10 @@ class CapPhep extends Model
     {
         return $this->belongsTo(DonVi::class);
     }
-
+    public function cap_phep_diem()
+    {
+        return $this->hasMany(CapPhepDiem::class, 'cap_phep_id', 'id')->where('isdelete',0);
+    }
     public function tai_lieu()
     {
         return $this->hasMany(TaiLieu::class, 'danh_muc', 'id')->where('isdelete',0)->where('type','cap_phep');

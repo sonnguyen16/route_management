@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreDuongCamDiemRequest extends FormRequest
+class StoreCapPhepDiemRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -18,19 +17,19 @@ class StoreDuongCamDiemRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, ValidationRule|array|string>
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
             'id' => 'nullable',
-            'duong_cam_id' => 'required|integer',
-            'noi_dung' => 'nullable',
-            'den_km' => 'nullable', //'required|string',
+            'cap_phep_id' => 'required|exists:cap_phep,id',
             'tu_km' => 'nullable',
-            'tu_ngay' => 'nullable', //'required|date',
-            'den_ngay' => 'nullable', // 'required|date',
+            'den_km' => 'nullable',
             'ten' => 'nullable',
+            'tu_ngay' => 'nullable|date',
+            'den_ngay' => 'nullable|date',
+            'noi_dung' => 'nullable',
         ];
     }
 
@@ -42,8 +41,8 @@ class StoreDuongCamDiemRequest extends FormRequest
 
     public function messages(): array{
         return [
-            'duong_cam_id.required' => 'Tuyến đường không được để trống',
-            'duong_cam_id.integer' => 'Tuyến đường phải là số'
+            'cap_phep_id.required' => 'cấp phép sửa không được để trống',
+            'cap_phep_id.exists' => 'cấp phép không tồn tại',
         ];
     }
 }

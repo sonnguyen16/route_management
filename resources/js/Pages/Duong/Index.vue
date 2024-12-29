@@ -171,17 +171,17 @@ const chooseFile = (id) => {
                     class="table table-striped text-2xl"
                     v-data="{ data: tuyen_duong.data, columns: columns }">
              </table> -->
-             <table class="table table-striped text-2xl">
+             <table class="table table-striped text-2xl table-line">
                 <thead>
                     <tr>
                     <th class="text-center">STT</th>
-                    <th class="text-left">Tên tuyến đường</th>
-                    <th class="text-left">Loại tuyến đường</th>
-                    <th class="text-left">Mã phân cấp</th>
+                    <th class="text-left" style="min-width: 100px;">Tên tuyến đường</th>
+                    <th class="text-left" style="min-width: 120px;">Loại tuyến đường</th>
+                    <th class="text-left"  style="min-width: 90px;">Mã phân cấp</th>
                     <th class="text-left">Điểm đầu/ cuối</th>
-                    <th class="text-center">Chiều dài</th>
+                    <th class="text-center" style="min-width: 80px;">Chiều dài</th>
                     <th class="text-center">Chiều rộng</th>
-                    <th class="text-center">Lộ giới</th>
+                    <th class="text-center" style="min-width: 80px;">Lộ giới</th>
                     <th class="text-center">Đơn vị quản lý</th>
                     <th class="text-center">File đính kèm</th>
                     <th class="text-center">Thao tác</th>
@@ -194,45 +194,34 @@ const chooseFile = (id) => {
                     <td>{{ item.loai_tuyen_duong ? item.loai_tuyen_duong.ten : ''}}</td>
                     <td>{{ item.phan_cap ? item.phan_cap.ten : ''}}</td>
                     <td style="line-height: 1.5;">
-                        <a href="#">{{ item.diem_dau_xa ? item.diem_dau_xa.name : ''}}, {{ item.diem_dau_huyen ? item.diem_dau_huyen.name : ''}}</a><br>
-                        <a href="#">{{ item.diem_cuoi_xa ? item.diem_cuoi_xa.name : ''}}, {{ item.diem_cuoi_huyen ? item.diem_cuoi_huyen.name : ''}}</a>
-                    </td>
-                    <td class="text-center">{{ item.chieu_dai }}</td>
+                        - {{ item.diem_dau_xa ? item.diem_dau_xa.name : ''}}, {{ item.diem_dau_huyen ? item.diem_dau_huyen.name : ''}}<br>
+                        - {{ item.diem_cuoi_xa ? item.diem_cuoi_xa.name : ''}}, {{ item.diem_cuoi_huyen ? item.diem_cuoi_huyen.name : ''}}
+                     </td>
+                    <td class="text-center">{{ item.chieu_dai }} km</td>
                     <td class="text-left">
-                        <div style="padding-left:10px"><a  @click.prevent="themDuongDiem(item)"  class="newDiem cursor-pointer" title="Thêm điểm cấm"><i class="fas fa-plus mr-2"></i>Thêm chiều rộng</a></div>
-                        <table v-if="item.tuyen_duong_diem.length > 0" style="width: 100%;">
-                            <tr>
-                                <th class="text-left">Đoạn đường</th>
-                                <th class="text-center">Từ km</th>
-                                <th class="text-center">Đến km</th>
-                                <th class="text-center" style="min-width:100px;">Chiều rộng</th>
-                                <th></th>
-                                <th></th>
-                                </tr>
-                            <tr v-for="(a,i) in item.tuyen_duong_diem" :key="i">
-                                <td class="text-left">
-                                   <a href="#"  @click.prevent="SuaDuongDiem(a)">  {{ i+1 }}.{{ a.noi_dung }}</a>
-                                </td>
-                                <td><span v-if="a.tu_km">{{ 'km '+a.tu_km}}</span></td>
-                                <td><span v-if="a.den_km">{{ 'km '+a.den_km }}</span></td>
-                                <td><span >{{ a.chieu_rong }}</span></td>
-                                <td><a href="#" @click.prevent="deleteDiemCam(a)" class="cursor-pointer"><i class="fa fa-times-circle mr-1"></i></a></td>
-                               <td><a href="#" @click.prevent="SuaDuongDiem(a)" class=" cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
-                            </tr>
-                        </table>
+                        
+                        <div v-for="(a,i) in item.tuyen_duong_diem" :key="i">
+                             <b> <span style="color:black">{{ i+1 }}</span>. {{ a.noi_dung }}</b><br>
+                                - Đoạn km {{ a.tu_km }} đến km {{ a.den_km }}<br>
+                                - chiều rộng <b>{{ a.chieu_rong }} m</b>
+                            <a href="#" @click.prevent="deleteDiemCam(a)" class="cursor-pointer"><i class="fa fa-times-circle mr-1"></i></a>
+                         <a href="#" @click.prevent="SuaDuongDiem(a)" class=" cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a>
+                        </div>
+                        <div><a  @click.prevent="themDuongDiem(item)"  class="newDiem cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i>Thêm đoạn đường</a></div>
+                        
                     </td>
                     <td class="text-center">{{ item.lo_gioi }}</td>
                     <td><a href="#">{{ item.don_vi ? item.don_vi.ten : ''}}</a></td>
                     <td style="vertical-align: unset !important;">
-                        <label style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(item.id)"
-                            class="cursor-pointer border-0 w-full text-start rounded-md mb-0">
-                            <i class="fa fa-paperclip mr-2"></i>
-                            Tải lên tệp
-                        </label>
                             <Upload
                                 :listFile ="item.tai_lieu"
                                 @refresh="onRefresh"
                             />
+                            <label style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(item.id)"
+                            class="cursor-pointer border-0 w-full text-start rounded-md mb-0">
+                            <i class="fa fa-paperclip mr-2"></i>
+                            Thêm tài liệu
+                        </label>
                         </td>
                     <td class="text-center"><a :data-id=item.id class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
                 </tr>

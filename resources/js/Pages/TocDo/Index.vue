@@ -154,44 +154,39 @@ const chooseFile = (id) => {
              <input v-model="search" class="border-gray-300 rounded-lg w-1/5" placeholder="Tìm kiếm giới hạn tốc độ">
          </div>
         <div class="table-responsive">
-            <table class="table table-striped text-2xl">
+            <table class="table table-striped text-2xl table-line">
                 <thead>
                     <tr>
-                    <th class="text-center">Vị trí giới hạn</th>
-                    <th class="text-center">File đính kèm</th>
+                    <th class="text-center">STT</th>
+                    <th class="text-left">Tuyến đường</th>
+                    <th class="text-left">Loại tuyến đường</th>
+                    <th class="text-left">Chiều dài</th>
+                    <th class="text-left">Lộ giới</th>
+                    <th class="text-left">Nội dung</th>
+                    <th class="text-left">Vị trí giới hạn</th>
+                    <th class="text-left">File đính kèm</th>
                     <th class="text-center">Thao tác</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="(item,i) in gioi_han_toc_do.data" :key="i">
-                   <td class="text-left" style="vertical-align: unset !important;">
-                        <div><b>{{ i+1 }}. {{ item.tuyen_duong ? item.tuyen_duong.ten : ''}}</b></div>
-                        
-                        <table v-if="item.diem_gioi_han_toc_do.length > 0" style="width: 100%;">
-                            <tr>
-                            <th class="text-left">Điểm giới hạn</th>
-                            <th class="text-left">Từ km</th>
-                            <th class="text-left">Đến km</th>
-                            <th class="text-center">Từ ngày</th>
-                            <th class="text-center">Đến ngày</th>
-                            <th class="text-center">Nội dung</th>
-                            <th class="text-center"></th>
-                            <th class="text-center"></th>
-                            </tr>
-                            <tr v-for="(a,i) in item.diem_gioi_han_toc_do" :key="i">
-                                <td >
-                                   <a href="#" @click.prevent="suaDiemGioiHanTocDo(a)"> {{ i+1 }}.{{ a.toc_do }}</a>
-                                </td>
-                                <td class="text-center"><span v-if="a.tu_km">{{ 'km '+a.tu_km}}</span></td>
-                                <td class="text-center"><span v-if="a.den_km">{{ 'km '+a.den_km }}</span></td>
-                                <td class="text-center"><span v-if="a.tu_ngay">{{ moment(a.tu_ngay).format("DD/MM/YYYY HH:mm") }}</span></td>
-                                <td class="text-center"><span v-if="a.den_ngay">{{ moment(a.den_ngay).format("DD/MM/YYYY HH:mm") }}</span></td>
-                                <td class="text-center">{{ a.noi_dung}}</td>
-                                <td><a href="#" @click.prevent="deleteDiemGioiHanTocDo(a.id)" class="cursor-pointer"><i class="fa fa-times-circle mr-1"></i></a></td>
-                                <td><a href="#" @click.prevent="suaDiemGioiHanTocDo(a)" class=" cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
-                            </tr>
-                        </table>
-                        <div style="padding-left:10px"><a @click.prevent="themDiemGioiHanTocDovalue(item.id)" class="newDiem cursor-pointer" title="Sửa"><i class="fas fa-plus mr-2"></i>Thêm mới vị trí</a></div>
+                    <td>{{ i+1 }}</td>
+                    <td>{{ item.tuyen_duong ? item.tuyen_duong.ten : ''}}</td>
+                    <td>{{ item.tuyen_duong.loai_tuyen_duong ? item.tuyen_duong.loai_tuyen_duong.ten : ''}}</td>
+                    <td>{{ item.tuyen_duong.chieu_dai}} km</td>
+                    <td>{{ item.tuyen_duong.lo_gioi}}</td>
+                    <td>{{ item.noi_dung}}</td>
+                    <td class="text-left" style="vertical-align: unset !important;">
+                    <div v-for="(a,i) in item.diem_gioi_han_toc_do" :key="i">
+                        <b>{{ i+1 }}. {{ a.toc_do }}</b><br>
+                        - Đoạn từ km: <span v-if="a.tu_km">{{ a.tu_km}}</span> đến km {{ a.den_km }}<br>
+                        - Từ ngày: <span v-if="a.tu_ngay">{{ moment(a.tu_ngay).format("DD/MM/YYYY HH:mm") }}</span> đến ngày <span v-if="a.den_ngay">{{ moment(a.den_ngay).format("DD/MM/YYYY HH:mm") }}</span><br>
+                        - Nội dung: {{ a.noi_dung}}
+                        <a href="#" @click.prevent="deleteDiemGioiHanTocDo(a.id)" class="cursor-pointer"><i class="fa fa-times-circle mr-1"></i></a>
+                        <a href="#" @click.prevent="suaDiemGioiHanTocDo(a)" class=" cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a>
+                           
+                    </div>
+                        <div><a @click.prevent="themDiemGioiHanTocDovalue(item.id)" class="newDiem cursor-pointer" title="Sửa"><i class="fas fa-plus mr-2"></i>Thêm mới vị trí</a></div>
                        </td>
                         <td style="vertical-align: unset !important;">
                             <label style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(item.id)"

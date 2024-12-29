@@ -6,36 +6,35 @@ import Select from "@/Components/Select.vue";
 import {ref, watch } from "vue";
 const props = defineProps({
   show: Boolean,
-  duong_cam: Object,
-  diem_cam: Object,
+  cap_phep_diem: Object,
+  cap_phep: Object,
   keyModal: Number
 })
 
 const emits = defineEmits(['closeModal', 'refresh', 'fileChange']);
 let form = useForm({
     id: '',
-    duong_cam_id: '',
+    cap_phep_id: '',
     ten: '',
-    noi_dung: '',
     tu_km: '',
     den_km: '',
     tu_ngay: '',
     den_ngay: '',
+    noi_dung: '',
 })
 
 watch(() => props.keyModal, () => {
-  if(props.duong_cam) {
-        form.duong_cam_id = props.duong_cam.id;
-        if(props.diem_cam) {
-         Object.assign(form, props.diem_cam);
+  if(props.cap_phep) {
+        form.cap_phep_id = props.cap_phep.id;
+        if(props.cap_phep_diem) {
+         Object.assign(form, props.cap_phep_diem);
         } else {
           form.ten = "";
-          form.noi_dung = "";
-          form.vi_tri = "";
           form.tu_km = "";
           form.den_km = "";
           form.tu_ngay = "";
           form.den_ngay = "";
+          form.noi_dung = "";
         }
        
     }else{
@@ -48,7 +47,9 @@ const closeModal = () => {
     form.clearErrors();
 }
 const submit = () => {
-    form.post(route('duong-cam.storeDiemCam'), {
+    console.log(form);
+    // console.log(cap_phep);
+    form.post(route('cap-phep.storeDiemCapPhep'), {
         onSuccess: () => {
             closeModal()
             emits('refresh')
@@ -61,27 +62,27 @@ const submit = () => {
 </script>
 
 <template>
-  <div class="modal fade" id="ModelDiemCam">
+  <div class="modal fade" id="modelDiemCapPhep">
       <div
           class="modal-dialog modal-dialog-centered modal-lg"  style="max-width: 600px;"
      >
+    
       <div class="modal-content">
               <div class="modal-body p-0">
                   <div class="row">
                       <!-- Main Content -->
-                      
-                      <div :class="['px-4 pt-4', isEdit ? 'col-md-12' : 'col-md-12']">
+                     
+                      <div :class="['px-4 pt-4','col-md-12']">
                           <div class="form-group">
-                              <label for="ten">Điểm cấm</label>
+                              <label for="ten">Tên cấp phép</label>
                               <Input
                                 v-model="form.ten"
                                 type="text"
                                 :errors="form.errors.ten"
-                                placeholder="Điểm cấm"
-                                id="ten"
+                                placeholder="Tên"
+                                id="toc_do"
                               />
                           </div>
-                          
                           <div class="form-group">
                               <label for="tu_km">Từ km</label>
                               <Input
@@ -106,7 +107,7 @@ const submit = () => {
                                 <label for="tu_ngay">Từ ngày</label>
                                 <Input
                                     v-model="form.tu_ngay"
-                                    type="datetime-local"
+                                    type="date"
                                     :errors="form.errors.tu_ngay"
                                 />
                             </div>
@@ -115,18 +116,20 @@ const submit = () => {
                                 <label for="den_ngay">Đến ngày</label>
                                 <Input
                                     v-model="form.den_ngay"
-                                    type="datetime-local"
+                                    type="date"
                                     :errors="form.errors.den_ngay"
                                 />
                             </div>
-                            
                             <div class="form-group">
-                                <label for="ly_do">Nội dung cấm</label>
-                                <Input
-                                    v-model="form.noi_dung"
-                                    :errors="form.errors.noi_dung"
-                                />
-                            </div>
+                              <label for="toc_do">Nội dung</label>
+                              <Input
+                                v-model="form.noi_dung"
+                                type="text"
+                                :errors="form.errors.noi_dung"
+                                placeholder="Nội dung"
+                                id="toc_do"
+                              />
+                          </div>
                       </div>
                   </div>
               </div>
@@ -141,3 +144,11 @@ const submit = () => {
       </div>
   </div>
 </template>
+<style scoped>
+.form-group {
+    display: grid
+;
+    grid-template-columns: 3fr 10fr!important;
+    margin-bottom: 0;
+}
+</style>

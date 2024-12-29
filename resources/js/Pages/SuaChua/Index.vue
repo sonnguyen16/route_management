@@ -211,47 +211,39 @@ const chooseFile = (id) => {
              <input v-model="search" class="border-gray-300 rounded-lg w-1/5" placeholder="Tìm kiếm sửa chữa">
          </div>
          <div class="table-responsive">
-            <table class="table table-striped text-2xl">
+            <table class="table table-striped text-2xl table-line">
                 <thead>
                     <tr>
                     <th class="text-center">STT</th>
-                    <th class="text-center">Nội dung</th>
-                    <th class="text-center">File đính kèm</th>
+                    <th class="text-left">Tuyến đường</th>
+                    <th class="text-left">Loại tuyến đường</th>
+                    <th class="text-left">Chiều dài</th>
+                    <th class="text-left">Lộ giới</th>
+                    <th class="text-left">Đơn vị thi công</th>
+                    <th class="text-left">Hạng mục sửa</th>
+                    <th class="text-left">File đính kèm</th>
                     <th class="text-center">Thao tác</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="(item,i) in sua_chua.data" :key="i">
                     <td class="text-center" scope="row">{{ i+1 }}</td>  
-                   
+                    <td>{{ item.tuyen_duong ? item.tuyen_duong.ten : ''}}</td>
+                    <td>{{ item.tuyen_duong.loai_tuyen_duong ? item.tuyen_duong.loai_tuyen_duong.ten : ''}}</td>
+                    <td>{{ item.tuyen_duong.chieu_dai}} km</td>
+                    <td>{{ item.tuyen_duong.lo_gioi}}</td>
+                    <td>{{ item.don_vi ? item.don_vi.ten : ''}}</td>
                     <td class="text-left" style="vertical-align: unset !important;">
-                    <div>Tuyến đường: <b> {{ item.tuyen_duong ? item.tuyen_duong.ten : ''}} </b></div>
-                    <div>Đơn vị thi công: <b>{{ item.don_vi ? item.don_vi.ten : ''}}</b></div>
-                       <table v-if="item.sua_chua_diem.length > 0" style="width: 100%;color:#4f85f9">
-                            <tr>
-                                <th class="text-left">Hạng mục</th>
-                                <th class="text-center">Ngày duyệt</th>
-                                <th class="text-center">Ngày khởi công</th>
-                                <th class="text-center">Ngày hoàn thành</th>
-                                <th class="text-center">Từ km</th>
-                                <th class="text-center">Đến km</th>
-                                <th></th>
-                                <th></th>
-                                </tr>
-                            <tr v-for="(a,i) in item.sua_chua_diem" :key="i">
-                                <td ><!--<a :data-id=a.id class="editDiem cursor-pointer">-->
-                                   <a href="#" @click.prevent="updateMsg(a)"> {{ i+1 }}.{{ a.loai_sua_chua.ten }}</a><!--</a>-->
-                                </td>
-                                <td class="text-center"><span v-if="a.ngay_duyet">{{ moment(a.ngay_duyet).format("DD/MM/YYYY") }}</span></td>
-                                <td class="text-center"><span v-if="a.ngay_khoi_cong">{{ moment(a.ngay_khoi_cong).format("DD/MM/YYYY") }}</span></td>
-                                <td class="text-center"><span v-if="a.ngay_hoan_thanh">{{ moment(a.ngay_hoan_thanh).format("DD/MM/YYYY") }}</span></td>
-                                <td class="text-center">Km {{ a.tu_km }}+</td>
-                                <td class="text-center">Km {{ a.den_km }}+</td>
-                                <td><a href="#" @click.prevent="deleteDiem(a.id)" class="cursor-pointer"><i class="fa fa-times-circle mr-1"></i></a></td>
-                                <td><a href="#" @click.prevent="updateMsg(a)" class=" cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
-                            </tr>
-                        </table>
-                        <div style="padding-left:10px"><a :data-id=item.id class="newDiem cursor-pointer" title="Sửa"><i class="fas fa-plus mr-2"></i>Thêm mới vị trí</a></div>
+                        <div v-for="(a,i) in item.sua_chua_diem" :key="i">
+                            <a href="#" @click.prevent="updateMsg(a)"><b>{{ i+1 }}.{{ a.loai_sua_chua.ten }}</b></a><br>
+                            - Ngày duyệt: <span v-if="a.ngay_duyet">{{ moment(a.ngay_duyet).format("DD/MM/YYYY") }}</span><br>
+                            - Ngày khởi công: <span v-if="a.ngay_khoi_cong">{{ moment(a.ngay_khoi_cong).format("DD/MM/YYYY") }}</span><br>
+                            - Ngày hoàn thành: <span v-if="a.ngay_hoan_thanh">{{ moment(a.ngay_hoan_thanh).format("DD/MM/YYYY") }}</span><br>
+                            - Từ km {{ a.tu_km }} đến km {{ a.den_km }}
+                            <a href="#" @click.prevent="deleteDiem(a.id)" class="cursor-pointer"><i class="fa fa-times-circle mr-1"></i></a>
+                            <a href="#" @click.prevent="updateMsg(a)" class=" cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a>
+                        </div>
+                         <div><a :data-id=item.id class="newDiem cursor-pointer" title="Sửa"><i class="fas fa-plus mr-2"></i>Thêm mới vị trí</a></div>
                         </td>
                         <td style="vertical-align: unset !important;">
                             <label style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(item.id)"

@@ -198,49 +198,35 @@ const chooseFile = (id) => {
              <input v-model="search" class="border-gray-300 rounded-lg w-1/5" placeholder="Tìm kiếm đường cấm">
          </div>
          <div class="table-responsive">
-            <table class="table table-striped text-2xl">
+            <table class="table table-striped text-2xl table-line">
                 <thead>
                     <tr>
                     <th class="text-center">STT</th>
-                    <th class="text-center">Nội dung</th>
-                    <th class="text-center">File đính kèm</th>
+                    <th class="text-left">Tuyến đường</th>
+                    <th class="text-left">Đơn vị quyết định</th>
+                    <th class="text-left">Đơn vị thực hiện</th>
+                    <th class="text-left">Nội dung</th>
+                    <th class="text-left">File đính kèm</th>
                     <th class="text-center">Thao tác</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="(item,i) in duong_cam.data" :key="i">
                     <td class="text-center" scope="row">{{ i+1 }}</td>
+                    <td class="text-left" scope="row">{{ item.tuyen_duong ? item.tuyen_duong.ten : ''}}</td>
+                    <td class="text-left" scope="row">{{ item.don_vi_quyet_dinh.ten ? item.don_vi_quyet_dinh.ten : ''}}</td>
+                    <td class="text-left" scope="row">{{ item.don_vi_thuc_hien.ten ? item.don_vi_thuc_hien.ten : ''}}</td>
                     <td class="text-left" style="vertical-align: unset !important;">
-                        <div>
-                            Tuyến đường: <b>{{ item.tuyen_duong ? item.tuyen_duong.ten : ''}}</b><br>
-                            Đơn vị quyết định: <b>{{ item.don_vi_quyet_dinh.ten ? item.don_vi_quyet_dinh.ten : ''}}</b><br>
-                            Đơn vị thực hiện: <b>{{ item.don_vi_thuc_hien.ten ? item.don_vi_thuc_hien.ten : ''}}</b>
+                        <div v-for="(a,i) in item.diem_cam" :key="i">
+                            <a href="#"  @click.prevent="suaDiemCam(a)"><b>{{ i+1 }}.{{ a.ten }}</b></a><br>
+                            - Đoạn từ km <span v-if="a.tu_km">{{a.tu_km}}</span> đến <span v-if="a.den_km">{{a.den_km }}</span><br>
+                            - Từ ngày: <span v-if="a.tu_ngay">{{ moment(a.tu_ngay).format("DD/MM/YYYY HH:mm") }}</span> đến ngày: <span v-if="a.den_ngay">{{ moment(a.den_ngay).format("DD/MM/YYYY HH:mm") }}</span><br>
+                            - Nội dung: {{ a.noi_dung }}
+                            <a href="#" @click.prevent="deleteDiemCam(a)" class="cursor-pointer"><i class="fa fa-times-circle mr-1"></i></a>
+                            <a href="#" @click.prevent="suaDiemCam(a)" class=" cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a>
+
                         </div>
-                        <div style="padding-left:10px"><a  @click.prevent="themDiemCam(item.id)"  class="newDiem cursor-pointer" title="Thêm điểm cấm"><i class="fas fa-plus mr-2"></i>Thêm điểm cấm</a></div>
-                        <table v-if="item.diem_cam.length > 0" style="width: 100%;">
-                            <tr>
-                                <th class="text-left">Điểm cấm</th>
-                                <th class="text-center">Từ km</th>
-                                <th class="text-center">Đến km</th>
-                                <th class="text-center" style="min-width:100px;">Từ ngày</th>
-                                <th class="text-center" style="min-width:100px;">Đến ngày</th>
-                                <th class="text-center" style="min-width:100px;">Nội dung</th>
-                                <th></th>
-                                <th></th>
-                                </tr>
-                            <tr v-for="(a,i) in item.diem_cam" :key="i">
-                                <td ><!--<a :data-id=a.id class="editDiem cursor-pointer">-->
-                                   <a href="#"  @click.prevent="suaDiemCam(a)">  {{ i+1 }}.{{ a.noi_dung }}</a><!--</a>-->
-                                </td>
-                                <td><span v-if="a.tu_km">{{ 'km '+a.tu_km}}</span></td>
-                                <td><span v-if="a.den_km">{{ 'km '+a.den_km }}</span></td>
-                                <td class="text-center"><span v-if="a.tu_ngay">{{ moment(a.tu_ngay).format("DD/MM/YYYY HH:mm") }}</span></td>
-                                <td class="text-center"><span v-if="a.den_ngay">{{ moment(a.den_ngay).format("DD/MM/YYYY HH:mm") }}</span></td>
-                                <td><span >{{ a.noi_dung }}</span></td>
-                                <td><a href="#" @click.prevent="deleteDiemCam(a)" class="cursor-pointer"><i class="fa fa-times-circle mr-1"></i></a></td>
-                               <td><a href="#" @click.prevent="suaDiemCam(a)" class=" cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
-                            </tr>
-                        </table>
+                        <div><a  @click.prevent="themDiemCam(item.id)"  class="newDiem cursor-pointer" title="Thêm điểm cấm"><i class="fas fa-plus mr-2"></i>Thêm điểm cấm</a></div>
                     </td>
                         <td style="vertical-align: unset !important;">
                             <label style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(item.id)"

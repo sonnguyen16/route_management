@@ -146,10 +146,10 @@ const chooseFile = (id) => {
                     <th class="text-left">Loại kết<br>cấu nhịp</th>
                     <th class="text-left">Lý trình</th>                    
                     <th class="text-center">Chiều dài</th>
-                    <th class="text-left">Chiều rộng</th>
+                    <th class="text-center">Chiều rộng</th>
                     <th class="text-center">Năm<br>khai thác</th>
-                    <th class="text-center">Tải trọng thiết kế</th>
-                    <th class="text-center">Tải trọng khai thác</th>
+                    <th class="text-center">Tải trọng<br>thiết kế</th>
+                    <th class="text-center">Tải trọng<br>khai thác</th>
                     <th class="text-center">Năm<br>kiểm định</th>
                     <th class="text-center">Tuyến đường</th>
                     <th class="text-center">File đính kèm</th>

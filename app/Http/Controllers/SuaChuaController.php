@@ -20,7 +20,7 @@ class SuaChuaController extends Controller
 {
     public function index(Request $request)
     {
-        $sua_chua = SuaChua::with(['tai_lieu','tuyen_duong', 'don_vi', 'nguoi_duyet','sua_chua_diem','sua_chua_diem.loai_sua_chua']);
+        $sua_chua = SuaChua::with(['tai_lieu','tuyen_duong', 'don_vi', 'nguoi_duyet','sua_chua_diem','sua_chua_diem.loai_sua_chua','tuyen_duong.loai_tuyen_duong']);
         if($request->filled('ten_duong')){
             $sua_chua = $sua_chua->whereHas('tuyen_duong', function($query) use ($request){
                 $query->where('ten', 'like', '%'.$request->ten_duong.'%');

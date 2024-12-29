@@ -192,15 +192,19 @@ th, td{
   width: 250px;
   border-radius: 10px;
 }
-
+.table-line { 
+  line-height: 1.5;
+}
 .table-bordered td,
 .table-bordered th {
   border: 1px solid #90caf9 !important;
 }
 th, td {
-  vertical-align: middle !important;
+ /* vertical-align: middle !important; */
+ vertical-align: top !important;
   padding: 0px !important;
-  padding-left: 10px !important;
+  padding-top: 5px!important;
+  padding-left: 5px!important;
 }
 thead th {
   background: rgba(227, 242, 253, 1);
@@ -312,4 +316,19 @@ hr {
 }
 .color-navbar{
   color: #c3d0de !important;
+}
+ul {
+  display: block;
+  list-style-type: disc;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  padding-inline-start: 5px;
+  unicode-bidi: isolate;
+}
+ul li {
+  display: list-item;
+  text-align: -webkit-match-parent;
+  unicode-bidi: isolate;
 }

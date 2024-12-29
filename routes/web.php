@@ -65,6 +65,8 @@ Route::prefix('gioi-han-toc-do')->middleware('auth')->group(function () {
 Route::prefix('cap-phep')->middleware('auth')->group(function () {
     Route::get('/', [CapPhepController::class, 'index'])->name('cap-phep.index');
     Route::post('/store', [CapPhepController::class, 'store'])->name('cap-phep.store');
+    Route::post('/storeDiemCapPhep', [CapPhepController::class, 'storeCapPhepDiem'])->name('cap-phep.storeDiemCapPhep');
+    Route::get('/delete/diem-cap-phep', [CapPhepController::class, 'deleteDiemCapPhep'])->name('cap-phep.deleteDiemCapPhep');
 });
 
 Route::prefix('giam-sat')->middleware('auth')->group(function () {

@@ -19,7 +19,7 @@ class GioiHanTocDoController extends Controller
             'tai_lieu',
             'tuyen_duong',
             'tuyen_duong.diem_dau_xa',
-            'tuyen_duong.diem_cuoi_xa','diem_gioi_han_toc_do',]);
+            'tuyen_duong.diem_cuoi_xa','diem_gioi_han_toc_do','tuyen_duong.loai_tuyen_duong']);
         if($request->filled('ten_duong')) {
             $gioi_han_toc_do = $gioi_han_toc_do->whereHas('tuyen_duong', function($query) use ($request) {
                 $query->where('ten', 'like', '%'.$request->ten_duong.'%');
