@@ -168,7 +168,7 @@ const chooseFile = (id) => {
                     <td class="text-center"><a @click.prevent="editModal(item)" class="cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
                 </tr>
                 <tr v-for="(item,i) in item.doan_duong" :key="i">
-                    <td><a @click.prevent="openModal(item)" class=" cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a></td>
+                    <td></td>
                     <td></td>
                     <td>{{ item.noi_dung}}</td>
                     <td class="text-center">{{ item.tu_km}}</td>
