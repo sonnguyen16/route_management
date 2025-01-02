@@ -201,8 +201,8 @@ const chooseFile = (id) => {
                     <td class="text-center" scope="row"><a @click.prevent="openModal(item)" class="edit cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a></td>
                     <td class="text-left" scope="row">{{i+1}}. {{ item.tuyen_duong ? item.tuyen_duong.ten : ''}}</td>
                     <td class="text-left" scope="row">{{ item.noi_dung }}</td>
-                    <td class="text-left" scope="row">{{ item.don_vi_quyet_dinh.ten ? item.don_vi_quyet_dinh.ten : ''}}</td>
-                    <td class="text-left" scope="row">{{ item.don_vi_thuc_hien.ten ? item.don_vi_thuc_hien.ten : ''}}</td>
+                    <td class="text-left" scope="row"><span v-if="item.don_vi_quyet_dinh">{{ item.don_vi_quyet_dinh.ten ? item.don_vi_quyet_dinh.ten : ''}}</span></td>
+                    <td class="text-left" scope="row"><span v-if="item.don_vi_thuc_hien">{{ item.don_vi_thuc_hien.ten ? item.don_vi_thuc_hien.ten : ''}}</span></td>
                     <td class="text-center">{{ item.tu_km}}</td>
                     <td class="text-center">{{ item.den_km}}</td>
                     <td class="text-center" > <span v-if="item.tu_ngay">{{ moment(item.tu_ngay).format("DD/MM/YYYY HH:mm") }}</span></td>
@@ -226,8 +226,8 @@ const chooseFile = (id) => {
                     <td class="text-center" scope="row"></td>
                     <td class="text-left" scope="row"></td>
                     <td class="text-left" scope="row">{{ item.noi_dung }}</td>
-                    <td class="text-left" scope="row">{{ item.don_vi_quyet_dinh ? item.don_vi_quyet_dinh.ten : ''}}</td>
-                    <td class="text-left" scope="row">{{ item.don_vi_thuc_hien ? item.don_vi_thuc_hien.ten : ''}}</td>
+                    <td class="text-left" scope="row"><span v-if="item.don_vi_quyet_dinh">{{ item.don_vi_quyet_dinh.ten ? item.don_vi_quyet_dinh.ten : ''}}</span></td>
+                    <td class="text-left" scope="row"><span v-if="item.don_vi_thuc_hien">{{ item.don_vi_thuc_hien.ten ? item.don_vi_thuc_hien.ten : ''}}</span></td>
                     <td class="text-center">{{ item.tu_km}}</td>
                     <td class="text-center">{{ item.den_km}}</td>
                     <td class="text-center" > <span v-if="item.tu_ngay">{{ moment(item.tu_ngay).format("DD/MM/YYYY HH:mm") }}</span></td>
