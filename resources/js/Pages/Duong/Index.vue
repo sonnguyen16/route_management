@@ -163,7 +163,7 @@ const chooseFile = (id) => {
                     <template v-for="(item, i) in tuyen_duong.data" :key="i">
                     <tr v-if="!item.tuyen_duong_id">
                     <td class="text-center" scope="row">
-                       <a @click.prevent="openModal(item)" class="edit cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a>
+                       <a @click.prevent="openModal(item)" class="cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a>
                     </td>
                     <td><a :data-id=item.id class="edit cursor-pointer" title="Sửa"> {{ i+1 }}
                         .{{ item.ten }}</a>
@@ -191,7 +191,7 @@ const chooseFile = (id) => {
                         </label>
                         </td>
                         <td class="text-right">
-                       <a :data-id=item.id class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a>
+                       <a :data-id=item.id class="cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a>
                         </td>
                     </tr>
 
@@ -222,11 +222,9 @@ const chooseFile = (id) => {
                         </label>
                         </td>
                         <td class="text-right">
-                            <a :data-id=item.id class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a>
+                            <a :data-id=item.id class="cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a>
                         </td>
                     </tr>
-
-                    
                     </template>
                     
                 </tbody>

@@ -220,7 +220,7 @@ const chooseFile = (id) => {
                                 
                             />
                         </td>
-                    <td class="text-center"><a @click.prevent="editModal(item)" class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
+                    <td class="text-center"><a @click.prevent="editModal(item)" class=" cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
                 </tr>
                 <tr v-for="(item,i) in item.doan_duong" :key="i">
                     <td class="text-center" scope="row"></td>
@@ -245,7 +245,7 @@ const chooseFile = (id) => {
                                 
                             />
                         </td>
-                    <td class="text-center"><a @click.prevent="editModal(item)" class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
+                    <td class="text-center"><a @click.prevent="editModal(item)" class=" cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
                 </tr>
             </template>
                 </tbody>
