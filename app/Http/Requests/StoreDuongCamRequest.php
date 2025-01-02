@@ -25,11 +25,14 @@ class StoreDuongCamRequest extends FormRequest
         return [
             'id' => 'nullable',
             'tuyen_duong_id' => 'required|integer',
-            'don_vi_quyet_dinh_id' => 'required|integer',
-            'don_vi_thuc_hien_id' => 'required|integer',
+            'don_vi_quyet_dinh_id' => 'nullable',
+            'don_vi_thuc_hien_id' => 'nullable',
             'tu_ngay' => 'nullable', //'required|date',
             'den_ngay' => 'nullable', // 'required|date',
-            'ly_do' => 'nullable', //'required|string',
+            'tu_km' => 'nullable', //'required|string',
+            'den_km' => 'nullable', //'required|string',
+            'noi_dung' => 'nullable', //'required|string',
+            'duong_cam_id' => 'nullable', //'required|string',
         ];
     }
 
@@ -43,10 +46,10 @@ class StoreDuongCamRequest extends FormRequest
         return [
             'tuyen_duong_id.required' => 'Tuyến đường không được để trống',
             'tuyen_duong_id.integer' => 'Tuyến đường phải là số',
-            'don_vi_quyet_dinh_id.required' => 'Đơn vị quyết định không được để trống',
-            'don_vi_quyet_dinh_id.integer' => 'Đơn vị quyết định phải là số',
-            'don_vi_thuc_hien_id.required' => 'Đơn vị thực hiện không được để trống',
-            'don_vi_thuc_hien_id.integer' => 'Đơn vị thực hiện phải là số',
+         //   'don_vi_quyet_dinh_id.required' => 'Đơn vị quyết định không được để trống',
+         //   'don_vi_quyet_dinh_id.integer' => 'Đơn vị quyết định phải là số',
+         //   'don_vi_thuc_hien_id.required' => 'Đơn vị thực hiện không được để trống',
+          //  'don_vi_thuc_hien_id.integer' => 'Đơn vị thực hiện phải là số',
           //  'tu_ngay.required' => 'Từ ngày không được để trống',
          //   'tu_ngay.date' => 'Từ ngày phải là ngày',
           //  'den_ngay.required' => 'Đến ngày không được để trống',

@@ -15,7 +15,7 @@ let choice = null;
 
 onMounted(() => {
    // model.value = 19;
-    console.log(`gia trị 1: ${model.value}`);
+    
     const selectElement = document.getElementById(props.id);
     choice = new Choices(selectElement);
     choice.setChoices(props.options, 'id', props?.options?.[0]?.name ? 'name' : 'ten', true);
@@ -28,14 +28,13 @@ watch(() => props.options, (newOptions) => {
         if(newOptions) {
             choice.setChoices(newOptions, 'id', newOptions[0]?.name ? 'name' : 'ten', true);
         }
-       console.log(`gia trị 2: ${model.value}`);
+       
         choice.setChoiceByValue(model.value);
     }
 });
 
 watch(() => model.value, () => {
     choice.setChoiceByValue(model.value);
-    console.log(`gia trị: ${model.value}`);
 });
 
 </script>

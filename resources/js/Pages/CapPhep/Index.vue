@@ -20,6 +20,7 @@ const props = defineProps({
 })
 
 const cap_phep_selected = ref(null);
+const cap_phep_cha_selected = ref(null);
 const cap_phep_diem_selected = ref(null);
 const key = ref(0);
 const keyModal = ref(0);
@@ -45,9 +46,8 @@ const columns = [
 ]
 
 const modal = useModal('modal');
-const modeldiemcapphep = useModal('modelDiemCapPhep');
 onMounted(() => {
-    eventForEditBtn()
+   // eventForEditBtn()
 })
 
 const onRefresh = () => {
@@ -71,9 +71,17 @@ const eventForEditBtn = () => {
     });
 }
 
-const openModal = () => {
+const openModal = (item) => {
     keyModal.value++;
     cap_phep_selected.value = null;
+    cap_phep_cha_selected.value = item;
+    isEdit.value = false;
+    modal.showModal();
+}
+const editModal = (item) => {
+    keyModal.value++;
+    cap_phep_selected.value = item;
+    cap_phep_cha_selected.value = props.cap_phep.data.find(item => item.id === item.cap_phep_id);;
     isEdit.value = false;
     modal.showModal();
 }
@@ -121,21 +129,6 @@ const chooseFile = (id) => {
 // ket thuc
 
 
-
-function themDiemCapPhep(id) {
-  cap_phep_selected.value = props.cap_phep.data.find(item => item.id === id);
-  cap_phep_diem_selected.value = null;
-  keyModal.value++
-  modeldiemcapphep.showModal();
-}
-function suaDiemCapPhep(value) {
-    console.log(value);
-    cap_phep_selected.value = props.cap_phep.data.find(item => item.id === value.cap_phep_id);
-    cap_phep_diem_selected.value = value;
-    keyModal.value++
-    modeldiemcapphep.showModal();
-   
-}
 function deleteDiemCapPhep(value) {
     router.visit(route('cap-phep.deleteDiemCapPhep', {id: value}), {
         preserveState: true,
@@ -163,52 +156,66 @@ function deleteDiemCapPhep(value) {
                     <th class="text-left">Đơn vị cấp phép</th>
                     <th class="text-left">Số cấp phép</th>
                     <th class="text-left">Nội dung</th>
-                    <th class="text-left">Nội dung cấp phép</th>
+                    <th class="text-left">Từ km</th>
+                    <th class="text-left">Đến km</th>
+                    <th class="text-left">Từ ngày</th>
+                    <th class="text-left">Đến ngày</th>
                     <th class="text-left">File đính kèm</th>
                     <th class="text-center">Thao tác</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(item,i) in cap_phep.data" :key="i">
-                    <td class="text-center" scope="row">{{ i+1 }}</td>
-                    <td>{{ item.tuyen_duong.ten }}</td>
-                    <td>{{ item.don_vi.ten }}</td>
-                    <td>{{ item.so_cap_phep }}</td>
-                   
-                    <td>{{ item.noi_dung }}</td>
-                    <td>
-                        <div v-for="(a,i) in item.cap_phep_diem" :key="i">
-                            <a href="#"  @click.prevent="suaDiemCapPhep(a)">  <b>{{ i+1 }}.{{ a.ten }}</b></a><br>
-                            - Đoạn từ km <span v-if="a.tu_km">{{a.tu_km}}</span> đến km <span v-if="a.den_km">{{a.den_km }}</span><br>
-                            - Từ ngày: <span v-if="a.tu_ngay">{{ moment(a.tu_ngay).format("DD/MM/YYYY") }}</span> đến ngày: <span v-if="a.den_ngay">{{ moment(a.den_ngay).format("DD/MM/YYYY") }}</span><br>
-                            - Nội dung: {{ a.noi_dung }}
-                            <a href="#" @click.prevent="deleteDiemCapPhep(a.id)" class="cursor-pointer"><i class="fa fa-times-circle mr-1"></i></a>
-                            <a href="#" @click.prevent="suaDiemCapPhep(a)" class=" cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a>
-
-                        </div>
-                        <div><a @click.prevent="themDiemCapPhep(item.id)" class="newDiem cursor-pointer" title="Sửa"><i class="fas fa-plus mr-2"></i>Thêm mới</a></div>
-                       
+                    <template v-for="(item,i) in cap_phep.data" :key="i">
+                    <tr v-if="!item.cap_phep_id">
+                    <td class="text-center" scope="row">
+                        <a @click.prevent="openModal(item)" class="cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a>
                     </td>
+                    <td>{{ i+1 }}. {{ item.tuyen_duong.ten }}</td>
+                    <td><span v-if="item.don_vi">{{ item.don_vi.ten }}</span></td>
+                    <td>{{ item.so_cap_phep }}</td>
+                    <td>{{ item.noi_dung }}</td>
+                    <td>{{ item.tu_km }}</td>
+                    <td>{{ item.den_km }}</td>
+                    <td><span v-if="item.ngay_cap_phep">{{ moment(item.ngay_cap_phep).format("DD/MM/YYYY") }}</span></td>
+                    <td><span v-if="item.ngay_het_han">{{ moment(item.ngay_het_han).format("DD/MM/YYYY") }}</span></td>
                     <td style="vertical-align: unset !important;">
                         <label style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(item.id)"
                             class="cursor-pointer border-0 w-full text-start rounded-md mb-0">
                             <i class="fa fa-paperclip mr-2"></i>
-                            Tải lên tệp
                         </label>
                         <Upload
                             :listFile ="item.tai_lieu"
                             @refresh="onRefresh"
                         />
                     </td>
-                    <td class="text-center"><a :data-id=item.id class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
-                </tr>
+                    <td class="text-center"><a @click.prevent="editModal(item)" class="cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
+                    </tr>
+                    <tr v-for="(item,i) in item.doan_duong" :key="i">
+                    <td class="text-center" scope="row">
+                    </td>
+                    <td></td>
+                    <td><span v-if="item.don_vi">{{ item.don_vi.ten }}</span></td>
+                    <td>{{ item.so_cap_phep }}</td>
+                    <td>{{ item.noi_dung }}</td>
+                    <td>{{ item.tu_km }}</td>
+                    <td>{{ item.den_km }}</td>
+                    <td><span v-if="item.ngay_cap_phep">{{ moment(item.ngay_cap_phep).format("DD/MM/YYYY") }}</span></td>
+                    <td><span v-if="item.ngay_het_han">{{ moment(item.ngay_het_han).format("DD/MM/YYYY") }}</span></td>
+                    <td style="vertical-align: unset !important;">
+                        <label style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(item.id)"
+                            class="cursor-pointer border-0 w-full text-start rounded-md mb-0">
+                            <i class="fa fa-paperclip mr-2"></i>
+                        </label>
+                        <Upload
+                            :listFile ="item.tai_lieu"
+                            @refresh="onRefresh"
+                        />
+                    </td>
+                    <td class="text-center"><a @click.prevent="editModal(item)" class="cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
+                    </tr>
+                    </template>
                 </tbody>
                 </table>
-             <!--<table :key="key"
-                    class="table table-striped text-2xl"
-                    v-data="{ data: cap_phep.data, columns: columns }">
-             </table>
-             -->
          </div>
          <Pagination
              :all-data="cap_phep"
@@ -222,16 +229,7 @@ function deleteDiemCapPhep(value) {
          :key-modal="keyModal"
          :cap_phep="cap_phep_selected"
          :tuyen_duong="tuyen_duong"
-         :don_vi="don_vi"
-     />
-     <ModalDiemCapPhep
-         @close-modal="modeldiemcapphep.hideModal"
-         @refresh="onRefresh"
-         :is-edit="isEdit"
-         :key-modal="keyModal"
-         :cap_phep="cap_phep_selected"
-         :cap_phep_diem="cap_phep_diem_selected"
-         :tuyen_duong="tuyen_duong"
+         :cap_phep_cha="cap_phep_cha_selected"
          :don_vi="don_vi"
      />
 </MainLayout>

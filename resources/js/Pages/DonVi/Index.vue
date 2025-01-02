@@ -163,7 +163,6 @@ keyModal
                         <label style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(item.id)"
                             class="cursor-pointer border-0 w-full text-start rounded-md mb-0">
                             <i class="fa fa-paperclip mr-2"></i>
-                            Tải lên tệp
                         </label>
                         <Upload
                             :listFile ="item.tai_lieu"

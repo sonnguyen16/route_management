@@ -18,6 +18,9 @@ class GioiHanTocDo extends Model
         'noi_dung',
         'tu_ngay',
         'den_ngay',
+        'tu_km',
+        'den_km',
+        'gioi_han_toc_do_id',
         'tai_lieu'
     ];
 
@@ -39,5 +42,9 @@ class GioiHanTocDo extends Model
     public function diem_gioi_han_toc_do()
     {
         return $this->hasMany(DiemGioiHanTocDo::class, 'gioi_han_toc_do_id', 'id')->where('isdelete',0);
+    }
+    public function doan_duong()
+    {
+        return $this->hasMany(GioiHanTocDo::class, 'gioi_han_toc_do_id', 'id')->where('isdelete',0);
     }
 }

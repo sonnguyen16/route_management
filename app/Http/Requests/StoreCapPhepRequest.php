@@ -28,7 +28,10 @@ class StoreCapPhepRequest extends FormRequest
             'so_cap_phep' => 'nullable',
             'ngay_cap_phep' => 'nullable',
             'ngay_het_han' => 'nullable',
+            'tu_km' => 'nullable',
+            'den_km' => 'nullable',
             'noi_dung' => 'nullable',
+            'cap_phep_id' => 'nullable',
         ];
     }
 

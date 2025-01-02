@@ -20,7 +20,7 @@ class SuaChuaController extends Controller
 {
     public function index(Request $request)
     {
-        $sua_chua = SuaChua::with(['tai_lieu','tuyen_duong', 'don_vi', 'nguoi_duyet','sua_chua_diem','sua_chua_diem.loai_sua_chua','tuyen_duong.loai_tuyen_duong']);
+        $sua_chua = SuaChua::with(['tai_lieu','tuyen_duong', 'don_vi', 'nguoi_duyet','loai_sua_chua','doan_duong','doan_duong.don_vi','doan_duong.loai_sua_chua']);
         if($request->filled('ten_duong')){
             $sua_chua = $sua_chua->whereHas('tuyen_duong', function($query) use ($request){
                 $query->where('ten', 'like', '%'.$request->ten_duong.'%');
@@ -47,6 +47,7 @@ class SuaChuaController extends Controller
 
     public function store(StoreSuaChuaRequest $request)
     {
+        
         $validated = $request->validated();
         unset($validated['tai_lieu']);
         $sua_chua = SuaChua::updateOrCreate(['id' => $validated['id']],$validated);

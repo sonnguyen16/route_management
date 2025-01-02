@@ -18,7 +18,10 @@ class DuongCam extends Model
         'don_vi_thuc_hien_id',
         'tu_ngay',
         'den_ngay',
-        'ly_do',
+        'tu_km',
+        'den_km',
+        'noi_dung',
+        'duong_cam_id',
     ];
 
     public function tuyen_duong()
@@ -43,5 +46,9 @@ class DuongCam extends Model
     public function diem_cam()
     {
         return $this->hasMany(DiemCam::class, 'duong_cam_id', 'id')->where('isdelete',0);
+    }
+    public function doan_duong()
+    {
+        return $this->hasMany(DuongCam::class, 'duong_cam_id', 'id')->where('isdelete',0);
     }
 }

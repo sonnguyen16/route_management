@@ -21,13 +21,14 @@ const props = defineProps({
     loai_tuyen_duong: Object,
     phan_cap: Object,
     loai_tuan_tra: Object,
+    tuyen_duong_cha: Object,
     isEdit: {
         type: Boolean,
         default: false
     },
     keyModal: Number
 })
-
+const flag = ref(false);
 const emits = defineEmits(['closeModal', 'refresh', 'fileChange']);
 
 let form = useForm({
@@ -47,6 +48,7 @@ let form = useForm({
     chieu_rong: '',
     don_vi_id: '',
     lo_gioi: '',
+    tuyen_duong_id: '',
 })
 
 
@@ -63,6 +65,12 @@ const cuoi_xa = computed(() => {
 })
 
 const submit = () => {
+    if(flag) {
+        form.ten = "";
+        form.loai_tuyen_duong_id = "";
+        form.phan_cap_id ="";
+       
+    }
     form.post(route('tuyen-duong.store'), {
         onSuccess: () => {
             closeModal()
@@ -86,7 +94,7 @@ watch(() => props.keyModal, () => {
         formFile.tuyen_duong_id = props.tuyen_duong.id;
         formFile.danh_muc = danhMucTaiLieuOptions.tuyen_duong;
         uploadedFiles.value = props.tuyen_duong.tai_lieu;
-    }else{
+    } else {
         form.reset();
         formFile.reset();
         
@@ -109,6 +117,15 @@ watch(() => props.keyModal, () => {
        
       
     }
+    console.log(props.tuyen_duong_cha);
+    if (props.tuyen_duong_cha) {
+        form.ten = props.tuyen_duong_cha.ten;
+        form.loai_tuyen_duong_id = props.tuyen_duong_cha.loai_tuyen_duong_id;
+        form.phan_cap_id = props.tuyen_duong_cha.phan_cap_id;
+        form.tuyen_duong_id = props.tuyen_duong_cha.id;
+        flag.value = true;
+    }
+    
 })
 
 const closeModal = () => {
@@ -156,7 +173,7 @@ const uploadFiles = (files) => {
                          <div :class="['px-4 pt-4', isEdit ? 'col-md-12' : 'col-md-12']">
                             <div class="form-group">
                                 <label for="ten_tuyen_duong">Tên đường</label>
-                                <Input v-model="form.ten" :errors="form.errors.ten" />
+                                <Input v-model="form.ten" :errors="form.errors.ten" :disabled="flag"/>
                             </div>
                             <div class="form-group">
                                 <label for="loai_tuyen_duong_id">Loại tuyến đường</label>
@@ -164,7 +181,7 @@ const uploadFiles = (files) => {
                                         :errors="form.errors.loai_tuyen_duong_id"
                                         :options="loai_tuyen_duong"
                                         id="loai_tuyen_duong_id"
-                                        option-default="Chọn loại"/>
+                                        option-default="Chọn loại" :disabled="flag"/>
                             </div>
                             <div class="form-group">
                                 <label for="phan_cap_id">Mã phân cấp</label>
@@ -172,7 +189,7 @@ const uploadFiles = (files) => {
                                         :errors="form.errors.phan_cap_id"
                                         :options="phan_cap"
                                         id="phan_cap_id"
-                                        option-default="Chọn mã phân cấp"/>
+                                        option-default="Chọn mã phân cấp" :disabled="flag"/>
                             </div>
 
                             <div class="form-group">
@@ -188,8 +205,10 @@ const uploadFiles = (files) => {
                                             :options="dau_xa"
                                             id="diem_dau_xa_id"
                                             option-default="Chọn xã"/>
+                                    <!--
                                     <Input v-model="form.diem_dau_lat" :errors="form.errors.diem_dau_lat" />
                                     <Input v-model="form.diem_dau_lng" :errors="form.errors.diem_dau_lng" />
+                                    -->
                                 </div>
                             </div>
 
@@ -206,14 +225,20 @@ const uploadFiles = (files) => {
                                             :options="cuoi_xa"
                                             id="diem_cuoi_xa_id"
                                             option-default="Chọn xã"/>
+                                            <!--
                                     <Input v-model="form.diem_cuoi_lat" :errors="form.errors.diem_cuoi_lat" />
                                     <Input v-model="form.diem_cuoi_lng" :errors="form.errors.diem_cuoi_lng" />
+                                    -->
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label for="chieu_dai">Chiều dài</label>
                                 <Input v-model="form.chieu_dai" :errors="form.errors.chieu_dai" />
+                            </div>
+                            <div class="form-group">
+                                <label for="chieu_rong">Chiều rộng</label>
+                                <Input v-model="form.chieu_rong" :errors="form.errors.chieu_rong" />
                             </div>
 
 

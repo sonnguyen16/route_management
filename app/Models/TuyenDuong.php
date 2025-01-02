@@ -29,6 +29,7 @@ class TuyenDuong extends Model
         'lo_gioi',
         'don_vi_id',
         'key',
+        'tuyen_duong_id',
     ];
 
     public function tai_lieu()
@@ -81,9 +82,8 @@ class TuyenDuong extends Model
         return $this->belongsTo(CauHinh::class, 'phan_cap_id');
     }
 
-    public function tuyen_duong_diem()
+    public function doan_duong()
     {
-        return $this->hasMany(TuyenDuongDiem::class, 'tuyen_duong_id')->where('isdelete',0);
+        return $this->hasMany(TuyenDuong::class, 'tuyen_duong_id')->where('isdelete',0);
     }
-    
 }

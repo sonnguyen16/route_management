@@ -15,6 +15,14 @@ class SuaChua extends Model
     protected $fillable = [
         'tuyen_duong_id',
         'don_vi_id',
+        'loai_sua_chua_id',
+        'tu_km',
+        'den_km',
+        'ngay_duyet',
+        'ngay_khoi_cong',
+        'ngay_hoan_thanh',
+        'noi_dung',
+        'sua_chua_id',
     ];
 
     public function tuyen_duong()
@@ -25,6 +33,10 @@ class SuaChua extends Model
     public function don_vi()
     {
         return $this->belongsTo(DonVi::class);
+    }
+    public function loai_sua_chua()
+    {
+        return $this->belongsTo(CauHinh::class, 'loai_sua_chua_id');
     }
 
     public function nguoi_duyet()
@@ -41,5 +53,9 @@ class SuaChua extends Model
     {
         return $this->hasMany(SuaChuaDiem::class, 'sua_chua_id', 'id')->where('isdelete',0);
           //  ->where('danh_muc', DanhMucTaiLieu::sua_chua->value);
+    }
+    public function doan_duong()
+    {
+        return $this->hasMany(SuaChua::class, 'sua_chua_id', 'id')->where('isdelete',0);
     }
 }

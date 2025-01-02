@@ -4,15 +4,11 @@ import {vData} from "@/Directives/v-data.js";
 import Pagination from "@/Components/Pagination.vue";
 import {router, useForm} from "@inertiajs/vue3";
 import Modal from "@/Pages/Duong/Modal.vue";
-import ModalDiem from "@/Pages/Duong/ModalDuongDiem.vue";
 import {useModal} from "@/Hooks/useModal.js";
 import {nextTick, onMounted, ref, watch} from "vue";
 import {debounce} from "lodash";
 import {
     _TIME_DEBOUNCE,
-    loaiOptions,
-    loaiTuanTraOptions,
-    maPhanCapOptions
 } from "@/Constants/constants.js";
 import Upload from "@/Components/UploadFile.vue";
 
@@ -27,6 +23,7 @@ const props = defineProps({
 
 const tuyen_duong_selected = ref(null);
 const tuyen_duong_diem_selected = ref(null);
+const tuyen_duong_cha_selected = ref(null);
 const keyModal = ref(0);
 const key = ref(0);
 const changePage = (page) => {
@@ -38,24 +35,7 @@ const changePage = (page) => {
     });
 }
 
-const columns = [
-
-    {field: 'id', label: 'STT'},
-    {field: 'ten', label: 'Tên'},
-    {field: 'loai_tuyen_duong.ten',label: 'Loại đường', },
-    {field: 'phan_cap.ten', label: 'Mã phân cấp'}, // enums: maPhanCapOptions},
-    {field: 'diem_dau_xa.name', label: 'Điểm đầu'},
-    {field: 'diem_cuoi_xa.name', label: 'Điểm cuối'},
-    {field: 'chieu_dai', label: 'Chiều dài', align: 'center'},
-    {field: 'chieu_rong', label: 'Chiều rộng', align: 'center'},
-    {field: 'lo_gioi', label: 'Lộ giới'},
-    {field: 'don_vi.ten', label: 'Đơn vị quản lý'},
-    // {field: 'xi_nghiep', label: 'Xí nghiệp'},
-    {field: 'action', label: ''},
-]
-
 const modal = useModal('modal');
-const modeldiem = useModal('ModalDuongDiem');
 onMounted(() => {
     eventForEditBtn()
 })
@@ -75,15 +55,24 @@ const eventForEditBtn = () => {
     $('.edit').click(function () {
         const id = $(this).data('id');
         tuyen_duong_selected.value = props.tuyen_duong.data.find(item => item.id === id);
+        console.log(tuyen_duong_selected.value);
+        if (tuyen_duong_selected.tuyen_duong_id) {
+            tuyen_duong_cha_selected.value = props.tuyen_duong.data.find(item => item.id === tuyen_duong_selected.value.tuyen_duong_id);
+        } else {
+            tuyen_duong_cha_selected.value = null;
+        }
+        
         isEdit.value = true;
         keyModal.value++;
+        
         modal.showModal();
     });
 }
 
-const openModal = () => {
+const openModal = (value) => {
     keyModal.value++
     tuyen_duong_selected.value = null;
+    tuyen_duong_cha_selected.value = value;
     isEdit.value = false;
     modal.showModal();
 }
@@ -104,20 +93,6 @@ const searchDebounce = debounce((value) => {
 }, _TIME_DEBOUNCE)
 
 const isEdit = ref(false);
-
-function themDuongDiem(value) {
-  console.log(value);
-  tuyen_duong_selected.value = value;
-  tuyen_duong_diem_selected.value = null;
-  keyModal.value++
-  modeldiem.showModal();
-}
-function SuaDuongDiem(value) {
- tuyen_duong_selected.value = props.tuyen_duong.data.find(item => item.id === value.tuyen_duong_id);
- tuyen_duong_diem_selected.value = value;
- keyModal.value++
- modeldiem.showModal();
-}
 
 function deleteDiemCam(id) {
     router.visit(route('tuyen-duong.deleteDiem', {id: id}), {
@@ -167,20 +142,17 @@ const chooseFile = (id) => {
              <input v-model="search" class="border-gray-300 rounded-lg w-1/5" placeholder="Tìm kiếm tuyến đường">
          </div>
          <div class="table-responsive">
-            <!--<table :key="key"
-                    class="table table-striped text-2xl"
-                    v-data="{ data: tuyen_duong.data, columns: columns }">
-             </table> -->
-             <table class="table table-striped text-2xl table-line">
+            <table class="table table-striped text-2xl table-line">
                 <thead>
                     <tr>
-                    <th class="text-center">STT</th>
+                    <th class="text-center"></th>
                     <th class="text-left" style="min-width: 100px;">Tên tuyến đường</th>
                     <th class="text-left" style="min-width: 120px;">Loại tuyến đường</th>
                     <th class="text-left"  style="min-width: 90px;">Mã phân cấp</th>
-                    <th class="text-left">Điểm đầu/ cuối</th>
+                    <th class="text-left">Điểm đầu</th>
+                    <th class="text-left">Điểm cuối</th>
                     <th class="text-center" style="min-width: 80px;">Chiều dài</th>
-                    <th class="text-center">Chiều rộng</th>
+                    <th class="text-center" style="min-width: 80px;">Chiều rộng</th>
                     <th class="text-center" style="min-width: 80px;">Lộ giới</th>
                     <th class="text-center">Đơn vị quản lý</th>
                     <th class="text-center">File đính kèm</th>
@@ -188,28 +160,24 @@ const chooseFile = (id) => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(item,i) in tuyen_duong.data" :key="i">
-                    <td class="text-center" scope="row">{{ i+1 }}</td>
-                    <td><a :data-id=item.id class="edit cursor-pointer" title="Sửa">{{ item.ten }}</a></td>
+                    <template v-for="(item, i) in tuyen_duong.data" :key="i">
+                    <tr v-if="!item.tuyen_duong_id">
+                    <td class="text-center" scope="row">
+                       <a @click.prevent="openModal(item)" class="edit cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a>
+                    </td>
+                    <td><a :data-id=item.id class="edit cursor-pointer" title="Sửa"> {{ i+1 }}
+                        .{{ item.ten }}</a>
+                    </td>
                     <td>{{ item.loai_tuyen_duong ? item.loai_tuyen_duong.ten : ''}}</td>
                     <td>{{ item.phan_cap ? item.phan_cap.ten : ''}}</td>
                     <td style="line-height: 1.5;">
-                        - {{ item.diem_dau_xa ? item.diem_dau_xa.name : ''}}, {{ item.diem_dau_huyen ? item.diem_dau_huyen.name : ''}}<br>
-                        - {{ item.diem_cuoi_xa ? item.diem_cuoi_xa.name : ''}}, {{ item.diem_cuoi_huyen ? item.diem_cuoi_huyen.name : ''}}
-                     </td>
-                    <td class="text-center">{{ item.chieu_dai }} km</td>
-                    <td class="text-left">
-                        
-                        <div v-for="(a,i) in item.tuyen_duong_diem" :key="i">
-                             <b> <span style="color:black">{{ i+1 }}</span>. {{ a.noi_dung }}</b><br>
-                                - Đoạn km {{ a.tu_km }} đến km {{ a.den_km }}<br>
-                                - chiều rộng <b>{{ a.chieu_rong }} m</b>
-                            <a href="#" @click.prevent="deleteDiemCam(a)" class="cursor-pointer"><i class="fa fa-times-circle mr-1"></i></a>
-                         <a href="#" @click.prevent="SuaDuongDiem(a)" class=" cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a>
-                        </div>
-                        <div><a  @click.prevent="themDuongDiem(item)"  class="newDiem cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i>Thêm đoạn đường</a></div>
-                        
+                        {{ item.diem_dau_xa ? item.diem_dau_xa.name : ''}}, {{ item.diem_dau_huyen ? item.diem_dau_huyen.name : ''}}
                     </td>
+                    <td>
+                        {{ item.diem_cuoi_xa ? item.diem_cuoi_xa.name : ''}}, {{ item.diem_cuoi_huyen ? item.diem_cuoi_huyen.name : ''}}
+                    </td>
+                    <td class="text-center">{{ item.chieu_dai }}</td>
+                    <td class="text-center">{{ item.chieu_rong }}</td>
                     <td class="text-center">{{ item.lo_gioi }}</td>
                     <td><a href="#">{{ item.don_vi ? item.don_vi.ten : ''}}</a></td>
                     <td style="vertical-align: unset !important;">
@@ -217,14 +185,50 @@ const chooseFile = (id) => {
                                 :listFile ="item.tai_lieu"
                                 @refresh="onRefresh"
                             />
-                            <label style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(item.id)"
+                            <label title="Thêm tài liệu" style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(item.id)"
                             class="cursor-pointer border-0 w-full text-start rounded-md mb-0">
                             <i class="fa fa-paperclip mr-2"></i>
-                            Thêm tài liệu
                         </label>
                         </td>
-                    <td class="text-center"><a :data-id=item.id class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
-                </tr>
+                        <td class="text-right">
+                       <a :data-id=item.id class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a>
+                        </td>
+                    </tr>
+
+                    <tr v-for="(item, k) in item.doan_duong" :key="k">
+                    <td class="text-center" scope="row"></td>
+                    <td><a :data-id=item.id class="edit cursor-pointer" title="Sửa">{{ item.ten }}</a>
+                    </td>
+                    <td>{{ item.loai_tuyen_duong ? item.loai_tuyen_duong.ten : ''}}</td>
+                    <td>{{ item.phan_cap ? item.phan_cap.ten : ''}}</td>
+                    <td style="line-height: 1.5;">
+                        {{ item.diem_dau_xa ? item.diem_dau_xa.name : ''}}, {{ item.diem_dau_huyen ? item.diem_dau_huyen.name : ''}}
+                    </td>
+                    <td>
+                        {{ item.diem_cuoi_xa ? item.diem_cuoi_xa.name : ''}}, {{ item.diem_cuoi_huyen ? item.diem_cuoi_huyen.name : ''}}
+                    </td>
+                    <td class="text-center">{{ item.chieu_dai }}</td>
+                    <td class="text-center">{{ item.chieu_rong }}</td>
+                    <td class="text-center">{{ item.lo_gioi }}</td>
+                    <td><a href="#">{{ item.don_vi ? item.don_vi.ten : ''}}</a></td>
+                    <td style="vertical-align: unset !important;">
+                            <Upload
+                                :listFile ="item.tai_lieu"
+                                @refresh="onRefresh"
+                            />
+                            <label title="Thêm tài liệu" style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(item.id)"
+                            class="cursor-pointer border-0 w-full text-start rounded-md mb-0">
+                            <i class="fa fa-paperclip mr-2"></i>
+                        </label>
+                        </td>
+                        <td class="text-right">
+                            <a :data-id=item.id class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a>
+                        </td>
+                    </tr>
+
+                    
+                    </template>
+                    
                 </tbody>
                 </table>
          </div>
@@ -241,16 +245,8 @@ const chooseFile = (id) => {
          :loai_tuyen_duong="loai_tuyen_duong"
          :phan_cap="phan_cap"
          :tuyen_duong="tuyen_duong_selected"
+         :tuyen_duong_cha="tuyen_duong_cha_selected"
          :don_vi="don_vi"
-         :is-edit="isEdit"
-
-     />
-     <ModalDiem
-         @close-modal="modeldiem.hideModal"
-         @refresh="onRefresh"
-         :key-modal="keyModal"
-         :tuyen_duong="tuyen_duong_selected"
-         :tuyen_duong_diem="tuyen_duong_diem_selected"
          :is-edit="isEdit"
      />
 </MainLayout>

@@ -23,7 +23,7 @@ class StoreTuyenDuongRequest extends FormRequest
     {
         return [
             'id' => 'nullable',
-            'ten' => 'required|string|max:255',
+            'ten' => 'nullable|string|max:255',
             'loai_tuyen_duong_id' => 'nullable|Int',
             'phan_cap_id' => 'nullable|Int',
             'diem_dau_huyen_id' => 'nullable|Int',
@@ -38,13 +38,14 @@ class StoreTuyenDuongRequest extends FormRequest
             'chieu_rong' => 'nullable',
             'don_vi_id' => 'nullable|Int',
             'lo_gioi' => 'nullable|string',
+            'tuyen_duong_id' => 'nullable|Int',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'ten.required' => 'Tên không được để trống',
+         /*   'ten.required' => 'Tên không được để trống',
             'loai_tuyen_duong_id.required' => 'Loại không được để trống', /*
             'phan_cap_id.required' => 'Mã phân cấp không được để trống',
             'diem_dau_huyen_id.required' => 'Điểm đầu huyện không được để trống',

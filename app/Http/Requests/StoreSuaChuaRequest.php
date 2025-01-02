@@ -24,10 +24,17 @@ class StoreSuaChuaRequest extends FormRequest
         return [
             'id' => 'nullable',
             'tuyen_duong_id' => 'required|exists:tuyen_duong,id',
-            'don_vi_id' => 'required|exists:don_vi,id',
+            'don_vi_id' => 'nullable|exists:don_vi,id',
+            'loai_sua_chua_id' => 'nullable',
+            'tu_km' => 'nullable',
+            'den_km' => 'nullable',
+            'ngay_duyet' => 'nullable',
+            'ngay_khoi_cong' => 'nullable',
+            'ngay_hoan_thanh' => 'nullable',
+            'noi_dung' => 'nullable',
+            'sua_chua_id' => 'nullable',
         ];
     }
-
     /**
      * Get the error messages for the defined validation rules.
      *
@@ -38,8 +45,6 @@ class StoreSuaChuaRequest extends FormRequest
         return [
             'tuyen_duong_id.required' => 'Tuyến đường không được để trống',
             'tuyen_duong_id.exists' => 'Tuyến đường không tồn tại',
-            'don_vi_id.required' => 'Đơn vị không được để trống',
-            'don_vi_id.exists' => 'Đơn vị không tồn tại',
         ];
     }
 }

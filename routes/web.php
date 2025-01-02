@@ -58,14 +58,12 @@ Route::prefix('cong-van')->middleware('auth')->group(function () {
 Route::prefix('gioi-han-toc-do')->middleware('auth')->group(function () {
     Route::get('/', [GioiHanTocDoController::class, 'index'])->name('gioi-han-toc-do.index');
     Route::post('/store', [GioiHanTocDoController::class, 'store'])->name('gioi-han-toc-do.store');
-    Route::post('/storeDiemGioiHanTocDo', [GioiHanTocDoController::class, 'storeDiemGioiHanTocDo'])->name('gioi-han-toc-do.storeDiemGioiHanTocDo');
     Route::get('/delete/diem-gioi-han-toc-do', [GioiHanTocDoController::class, 'deleteDiemGioiHanTocDo'])->name('gioi-han-toc-do.deleteDiemGioiHanTocDo');
 });
 
 Route::prefix('cap-phep')->middleware('auth')->group(function () {
     Route::get('/', [CapPhepController::class, 'index'])->name('cap-phep.index');
     Route::post('/store', [CapPhepController::class, 'store'])->name('cap-phep.store');
-    Route::post('/storeDiemCapPhep', [CapPhepController::class, 'storeCapPhepDiem'])->name('cap-phep.storeDiemCapPhep');
     Route::get('/delete/diem-cap-phep', [CapPhepController::class, 'deleteDiemCapPhep'])->name('cap-phep.deleteDiemCapPhep');
 });
 
@@ -77,7 +75,6 @@ Route::prefix('giam-sat')->middleware('auth')->group(function () {
 Route::prefix('duong-cam')->middleware('auth')->group(function () {
     Route::get('/', [DuongCamController::class, 'index'])->name('duong-cam.index');
     Route::post('/store', [DuongCamController::class, 'store'])->name('duong-cam.store');
-    Route::post('/storeDiemCam', [DuongCamController::class, 'storeDiemCam'])->name('duong-cam.storeDiemCam');
     Route::get('/delete/diem-cam', [DuongCamController::class, 'deleteDiemCam'])->name('duong-cam.deleteDiemCam');
 });
 

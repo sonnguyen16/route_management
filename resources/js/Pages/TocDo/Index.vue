@@ -4,7 +4,6 @@ import {vData} from "@/Directives/v-data.js";
 import Pagination from "@/Components/Pagination.vue";
 import {router, useForm} from "@inertiajs/vue3";
 import Modal from "@/Pages/TocDo/Modal.vue";
-import ModalDiemGioiHanTocDo from "@/Pages/TocDo/ModalDiemGioiHanTocDo.vue";
 import {useModal} from "@/Hooks/useModal.js";
 import {nextTick, onMounted, ref, watch} from "vue";
 import {_TIME_DEBOUNCE, loaiOptions, maPhanCapOptions} from "@/Constants/constants.js";
@@ -19,7 +18,7 @@ const props = defineProps({
 })
 
 const gioi_han_toc_do_selected = ref(null);
-const diem_gioi_han_toc_do_selected = ref(null);
+const gioi_han_toc_do_cha_selected = ref(null);
 const isEdit = ref(false);
 const key = ref(0);
 const keyModal = ref(0);
@@ -32,51 +31,44 @@ const changePage = (page) => {
     });
 }
 
-const columns = [
-    {field: 'id', label: 'ID'},
-    {field: 'tuyen_duong.ten', label: 'Tên đường'},
-    {field: 'noi_dung', label: 'Nội dung'},
-    {field: 'tu_ngay', label: 'Từ ngày'},
-    {field: 'den_ngay', label: 'Đến ngày'},
-    {field: 'action', label: 'Hành động'},
-]
 
 const modal = useModal('modal');
 
-const modeldiemgioihantocdo = useModal('ModalDiemGioiHanTocDo');
-
 onMounted(() => {
-    eventForEditBtn()
+   // eventForEditBtn()
 })
 
 const onRefresh = () => {
     key.value++
     keyModal.value++
     nextTick(() => {
-        eventForEditBtn()
+       // eventForEditBtn()
     })
     if(gioi_han_toc_do_selected.value) {
         gioi_han_toc_do_selected.value = props.gioi_han_toc_do.data.
         find(item => item.id === gioi_han_toc_do_selected.value.id);
     }
 }
-const eventForEditBtn = () => {
-    $('.edit').click(function () {
-        const id = $(this).data('id');
-        gioi_han_toc_do_selected.value = props.gioi_han_toc_do.data.find(item => item.id === id);
-        isEdit.value = true;
-        keyModal.value++
-        modal.showModal();
-    });
-}
 
-const openModal = () => {
+const openModal = (item) => {
     keyModal.value++
     gioi_han_toc_do_selected.value = null;
+    gioi_han_toc_do_cha_selected.value = item;
     isEdit.value = false;
     modal.showModal();
 }
-
+const editModal = (item) => {
+    gioi_han_toc_do_selected.value = item;
+    console.log(item);
+    if (item.gioi_han_toc_do_id) {
+        gioi_han_toc_do_cha_selected.value = props.gioi_han_toc_do.data.find(item => item.id === item.gioi_han_toc_do_id);
+    } else {
+        gioi_han_toc_do_cha_selected.value = null;
+    }
+    keyModal.value++
+    isEdit.value = true;
+    modal.showModal();
+}
 const search = ref('');
 
 watch(search, (value) => {
@@ -94,20 +86,6 @@ const searchDebounce = debounce((value) => {
 
 
 
-function themDiemGioiHanTocDovalue(id) {
-  gioi_han_toc_do_selected.value = props.gioi_han_toc_do.data.find(item => item.id === id);
-  diem_gioi_han_toc_do_selected.value = null;
-  keyModal.value++
-  modeldiemgioihantocdo.showModal();
-}
-function suaDiemGioiHanTocDo(value) {
-    console.log(value);
-    gioi_han_toc_do_selected.value = props.gioi_han_toc_do.data.find(item => item.id === value.gioi_han_toc_do_id);
-    diem_gioi_han_toc_do_selected.value = value;
-    keyModal.value++
-    modeldiemgioihantocdo.showModal();
-   
-}
 function deleteDiemGioiHanTocDo(value) {
     router.visit(route('gioi-han-toc-do.deleteDiemGioiHanTocDo', {id: value}), {
         preserveState: true,
@@ -116,7 +94,6 @@ function deleteDiemGioiHanTocDo(value) {
         }
     });
 }
-
 
 // upload hình ảnh
 let formFile = useForm({
@@ -157,58 +134,63 @@ const chooseFile = (id) => {
             <table class="table table-striped text-2xl table-line">
                 <thead>
                     <tr>
-                    <th class="text-center">STT</th>
+                    <th class="text-center"></th>
                     <th class="text-left">Tuyến đường</th>
-                    <th class="text-left">Loại tuyến đường</th>
-                    <th class="text-left">Chiều dài</th>
-                    <th class="text-left">Lộ giới</th>
                     <th class="text-left">Nội dung</th>
-                    <th class="text-left">Vị trí giới hạn</th>
+                    <th class="text-center">Từ km</th>
+                    <th class="text-center">Đến km</th>
+                    <th class="text-center">Từ ngày</th>
+                    <th class="text-center">Đến ngày</th>
                     <th class="text-left">File đính kèm</th>
                     <th class="text-center">Thao tác</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(item,i) in gioi_han_toc_do.data" :key="i">
-                    <td>{{ i+1 }}</td>
-                    <td>{{ item.tuyen_duong ? item.tuyen_duong.ten : ''}}</td>
-                    <td>{{ item.tuyen_duong.loai_tuyen_duong ? item.tuyen_duong.loai_tuyen_duong.ten : ''}}</td>
-                    <td>{{ item.tuyen_duong.chieu_dai}} km</td>
-                    <td>{{ item.tuyen_duong.lo_gioi}}</td>
+                    <template v-for="(item,i) in gioi_han_toc_do.data" :key="i">
+                    <tr v-if="!item.gioi_han_toc_do_id">
+                    <td><a @click.prevent="openModal(item)" class=" cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a></td>
+                    <td>{{ i+1 }}. {{ item.tuyen_duong ? item.tuyen_duong.ten : ''}}</td>
                     <td>{{ item.noi_dung}}</td>
-                    <td class="text-left" style="vertical-align: unset !important;">
-                    <div v-for="(a,i) in item.diem_gioi_han_toc_do" :key="i">
-                        <b>{{ i+1 }}. {{ a.toc_do }}</b><br>
-                        - Đoạn từ km: <span v-if="a.tu_km">{{ a.tu_km}}</span> đến km {{ a.den_km }}<br>
-                        - Từ ngày: <span v-if="a.tu_ngay">{{ moment(a.tu_ngay).format("DD/MM/YYYY HH:mm") }}</span> đến ngày <span v-if="a.den_ngay">{{ moment(a.den_ngay).format("DD/MM/YYYY HH:mm") }}</span><br>
-                        - Nội dung: {{ a.noi_dung}}
-                        <a href="#" @click.prevent="deleteDiemGioiHanTocDo(a.id)" class="cursor-pointer"><i class="fa fa-times-circle mr-1"></i></a>
-                        <a href="#" @click.prevent="suaDiemGioiHanTocDo(a)" class=" cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a>
-                           
-                    </div>
-                        <div><a @click.prevent="themDiemGioiHanTocDovalue(item.id)" class="newDiem cursor-pointer" title="Sửa"><i class="fas fa-plus mr-2"></i>Thêm mới vị trí</a></div>
-                       </td>
+                    <td class="text-center">{{ item.tu_km}}</td>
+                    <td class="text-center">{{ item.den_km }}</td>
+                    <td class="text-center"><span v-if="item.tu_ngay">{{ moment(item.tu_ngay).format("DD/MM/YYYY HH:mm") }}</span></td>
+                    <td class="text-center"><span v-if="item.den_ngay">{{ moment(item.den_ngay).format("DD/MM/YYYY HH:mm") }}</span></td>
                         <td style="vertical-align: unset !important;">
                             <label style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(item.id)"
                                 class="cursor-pointer border-0 w-full text-start rounded-md mb-0">
                                 <i class="fa fa-paperclip mr-2"></i>
-                                Tải lên tệp
                             </label>
                             <Upload
                                 :listFile ="item.tai_lieu"
                                 @refresh="onRefresh"
                             />
-                         
-                        </td>
-                    <td class="text-center"><a :data-id=item.id class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
+                    </td>
+                    <td class="text-center"><a @click.prevent="editModal(item)" class="cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
                 </tr>
+                <tr v-for="(item,i) in item.doan_duong" :key="i">
+                    <td><a @click.prevent="openModal(item)" class=" cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a></td>
+                    <td></td>
+                    <td>{{ item.noi_dung}}</td>
+                    <td class="text-center">{{ item.tu_km}}</td>
+                    <td class="text-center">{{ item.den_km }}</td>
+                    <td class="text-center"><span v-if="item.tu_ngay">{{ moment(item.tu_ngay).format("DD/MM/YYYY HH:mm") }}</span></td>
+                    <td class="text-center"><span v-if="item.den_ngay">{{ moment(item.den_ngay).format("DD/MM/YYYY HH:mm") }}</span></td>
+                        <td style="vertical-align: unset !important;">
+                            <label style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(item.id)"
+                                class="cursor-pointer border-0 w-full text-start rounded-md mb-0">
+                                <i class="fa fa-paperclip mr-2"></i>
+                            </label>
+                            <Upload
+                                :listFile ="item.tai_lieu"
+                                @refresh="onRefresh"
+                            />
+                    </td>
+                    <td class="text-center"><a @click.prevent="editModal(item)" class="cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
+                </tr>
+                </template>
                 </tbody>
                 </table>
-                <!--
-            <table :key="key"
-                   class="table table-striped text-2xl"
-                   v-data="{ data: gioi_han_toc_do.data, columns: columns }">
-            </table> -->
+                
         </div>
          <Pagination
              :all-data="gioi_han_toc_do"
@@ -222,15 +204,9 @@ const chooseFile = (id) => {
          :key-modal="keyModal"
          :tuyen_duong="tuyen_duong"
          :gioi_han_toc_do="gioi_han_toc_do_selected"
+         :gioi_han_toc_do_cha="gioi_han_toc_do_cha_selected"
          :don_vi="don_vi"
          :nguoi_duyet="nguoi_duyet"
      />
-     <ModalDiemGioiHanTocDo 
-      @close-modal="modeldiemgioihantocdo.hideModal"
-     :diem_gioi_han_toc_do="diem_gioi_han_toc_do_selected" 
-     :gioi_han_toc_do="gioi_han_toc_do_selected"
-     :key-modal="keyModal"
-     @refresh="onRefresh">
-    </ModalDiemGioiHanTocDo>
 </MainLayout>
 </template>

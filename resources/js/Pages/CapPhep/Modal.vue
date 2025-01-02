@@ -11,6 +11,7 @@ import File from "@/Components/File.vue";
 const props = defineProps({
     cap_phep: Object,
     tuyen_duong: Object,
+    cap_phep_cha: Object,
     don_vi: Object,
     isEdit: {
         type: Boolean,
@@ -29,6 +30,9 @@ const form = useForm({
     ngay_cap_phep: '',
     ngay_het_han: '',
     noi_dung: '',
+    tu_km: '',
+    den_km:'',
+    cap_phep_id:'',
 })
 
 const submit = () => {
@@ -52,12 +56,8 @@ let formFile = useForm({
 watch(() => props.keyModal, () => {
     if(props.cap_phep) {
         Object.assign(form, props.cap_phep);
-        formFile.tuyen_duong_id = props.cap_phep.tuyen_duong_id;
-        formFile.danh_muc = danhMucTaiLieuOptions.cap_phep;
-        uploadedFiles.value = props.cap_phep.tai_lieu;
     }else{
         form.reset();
-        formFile.reset();
         form.id = "";
         form.don_vi_id = "";
         form.tuyen_duong_id = "";
@@ -65,12 +65,18 @@ watch(() => props.keyModal, () => {
         form.ngay_cap_phep = "";
         form.ngay_het_han = "";
         form.noi_dung = "";
+        form.tu_km = "";
+        form.den_km = "";
+        form.cap_phep_id = "";
+    }
+    if(props.cap_phep_cha) {
+        form.cap_phep_id = props.cap_phep_cha.id;
+        form.tuyen_duong_id = props.cap_phep_cha.tuyen_duong_id;
     }
 })
 const closeModal = () => {
     emits('closeModal');
     form.reset();
-    formFile.reset();
     form.clearErrors();
 }
 
@@ -130,7 +136,31 @@ const uploadFiles = (files) => {
                                 <Input v-model="form.so_cap_phep"
                                        :errors="form.errors.so_cap_phep"/>
                             </div>
-<!--
+                            <div class="form-group">
+                                <label for="so_cap_phep">Nội dung</label>
+                                <Input v-model="form.noi_dung"
+                                       :errors="form.errors.noi_dung"/>
+                            </div>
+                            <div class="form-group">
+                              <label for="tu_km">Từ km</label>
+                              <Input
+                                v-model="form.tu_km"
+                                type="text"
+                                :errors="form.errors.tu_km"
+                                placeholder="Từ km"
+                                id="tu_km"
+                              />
+                          </div>
+                          <div class="form-group">
+                              <label for="den_km">Đến km</label>
+                              <Input
+                                v-model="form.den_km"
+                                type="text"
+                                :errors="form.errors.den_km"
+                                placeholder="Đến km"
+                                id="den_km"
+                              />
+                          </div>
                             <div class="form-group">
                                 <label for="ngay_cap_phep">Ngày cấp phép</label>
                                 <Input v-model="form.ngay_cap_phep"
@@ -142,12 +172,8 @@ const uploadFiles = (files) => {
                                 <Input v-model="form.ngay_het_han"
                                        type="date"
                                        :errors="form.errors.ngay_het_han"/>
-                            </div> -->
-                            <div class="form-group">
-                                <label for="so_cap_phep">Nội dung</label>
-                                <Input v-model="form.noi_dung"
-                                       :errors="form.errors.noi_dung"/>
                             </div>
+                            
                         </div>
 
                         

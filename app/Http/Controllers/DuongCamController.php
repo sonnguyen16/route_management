@@ -8,7 +8,6 @@ use App\Models\DiemCam;
 use App\Http\Requests\StoreDuongCamRequest;
 use App\Http\Requests\StoreDuongCamDiemRequest;
 use App\Models\TuyenDuong;
-use App\Models\TuyenDuongDiem;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\TaiLieu;
@@ -23,7 +22,9 @@ class DuongCamController extends Controller
             'don_vi_quyet_dinh',
             'don_vi_thuc_hien',
             'tuyen_duong',
-            'diem_cam',
+            'doan_duong',
+            'doan_duong.don_vi_quyet_dinh',
+            'doan_duong.don_vi_thuc_hien'
         ]);
         if($request->filled('ten_duong')){
             $duong_cam = $duong_cam->whereHas('tuyen_duong', function($query) use ($request){
@@ -61,9 +62,10 @@ class DuongCamController extends Controller
     }
     public function deleteDiem(Request $request)
     {
-        $obj = TuyenDuongDiem::find($request->id);
+       /* $obj = TuyenDuongDiem::find($request->id);
         $obj->isdelete = 1;
         $obj->save();
+        */
     }
 
 }

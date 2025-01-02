@@ -18,7 +18,10 @@ class CapPhep extends Model
         'so_cap_phep',
         'ngay_cap_phep',
         'ngay_het_han',
-        'noi_dung'
+        'noi_dung',
+        'tu_km',
+        'den_km',
+        'cap_phep_id',
     ];
 
     public function tuyen_duong()
@@ -39,5 +42,9 @@ class CapPhep extends Model
         return $this->hasMany(TaiLieu::class, 'danh_muc', 'id')->where('isdelete',0)->where('type','cap_phep');
       //  return $this->hasMany(TaiLieu::class, 'tuyen_duong_id', 'tuyen_duong_id')
       //      ->where('danh_muc', DanhMucTaiLieu::cap_phep->value);
+    }
+    public function doan_duong()
+    {
+        return $this->hasMany(CapPhep::class, 'cap_phep_id', 'id');
     }
 }

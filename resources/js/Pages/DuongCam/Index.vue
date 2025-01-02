@@ -25,6 +25,7 @@ const keyModal = ref(0);
 const tu_ngay = ref('');
 const den_ngay = ref('');
 const diem_cam_selected = ref(null);
+const duong_cam_cha_selected = ref(null);
 
 const changePage = (page) => {
     router.visit(route('duong-cam.index', {
@@ -40,51 +41,45 @@ const changePage = (page) => {
     });
 }
 
-const columns = [
-    {field: 'id', label: 'ID'},
-    {field: 'tuyen_duong.ten', label: 'Tên đường'},
-    {field: 'tu_ngay', label: 'Từ ngày'},
-    {field: 'den_ngay', label: 'Đến ngày'},
-    {field: 'don_vi_quyet_dinh.ten', label: 'Đơn vị quyết định'},
-    {field: 'don_vi_thuc_hien.ten', label: 'Đơn vị thực hiện'},
-    {field: 'action', label: 'Hành động'},
-]
 
 const modal = useModal('modal');
-const Modeldiemcam = useModal('ModelDiemCam');
 
 onMounted(() => {
-    eventForEditBtn()
+  //  eventForEditBtn()
 })
 
 const onRefresh = () => {
     key.value++
     keyModal.value++
     nextTick(() => {
-        eventForEditBtn()
+      //  eventForEditBtn()
     })
     if (duong_cam_selected.value) {
         duong_cam_selected.value = props.duong_cam.data.
         find(item => item.id === duong_cam_selected.value.id);
     }
 }
-const eventForEditBtn = () => {
-    $('.edit').click(function () {
-        const id = $(this).data('id');
-        duong_cam_selected.value = props.duong_cam.data.find(item => item.id === id);
-        isEdit.value = true;
-        keyModal.value++
-        modal.showModal();
-    });
-}
 
-const openModal = () => {
+const openModal = (item) => {
     keyModal.value++;
     duong_cam_selected.value = null;
+    duong_cam_cha_selected.value = item;
     isEdit.value = false;
     modal.showModal();
 }
 
+const editModal = (item) => {    
+    duong_cam_selected.value = item;
+    if (item.duong_cam_id) {
+        duong_cam_cha_selected.value = props.duong_cam.data.find(item => item.id === item.duong_cam_id);
+    } else {
+        duong_cam_cha_selected.value = null;
+    }
+ 
+    isEdit.value = true;
+    keyModal.value++;
+    modal.showModal();
+}
 const search = ref('');
 
 watch(search, (value) => {
@@ -127,20 +122,6 @@ const searchDebounce = debounce((value) => {
     });
 }, _TIME_DEBOUNCE)
 
-function themDiemCam(value) {
-  duong_cam_selected.value = props.duong_cam.data.find(item => item.id === value);
-  diem_cam_selected.value = null;
- keyModal.value++
- Modeldiemcam.showModal();
-}
-function suaDiemCam(value) {
-    console.log(value);
-    duong_cam_selected.value = props.duong_cam.data.find(item => item.id === value.duong_cam_id);
-    diem_cam_selected.value = value;
-    keyModal.value++
-    Modeldiemcam.showModal();
-
-}
 function deleteDiemCam(value) {
     router.visit(route('tuyen-duong.deleteDiem', {id: value}), {
         preserveState: true,
@@ -201,38 +182,37 @@ const chooseFile = (id) => {
             <table class="table table-striped text-2xl table-line">
                 <thead>
                     <tr>
-                    <th class="text-center">STT</th>
+                    <th class="text-center"></th>
                     <th class="text-left">Tuyến đường</th>
+                    <th class="text-left">Nội dung</th>
                     <th class="text-left">Đơn vị quyết định</th>
                     <th class="text-left">Đơn vị thực hiện</th>
-                    <th class="text-left">Nội dung</th>
+                    <th class="text-left">Từ km</th>
+                    <th class="text-left">Đến km</th>
+                    <th class="text-center">Từ ngày</th>
+                    <th class="text-center">Đến ngày</th>
                     <th class="text-left">File đính kèm</th>
                     <th class="text-center">Thao tác</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(item,i) in duong_cam.data" :key="i">
-                    <td class="text-center" scope="row">{{ i+1 }}</td>
-                    <td class="text-left" scope="row">{{ item.tuyen_duong ? item.tuyen_duong.ten : ''}}</td>
+                    <template v-for="(item,i) in duong_cam.data" :key="i">
+                    <tr v-if="!item.duong_cam_id" >
+                    <td class="text-center" scope="row"><a @click.prevent="openModal(item)" class="edit cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a></td>
+                    <td class="text-left" scope="row">{{i+1}}. {{ item.tuyen_duong ? item.tuyen_duong.ten : ''}}</td>
+                    <td class="text-left" scope="row">{{ item.noi_dung }}</td>
                     <td class="text-left" scope="row">{{ item.don_vi_quyet_dinh.ten ? item.don_vi_quyet_dinh.ten : ''}}</td>
                     <td class="text-left" scope="row">{{ item.don_vi_thuc_hien.ten ? item.don_vi_thuc_hien.ten : ''}}</td>
-                    <td class="text-left" style="vertical-align: unset !important;">
-                        <div v-for="(a,i) in item.diem_cam" :key="i">
-                            <a href="#"  @click.prevent="suaDiemCam(a)"><b>{{ i+1 }}.{{ a.ten }}</b></a><br>
-                            - Đoạn từ km <span v-if="a.tu_km">{{a.tu_km}}</span> đến <span v-if="a.den_km">{{a.den_km }}</span><br>
-                            - Từ ngày: <span v-if="a.tu_ngay">{{ moment(a.tu_ngay).format("DD/MM/YYYY HH:mm") }}</span> đến ngày: <span v-if="a.den_ngay">{{ moment(a.den_ngay).format("DD/MM/YYYY HH:mm") }}</span><br>
-                            - Nội dung: {{ a.noi_dung }}
-                            <a href="#" @click.prevent="deleteDiemCam(a)" class="cursor-pointer"><i class="fa fa-times-circle mr-1"></i></a>
-                            <a href="#" @click.prevent="suaDiemCam(a)" class=" cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a>
-
-                        </div>
-                        <div><a  @click.prevent="themDiemCam(item.id)"  class="newDiem cursor-pointer" title="Thêm điểm cấm"><i class="fas fa-plus mr-2"></i>Thêm điểm cấm</a></div>
-                    </td>
+                    <td class="text-center">{{ item.tu_km}}</td>
+                    <td class="text-center">{{ item.den_km}}</td>
+                    <td class="text-center" > <span v-if="item.tu_ngay">{{ moment(item.tu_ngay).format("DD/MM/YYYY HH:mm") }}</span></td>
+                    <td class="text-center" ><span v-if="item.den_ngay">{{ moment(item.den_ngay).format("DD/MM/YYYY HH:mm") }}</span></td>
+                    
+                   
                         <td style="vertical-align: unset !important;">
                             <label style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(item.id)"
                             class="cursor-pointer border-0 w-full text-start rounded-md mb-0">
                             <i class="fa fa-paperclip mr-2"></i>
-                            Tải lên tệp
                             </label>
                             <Upload
                                 :listFile ="item.tai_lieu"
@@ -240,8 +220,34 @@ const chooseFile = (id) => {
                                 
                             />
                         </td>
-                    <td class="text-center"><a :data-id=item.id class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
+                    <td class="text-center"><a @click.prevent="editModal(item)" class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
                 </tr>
+                <tr v-for="(item,i) in item.doan_duong" :key="i">
+                    <td class="text-center" scope="row"></td>
+                    <td class="text-left" scope="row"></td>
+                    <td class="text-left" scope="row">{{ item.noi_dung }}</td>
+                    <td class="text-left" scope="row">{{ item.don_vi_quyet_dinh ? item.don_vi_quyet_dinh.ten : ''}}</td>
+                    <td class="text-left" scope="row">{{ item.don_vi_thuc_hien ? item.don_vi_thuc_hien.ten : ''}}</td>
+                    <td class="text-center">{{ item.tu_km}}</td>
+                    <td class="text-center">{{ item.den_km}}</td>
+                    <td class="text-center" > <span v-if="item.tu_ngay">{{ moment(item.tu_ngay).format("DD/MM/YYYY HH:mm") }}</span></td>
+                    <td class="text-center" ><span v-if="item.den_ngay">{{ moment(item.den_ngay).format("DD/MM/YYYY HH:mm") }}</span></td>
+                    
+                    
+                        <td style="vertical-align: unset !important;">
+                            <label style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(item.id)"
+                            class="cursor-pointer border-0 w-full text-start rounded-md mb-0">
+                            <i class="fa fa-paperclip mr-2"></i>
+                            </label>
+                            <Upload
+                                :listFile ="item.tai_lieu"
+                                @refresh="onRefresh"
+                                
+                            />
+                        </td>
+                    <td class="text-center"><a @click.prevent="editModal(item)" class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
+                </tr>
+            </template>
                 </tbody>
                 </table>
           <!--   <table :key="key"
@@ -261,14 +267,8 @@ const chooseFile = (id) => {
          :key-modal="keyModal"
          :tuyen_duong="tuyen_duong"
          :duong_cam="duong_cam_selected"
+         :duong_cam_cha="duong_cam_cha_selected"
          :don_vi="don_vi"
      />
-     <ModelDiemCam 
-      @close-modal="Modeldiemcam.hideModal"
-     :duong_cam="duong_cam_selected" 
-     :diem_cam="diem_cam_selected"
-     :key-modal="keyModal"
-     @refresh="onRefresh">
-    </ModelDiemCam>
 </MainLayout>
 </template>
