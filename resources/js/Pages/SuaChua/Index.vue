@@ -217,7 +217,7 @@ const chooseFile = (id) => {
                         {{ i+1 }}
                     </td>  
                     <td>{{ it.tuyen_duong ? it.tuyen_duong.ten : ''}}</td>                    
-                    <td>{{ it.loai_sua_chua ? it.loai_sua_chua.ten : ''}}</td>
+                    <td></td>
                     <td class="text-center"></td>
                     <td class="text-center"></td>
                     <td class="text-center" ></td>

@@ -147,7 +147,6 @@ const chooseFile = (id) => {
                     <th class="text-center" style="min-width: 80px;">Chiều dài<br>(km)</th>
                     <th class="text-center" style="min-width: 80px;">Chiều rộng<br>(m)</th>
                     <th class="text-center" style="min-width: 80px;">Lộ giới<br>(m)</th>
-                    <th class="text-center">Đơn vị quản lý</th>
                     <th class="text-center">File đính kèm</th>
                     <th class="text-center">Thao tác</th>
                     </tr>
@@ -165,12 +164,16 @@ const chooseFile = (id) => {
                     <td>{{ it.ten }}</td>
                     <td>{{ it.loai_tuyen_duong ? it.loai_tuyen_duong.ten : ''}}</td>
                     <td>{{ it.phan_cap ? it.phan_cap.ten : ''}}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td style="line-height: 1.5;">
+                        {{ it.diem_dau_xa ? it.diem_dau_xa.name : ''}}, {{ it.diem_dau_huyen ? it.diem_dau_huyen.name : ''}}
+                    </td>
+                    <td>
+                        {{ it.diem_cuoi_xa ? it.diem_cuoi_xa.name : ''}}, {{ it.diem_cuoi_huyen ? it.diem_cuoi_huyen.name : ''}}
+                    </td>
+                    <td class="text-center">{{ it.chieu_dai }}</td>
+                    <td class="text-center">{{ it.chieu_rong }}</td>
+                    <td class="text-center">{{ it.lo_gioi }}</td>
+                    <!--<td><a href="#">{{ it.don_vi ? it.don_vi.ten : ''}}</a></td>-->
                     <td style="vertical-align: unset !important;">
                             <Upload
                                 :listFile ="it.tai_lieu"
@@ -205,7 +208,7 @@ const chooseFile = (id) => {
                     <td class="text-center">{{ item.chieu_dai }}</td>
                     <td class="text-center">{{ item.chieu_rong }}</td>
                     <td class="text-center">{{ item.lo_gioi }}</td>
-                    <td><a href="#">{{ item.don_vi ? item.don_vi.ten : ''}}</a></td>
+                  <!--  <td><a href="#">{{ item.don_vi ? item.don_vi.ten : ''}}</a></td>-->
                     <td style="vertical-align: unset !important;">
                             <Upload
                                 :listFile ="item.tai_lieu"

@@ -132,7 +132,7 @@ const closeModal = () => {
                     <div class="row">
                         <!-- Main Content -->
                          <div :class="['px-4 pt-4', isEdit ? 'col-md-12' : 'col-md-12']">
-                            <div :class="[props.flag ? 'disable_tr' : '']">
+                            <div>
                                 <div class="form-group">
                                     <label for="ten_tuyen_duong">Tên tuyến đường</label>
                                     <Input v-model="form.ten" :errors="form.errors.ten"/>
@@ -154,7 +154,7 @@ const closeModal = () => {
                                             option-default="Chọn mã phân cấp" :disabled="flag"/>
                                 </div>
                             </div>
-                            <div :class="[props.flag ? '' : 'disable_tr']">
+                            <div >
                             <div class="form-group">
                                 <label for="diem_dau_huyen_id">Điểm đầu</label>
                                 <div class="grid grid-cols-2 gap-x-3">
@@ -203,7 +203,7 @@ const closeModal = () => {
                             </div>
 
 
-                            <div class="form-group">
+                            <div class="form-group" style="display: none;">
                                 <label for="don_vi_quan_ly">Đơn vị quản lý</label>
                                 <Select v-model="form.don_vi_id"
                                         :errors="form.errors.don_vi_id"
