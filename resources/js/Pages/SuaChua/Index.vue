@@ -233,11 +233,12 @@ const chooseFile = (id) => {
                     <td class="text-center" scope="row"></td>  
                     <td></td>                    
                     <td>{{ item.loai_sua_chua ? item.loai_sua_chua.ten : ''}}</td>
+                    <td class="text-center">{{ item.tu_km}}</td>
+                    <td class="text-center">{{ item.den_km}}</td>
                     <td class="text-center" > <span v-if="item.ngay_duyet">{{ moment(item.ngay_duyet).format("DD/MM/YYYY") }}</span></td>
                     <td class="text-center" ><span v-if="item.ngay_khoi_cong">{{ moment(item.ngay_khoi_cong).format("DD/MM/YYYY") }}</span></td>
                     <td class="text-center" ><span v-if="item.ngay_hoan_thanh">{{ moment(item.ngay_hoan_thanh).format("DD/MM/YYYY") }}</span></td>
-                    <td class="text-center">{{ item.tu_km}}</td>
-                    <td class="text-center">{{ item.den_km}}</td>
+                   
                     <td>{{ item.don_vi ? item.don_vi.ten : ''}}</td>
                     <td class="text-center">{{ item.noi_dung}}</td>
                     <td style="vertical-align: unset !important;">
