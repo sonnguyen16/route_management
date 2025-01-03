@@ -203,7 +203,7 @@ const closeModal = () => {
                             </div>
 
 
-                            <div class="form-group" style="display: none;">
+                            <div class="form-group">
                                 <label for="don_vi_quan_ly">Đơn vị quản lý</label>
                                 <Select v-model="form.don_vi_id"
                                         :errors="form.errors.don_vi_id"

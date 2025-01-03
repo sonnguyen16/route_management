@@ -147,6 +147,7 @@ const chooseFile = (id) => {
                     <th class="text-center" style="min-width: 80px;">Chiều dài<br>(km)</th>
                     <th class="text-center" style="min-width: 80px;">Chiều rộng<br>(m)</th>
                     <th class="text-center" style="min-width: 80px;">Lộ giới<br>(m)</th>
+                    <th class="text-center">Đơn vị quản lý</th>
                     <th class="text-center">File đính kèm</th>
                     <th class="text-center">Thao tác</th>
                     </tr>
@@ -173,7 +174,7 @@ const chooseFile = (id) => {
                     <td class="text-center">{{ it.chieu_dai }}</td>
                     <td class="text-center">{{ it.chieu_rong }}</td>
                     <td class="text-center">{{ it.lo_gioi }}</td>
-                    <!--<td><a href="#">{{ it.don_vi ? it.don_vi.ten : ''}}</a></td>-->
+                    <td><a href="#">{{ it.don_vi ? it.don_vi.ten : ''}}</a></td>
                     <td style="vertical-align: unset !important;">
                             <Upload
                                 :listFile ="it.tai_lieu"
@@ -208,7 +209,7 @@ const chooseFile = (id) => {
                     <td class="text-center">{{ item.chieu_dai }}</td>
                     <td class="text-center">{{ item.chieu_rong }}</td>
                     <td class="text-center">{{ item.lo_gioi }}</td>
-                  <!--  <td><a href="#">{{ item.don_vi ? item.don_vi.ten : ''}}</a></td>-->
+                   <td><a href="#">{{ item.don_vi ? item.don_vi.ten : ''}}</a></td>
                     <td style="vertical-align: unset !important;">
                             <Upload
                                 :listFile ="item.tai_lieu"
