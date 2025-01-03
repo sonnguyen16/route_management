@@ -37,7 +37,7 @@ const changePage = (page) => {
 
 const modal = useModal('modal');
 onMounted(() => {
-    eventForEditBtn()
+   // eventForEditBtn()
 })
 
 const onRefresh = () => {
@@ -53,7 +53,7 @@ const onRefresh = () => {
 }
 const eventForEditBtn = () => {
     $('.edit').click(function () {
-        const id = $(this).data('id');
+      /*  const id = $(this).data('id');
         tuyen_duong_selected.value = props.tuyen_duong.data.find(item => item.id === id);
         console.log(tuyen_duong_selected.value);
         if (tuyen_duong_selected.tuyen_duong_id) {
@@ -66,6 +66,7 @@ const eventForEditBtn = () => {
         keyModal.value++;
         
         modal.showModal();
+        */
     });
 }
 
@@ -77,6 +78,20 @@ const openModal = (value) => {
     modal.showModal();
 }
 
+const editModal = (value) => {
+    tuyen_duong_selected.value = value;// props.tuyen_duong.data.find(item => item.id === id);
+   
+    if (value.tuyen_duong_id) {
+            tuyen_duong_cha_selected.value = props.tuyen_duong.data.find(item => item.id === value.tuyen_duong_id);
+        } else {
+            tuyen_duong_cha_selected.value = null;
+        }
+        
+        isEdit.value = true;
+        keyModal.value++;
+        
+        modal.showModal();
+}
 const search = ref('');
 
 watch(search, (value) => {
@@ -165,7 +180,7 @@ const chooseFile = (id) => {
                     <td class="text-center" scope="row">
                        <a @click.prevent="openModal(item)" class="cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a>
                     </td>
-                    <td><a :data-id=item.id class="edit cursor-pointer" title="Sửa"> {{ i+1 }}
+                    <td><a :data-id=item.id class=" cursor-pointer" title="Sửa"> {{ i+1 }}
                         .{{ item.ten }}</a>
                     </td>
                     <td>{{ item.loai_tuyen_duong ? item.loai_tuyen_duong.ten : ''}}</td>
@@ -191,13 +206,14 @@ const chooseFile = (id) => {
                         </label>
                         </td>
                         <td class="text-right">
-                       <a :data-id=item.id class="cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a>
+                       <a @click.prevent="editModal(item)"  class="cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a>
                         </td>
                     </tr>
 
                     <tr v-for="(item, k) in item.doan_duong" :key="k">
-                    <td class="text-center" scope="row"></td>
-                    <td><a :data-id=item.id class="edit cursor-pointer" title="Sửa">{{ item.ten }}</a>
+                    <td class="text-center" scope="row">
+                    </td>
+                    <td><a :data-id=item.id class=" cursor-pointer" title="Sửa">{{ item.ten }}</a>
                     </td>
                     <td>{{ item.loai_tuyen_duong ? item.loai_tuyen_duong.ten : ''}}</td>
                     <td>{{ item.phan_cap ? item.phan_cap.ten : ''}}</td>
@@ -222,7 +238,7 @@ const chooseFile = (id) => {
                         </label>
                         </td>
                         <td class="text-right">
-                            <a :data-id=item.id class="cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a>
+                            <a @click.prevent="editModal(item)" class="cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a>
                         </td>
                     </tr>
                     </template>

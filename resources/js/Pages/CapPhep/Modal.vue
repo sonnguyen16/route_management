@@ -123,19 +123,7 @@ const uploadFiles = (files) => {
                                         id="tuyen_duong_id"
                                         option-default="Chọn tuyến đường"/>
                             </div>
-                            <div class="form-group">
-                                <label for="ma_phan_cap">Đơn vị cấp phép</label>
-                                <Select v-model="form.don_vi_id"
-                                        :errors="form.errors.don_vi_id"
-                                        :options="don_vi"
-                                        id="don_vi_id"
-                                        option-default="Chọn đơn vị"/>
-                            </div>
-                            <div class="form-group">
-                                <label for="so_cap_phep">Số cấp phép</label>
-                                <Input v-model="form.so_cap_phep"
-                                       :errors="form.errors.so_cap_phep"/>
-                            </div>
+                           
                             <div class="form-group">
                                 <label for="so_cap_phep">Nội dung</label>
                                 <Input v-model="form.noi_dung"
@@ -172,6 +160,19 @@ const uploadFiles = (files) => {
                                 <Input v-model="form.ngay_het_han"
                                        type="date"
                                        :errors="form.errors.ngay_het_han"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="so_cap_phep">Số cấp phép</label>
+                                <Input v-model="form.so_cap_phep"
+                                       :errors="form.errors.so_cap_phep"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="ma_phan_cap">Đơn vị cấp phép</label>
+                                <Select v-model="form.don_vi_id"
+                                        :errors="form.errors.don_vi_id"
+                                        :options="don_vi"
+                                        id="don_vi_id"
+                                        option-default="Chọn đơn vị"/>
                             </div>
                             
                         </div>

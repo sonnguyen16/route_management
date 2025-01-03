@@ -141,6 +141,7 @@ const chooseFile = (id) => {
                     <th class="text-center">Đến km</th>
                     <th class="text-center">Từ ngày</th>
                     <th class="text-center">Đến ngày</th>
+                    <th class="text-left">Đơn vị</th>
                     <th class="text-left">File đính kèm</th>
                     <th class="text-center">Thao tác</th>
                     </tr>
@@ -155,7 +156,8 @@ const chooseFile = (id) => {
                     <td class="text-center">{{ item.den_km }}</td>
                     <td class="text-center"><span v-if="item.tu_ngay">{{ moment(item.tu_ngay).format("DD/MM/YYYY HH:mm") }}</span></td>
                     <td class="text-center"><span v-if="item.den_ngay">{{ moment(item.den_ngay).format("DD/MM/YYYY HH:mm") }}</span></td>
-                        <td style="vertical-align: unset !important;">
+                    <td  class="text-left">{{ item.don_vi ? item.don_vi.ten : ''}}</td>
+                    <td style="vertical-align: unset !important;">
                             <label style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(item.id)"
                                 class="cursor-pointer border-0 w-full text-start rounded-md mb-0">
                                 <i class="fa fa-paperclip mr-2"></i>
@@ -174,8 +176,9 @@ const chooseFile = (id) => {
                     <td class="text-center">{{ item.tu_km}}</td>
                     <td class="text-center">{{ item.den_km }}</td>
                     <td class="text-center"><span v-if="item.tu_ngay">{{ moment(item.tu_ngay).format("DD/MM/YYYY HH:mm") }}</span></td>
-                    <td class="text-center"><span v-if="item.den_ngay">{{ moment(item.den_ngay).format("DD/MM/YYYY HH:mm") }}</span></td>
-                        <td style="vertical-align: unset !important;">
+                    <td class="text-left"><span v-if="item.den_ngay">{{ moment(item.den_ngay).format("DD/MM/YYYY HH:mm") }}</span></td>
+                    <td>{{ item.don_vi ? item.don_vi.ten : ''}}</td>   
+                    <td style="vertical-align: unset !important;">
                             <label style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(item.id)"
                                 class="cursor-pointer border-0 w-full text-start rounded-md mb-0">
                                 <i class="fa fa-paperclip mr-2"></i>

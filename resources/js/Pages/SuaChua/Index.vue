@@ -56,7 +56,7 @@ const onRefresh = () => {
     key.value++
     keyModal.value++
     nextTick(() => {
-        eventForEditBtn()
+      //  eventForEditBtn()
     })
     if (sua_chua_selected.value) {
         sua_chua_selected.value = props.sua_chua.data.
@@ -191,11 +191,12 @@ const chooseFile = (id) => {
                     <th class="text-center"></th>
                     <th class="text-left">Tuyến đường</th>
                     <th class="text-left">Loại sửa chữa</th>
+                    <th class="text-left">Từ km</th>
+                    <th class="text-left">Đến km</th>
                     <th class="text-center">Ngày duyệt</th>
                     <th class="text-center">Ngày khởi công</th>
                     <th class="text-center">Ngày hoàn thành</th>
-                    <th class="text-left">Từ km</th>
-                    <th class="text-left">Đến km</th>
+                   
                     <th class="text-left">Đơn vị thi công</th>
                     <th class="text-left">Ghi chú</th>
                     <th class="text-left">File đính kèm</th>
@@ -208,11 +209,12 @@ const chooseFile = (id) => {
                     <td class="text-center" scope="row"><a @click.prevent="openModal(item)" class="edit cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a></td>  
                     <td>{{ i+1 }}. {{ item.tuyen_duong ? item.tuyen_duong.ten : ''}}</td>                    
                     <td>{{ item.loai_sua_chua ? item.loai_sua_chua.ten : ''}}</td>
+                    <td class="text-center">{{ item.tu_km}}</td>
+                    <td class="text-center">{{ item.den_km}}</td>
                     <td class="text-center" > <span v-if="item.ngay_duyet">{{ moment(item.ngay_duyet).format("DD/MM/YYYY") }}</span></td>
                     <td class="text-center" ><span v-if="item.ngay_khoi_cong">{{ moment(item.ngay_khoi_cong).format("DD/MM/YYYY") }}</span></td>
                     <td class="text-center" ><span v-if="item.ngay_hoan_thanh">{{ moment(item.ngay_hoan_thanh).format("DD/MM/YYYY") }}</span></td>
-                    <td class="text-center">{{ item.tu_km}}</td>
-                    <td class="text-center">{{ item.den_km}}</td>
+                   
                     <td>{{ item.don_vi ? item.don_vi.ten : ''}}</td>
                     <td class="text-center">{{ item.noi_dung}}</td>
                     <td style="vertical-align: unset !important;">

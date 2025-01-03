@@ -153,13 +153,15 @@ function deleteDiemCapPhep(value) {
                     <tr>
                     <th class="text-center">STT</th>
                     <th class="text-left">Tên đường</th>
-                    <th class="text-left">Đơn vị cấp phép</th>
-                    <th class="text-left">Số cấp phép</th>
+                   
                     <th class="text-left">Nội dung</th>
                     <th class="text-left">Từ km</th>
                     <th class="text-left">Đến km</th>
                     <th class="text-left">Từ ngày</th>
                     <th class="text-left">Đến ngày</th>
+                    <th class="text-left">Số cấp phép</th>
+                    <th class="text-left">Đơn vị cấp phép</th>
+                    
                     <th class="text-left">File đính kèm</th>
                     <th class="text-center">Thao tác</th>
                     </tr>
@@ -171,13 +173,15 @@ function deleteDiemCapPhep(value) {
                         <a @click.prevent="openModal(item)" class="cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a>
                     </td>
                     <td>{{ i+1 }}. {{ item.tuyen_duong.ten }}</td>
-                    <td><span v-if="item.don_vi">{{ item.don_vi.ten }}</span></td>
-                    <td>{{ item.so_cap_phep }}</td>
+                   
                     <td>{{ item.noi_dung }}</td>
                     <td>{{ item.tu_km }}</td>
                     <td>{{ item.den_km }}</td>
                     <td><span v-if="item.ngay_cap_phep">{{ moment(item.ngay_cap_phep).format("DD/MM/YYYY") }}</span></td>
                     <td><span v-if="item.ngay_het_han">{{ moment(item.ngay_het_han).format("DD/MM/YYYY") }}</span></td>
+                    <td>{{ item.so_cap_phep }}</td>
+                    <td><span v-if="item.don_vi">{{ item.don_vi.ten }}</span></td>
+                   
                     <td style="vertical-align: unset !important;">
                         <label style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(item.id)"
                             class="cursor-pointer border-0 w-full text-start rounded-md mb-0">

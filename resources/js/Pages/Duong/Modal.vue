@@ -89,6 +89,7 @@ let formFile = useForm({
 })
 
 watch(() => props.keyModal, () => {
+    console.log(props.tuyen_duong_cha);
      if(props.tuyen_duong) {
         Object.assign(form, props.tuyen_duong);
         formFile.tuyen_duong_id = props.tuyen_duong.id;

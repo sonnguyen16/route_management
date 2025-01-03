@@ -9,6 +9,7 @@ use App\Http\Requests\StoreGioiHanTocDoRequest;
 use App\Models\TaiLieu;
 use App\Enums\DanhMucTaiLieu;
 use App\Models\TuyenDuong;
+use App\Models\DonVi;
 
 class GioiHanTocDoController extends Controller
 {
@@ -18,7 +19,7 @@ class GioiHanTocDoController extends Controller
             'tai_lieu',
             'tuyen_duong',
             'tuyen_duong.diem_dau_xa',
-            'tuyen_duong.diem_cuoi_xa','tuyen_duong.loai_tuyen_duong','doan_duong']);
+            'tuyen_duong.diem_cuoi_xa','tuyen_duong.loai_tuyen_duong','doan_duong','don_vi','doan_duong.don_vi']);
         if($request->filled('ten_duong')) {
             $gioi_han_toc_do = $gioi_han_toc_do->whereHas('tuyen_duong', function($query) use ($request) {
                 $query->where('ten', 'like', '%'.$request->ten_duong.'%');
@@ -26,7 +27,9 @@ class GioiHanTocDoController extends Controller
         }
         $gioi_han_toc_do = $gioi_han_toc_do->paginate(15);
         $tuyen_duong = TuyenDuong::all();
-        return Inertia::render('TocDo/Index', compact('gioi_han_toc_do', 'tuyen_duong'));
+        $don_vi = DonVi::all();
+        
+        return Inertia::render('TocDo/Index', compact('gioi_han_toc_do', 'tuyen_duong','don_vi',));
     }
 
     public function store(StoreGioiHanTocDoRequest $request)

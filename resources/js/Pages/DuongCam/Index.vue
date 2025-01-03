@@ -185,12 +185,13 @@ const chooseFile = (id) => {
                     <th class="text-center"></th>
                     <th class="text-left">Tuyến đường</th>
                     <th class="text-left">Nội dung</th>
-                    <th class="text-left">Đơn vị quyết định</th>
-                    <th class="text-left">Đơn vị thực hiện</th>
                     <th class="text-left">Từ km</th>
                     <th class="text-left">Đến km</th>
                     <th class="text-center">Từ ngày</th>
                     <th class="text-center">Đến ngày</th>
+                    <th class="text-left">Đơn vị quyết định</th>
+                    <th class="text-left">Đơn vị thực hiện</th>
+                    
                     <th class="text-left">File đính kèm</th>
                     <th class="text-center">Thao tác</th>
                     </tr>
@@ -226,12 +227,13 @@ const chooseFile = (id) => {
                     <td class="text-center" scope="row"></td>
                     <td class="text-left" scope="row"></td>
                     <td class="text-left" scope="row">{{ item.noi_dung }}</td>
-                    <td class="text-left" scope="row"><span v-if="item.don_vi_quyet_dinh">{{ item.don_vi_quyet_dinh.ten ? item.don_vi_quyet_dinh.ten : ''}}</span></td>
-                    <td class="text-left" scope="row"><span v-if="item.don_vi_thuc_hien">{{ item.don_vi_thuc_hien.ten ? item.don_vi_thuc_hien.ten : ''}}</span></td>
                     <td class="text-center">{{ item.tu_km}}</td>
                     <td class="text-center">{{ item.den_km}}</td>
                     <td class="text-center" > <span v-if="item.tu_ngay">{{ moment(item.tu_ngay).format("DD/MM/YYYY HH:mm") }}</span></td>
                     <td class="text-center" ><span v-if="item.den_ngay">{{ moment(item.den_ngay).format("DD/MM/YYYY HH:mm") }}</span></td>
+                   
+                    <td class="text-left" scope="row"><span v-if="item.don_vi_quyet_dinh">{{ item.don_vi_quyet_dinh.ten ? item.don_vi_quyet_dinh.ten : ''}}</span></td>
+                    <td class="text-left" scope="row"><span v-if="item.don_vi_thuc_hien">{{ item.don_vi_thuc_hien.ten ? item.don_vi_thuc_hien.ten : ''}}</span></td>
                     
                     
                         <td style="vertical-align: unset !important;">

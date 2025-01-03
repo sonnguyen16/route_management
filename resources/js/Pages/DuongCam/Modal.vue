@@ -90,7 +90,7 @@ const closeModal = () => {
                         <!-- Main Content -->
                         <div :class="['px-4 pt-4', isEdit ? 'col-md-12' : 'col-md-12']">
                             <div class="form-group">
-                                <label for="tuyen_duong_id">Tuyến đường {{ form.tuyen_duong_id }}</label>
+                                <label for="tuyen_duong_id">Tuyến đường</label>
                                
                                 <Select
                                     v-model="form.tuyen_duong_id"
@@ -108,28 +108,6 @@ const closeModal = () => {
                                 />
                             </div>
                             <div class="form-group">
-                                <label for="don_vi_quyet_dinh_id">Đơn vị quyết định</label>
-                                <Select
-                                    v-model="form.don_vi_quyet_dinh_id"
-                                    :options="don_vi"
-                                    :errors="form.errors.don_vi_quyet_dinh_id"
-                                    id="don_vi_quyet_dinh_id"
-                                    option-default="Chọn đơn vị quyết định"
-                                />
-                            </div>
-
-                            <div class="form-group">
-                                <label for="don_vi_thuc_hien_id">Đơn vị thực hiện</label>
-                                <Select
-                                    v-model="form.don_vi_thuc_hien_id"
-                                    :options="don_vi"
-                                    :errors="form.errors.don_vi_thuc_hien_id"
-                                    id="don_vi_thuc_hien_id"
-                                    option-default="Chọn đơn vị thực hiện"
-                                />
-                            </div>
-
-                          <div class="form-group">
                               <label for="tu_km_id">Từ km</label>
                               <Input
                                 v-model="form.tu_km"
@@ -165,6 +143,29 @@ const closeModal = () => {
                                     :errors="form.errors.den_ngay"
                                 />
                             </div>
+                            <div class="form-group">
+                                <label for="don_vi_quyet_dinh_id">Đơn vị quyết định</label>
+                                <Select
+                                    v-model="form.don_vi_quyet_dinh_id"
+                                    :options="don_vi"
+                                    :errors="form.errors.don_vi_quyet_dinh_id"
+                                    id="don_vi_quyet_dinh_id"
+                                    option-default="Chọn đơn vị quyết định"
+                                />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="don_vi_thuc_hien_id">Đơn vị thực hiện</label>
+                                <Select
+                                    v-model="form.don_vi_thuc_hien_id"
+                                    :options="don_vi"
+                                    :errors="form.errors.don_vi_thuc_hien_id"
+                                    id="don_vi_thuc_hien_id"
+                                    option-default="Chọn đơn vị thực hiện"
+                                />
+                            </div>
+
+                         
                             
                            
                         </div>

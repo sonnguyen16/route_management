@@ -26,6 +26,7 @@ const emits = defineEmits(['closeModal', 'refresh', 'fileChange']);
 let form = useForm({
     id: '',
     tuyen_duong_id: '',
+    don_vi_id: '',
     tu_ngay: '',
     den_ngay: '',
     noi_dung: '',
@@ -60,6 +61,7 @@ watch(() => props.keyModal, () => {
         form.reset();
         form.id = '';
         form.tuyen_duong_id = '';
+        form.don_vi_id = '';
         form.tu_ngay = '';
         form.den_ngay = '';
         form.noi_dung = '';
@@ -168,6 +170,16 @@ const uploadFiles = (files) => {
                                     v-model="form.den_ngay"
                                     type="datetime-local"
                                     :errors="form.errors.den_ngay"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label for="don_vi_id">Đơn vị</label>
+                                <Select
+                                    v-model="form.don_vi_id"
+                                    :options="don_vi"
+                                    :errors="form.errors.don_vi_id"
+                                    id="don_vi_id"
+                                    option-default="Chọn đơn vị thi công"
                                 />
                             </div>
                         </div>

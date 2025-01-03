@@ -119,7 +119,25 @@ const closeModal = () => {
                                     option-default="Chọn đơn vị thi công"
                                 />
                             </div>
-                         
+                            <div class="form-group">
+                              <label for="tu_km_id">Từ km</label>
+                              <Input
+                                v-model="form.tu_km"
+                                type="text"
+                                :errors="form.errors.tu_km"
+                                placeholder="Từ km"
+                                id="tu_km_id"
+                              />
+                          </div>
+                          <div class="form-group">
+                              <label for="den_km_id">Đến km</label>
+                              <Input v-model="form.den_km"
+                                  type="text"
+                                  :errors="form.errors.tu_km"
+                                  placeholder="Đến km"
+                                  id="den_km_id"
+                              />
+                          </div>
                           <div class="form-group">
                                 <label for="ngay_duyet">Ngày duyệt</label>
                                 <Input
@@ -146,25 +164,7 @@ const closeModal = () => {
                                     :errors="form.errors.ngay_hoan_thanh"
                                 />
                             </div>
-                          <div class="form-group">
-                              <label for="tu_km_id">Từ km</label>
-                              <Input
-                                v-model="form.tu_km"
-                                type="text"
-                                :errors="form.errors.tu_km"
-                                placeholder="Từ km"
-                                id="tu_km_id"
-                              />
-                          </div>
-                          <div class="form-group">
-                              <label for="den_km_id">Đến km</label>
-                              <Input v-model="form.den_km"
-                                  type="text"
-                                  :errors="form.errors.tu_km"
-                                  placeholder="Đến km"
-                                  id="den_km_id"
-                              />
-                          </div>
+                         
                           <div class="form-group">
                                 <label for="don_vi_id">Đơn vị thi công</label>
                                 <Select
