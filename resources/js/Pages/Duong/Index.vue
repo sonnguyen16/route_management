@@ -215,8 +215,8 @@ const chooseFile = (id) => {
                     </td>
                     <td><a :data-id=item.id class=" cursor-pointer" title="Sửa">{{ item.ten }}</a>
                     </td>
-                    <td>{{ item.loai_tuyen_duong ? item.loai_tuyen_duong.ten : ''}}</td>
-                    <td>{{ item.phan_cap ? item.phan_cap.ten : ''}}</td>
+                    <td></td>
+                    <td></td>
                     <td style="line-height: 1.5;">
                         {{ item.diem_dau_xa ? item.diem_dau_xa.name : ''}}, {{ item.diem_dau_huyen ? item.diem_dau_huyen.name : ''}}
                     </td>
