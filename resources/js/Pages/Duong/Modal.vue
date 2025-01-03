@@ -67,8 +67,8 @@ const cuoi_xa = computed(() => {
 const submit = () => {
     if(flag) {
        // form.ten = "";
-        form.loai_tuyen_duong_id = "";
-        form.phan_cap_id ="";
+     //   form.loai_tuyen_duong_id = "";
+     //   form.phan_cap_id ="";
        
     }
     form.post(route('tuyen-duong.store'), {
