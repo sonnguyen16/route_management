@@ -18,6 +18,10 @@ const props = defineProps({
         type: Boolean,
         default: false
     },
+    flag: {
+        type: Boolean,
+        default: false
+    },
     keyModal: Number
 })
 
@@ -119,6 +123,7 @@ const uploadFiles = (files) => {
                     <div class="row">
                         <!-- Main Content -->
                         <div :class="['px-4 pt-4', isEdit ? 'col-md-12' : 'col-md-12']">
+                            <div :class="[props.flag ? 'disable_tr' : '']">
                             <div class="form-group">
                                 <label for="tuyen_duong_id">Tuyến đường</label>
                                 <Select
@@ -129,7 +134,8 @@ const uploadFiles = (files) => {
                                     option-default="Chọn tuyến đường"
                                 />
                             </div>
-                            
+                            </div>
+                            <div :class="[props.flag ? '' : 'disable_tr']">
                             <div class="form-group">
                                 <label for="toc_do">Nội dung</label>
                                 <Input
@@ -194,6 +200,7 @@ const uploadFiles = (files) => {
                                     option-default="Chọn đơn vị thực hiện"
                                 />
                             </div>
+                        </div>
                         </div>
 
                     </div>

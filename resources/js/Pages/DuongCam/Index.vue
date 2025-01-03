@@ -26,6 +26,7 @@ const tu_ngay = ref('');
 const den_ngay = ref('');
 const diem_cam_selected = ref(null);
 const duong_cam_cha_selected = ref(null);
+const flag = ref(false);
 
 const changePage = (page) => {
     router.visit(route('duong-cam.index', {
@@ -64,6 +65,11 @@ const openModal = (item) => {
     keyModal.value++;
     duong_cam_selected.value = null;
     duong_cam_cha_selected.value = item;
+    if(item && item.id) {
+        flag.value = true;
+    } else {
+        flag.value = false;
+    }
     isEdit.value = false;
     modal.showModal();
 }
@@ -72,8 +78,10 @@ const editModal = (item) => {
     duong_cam_selected.value = item;
     if (item.duong_cam_id) {
         duong_cam_cha_selected.value = props.duong_cam.data.find(item => item.id === item.duong_cam_id);
+        flag.value = true;
     } else {
         duong_cam_cha_selected.value = null;
+        flag.value = false;
     }
  
     isEdit.value = true;
@@ -197,35 +205,33 @@ const chooseFile = (id) => {
                     </tr>
                 </thead>
                 <tbody>
-                    <template v-for="(item,i) in duong_cam.data" :key="i">
-                    <tr v-if="!item.duong_cam_id" >
+                    <template v-for="(it,i) in duong_cam.data" :key="i">
+                    <tr v-if="!it.duong_cam_id" >
                     <td class="text-center" scope="row"><a @click.prevent="openModal(item)" class="edit cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a></td>
-                    <td class="text-left" scope="row">{{i+1}}. {{ item.tuyen_duong ? item.tuyen_duong.ten : ''}}</td>
-                    <td class="text-left" scope="row">{{ item.noi_dung }}</td>
-                    <td class="text-center">{{ item.tu_km}}</td>
-                    <td class="text-center">{{ item.den_km}}</td>
-                    <td class="text-center" > <span v-if="item.tu_ngay">{{ moment(item.tu_ngay).format("DD/MM/YYYY HH:mm") }}</span></td>
-                    <td class="text-center" ><span v-if="item.den_ngay">{{ moment(item.den_ngay).format("DD/MM/YYYY HH:mm") }}</span></td>
+                    <td class="text-left" scope="row">{{i+1}}. {{ it.tuyen_duong ? it.tuyen_duong.ten : ''}}</td>
+                    <td class="text-left" scope="row"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center" ></td>
+                    <td class="text-center" ></td>
                     
-                    <td class="text-left" scope="row"><span v-if="item.don_vi_quyet_dinh">{{ item.don_vi_quyet_dinh.ten ? item.don_vi_quyet_dinh.ten : ''}}</span></td>
-                    <td class="text-left" scope="row"><span v-if="item.don_vi_thuc_hien">{{ item.don_vi_thuc_hien.ten ? item.don_vi_thuc_hien.ten : ''}}</span></td>
-                   
-                   
+                    <td class="text-left" scope="row"></td>
+                    <td class="text-left" scope="row"></td>
                         <td style="vertical-align: unset !important;">
-                            <label style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(item.id)"
+                            <label style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(it.id)"
                             class="cursor-pointer border-0 w-full text-start rounded-md mb-0">
                             <i class="fa fa-paperclip mr-2"></i>
                             </label>
                             <Upload
-                                :listFile ="item.tai_lieu"
+                                :listFile ="it.tai_lieu"
                                 @refresh="onRefresh"
                                 
                             />
                         </td>
-                    <td class="text-center"><a @click.prevent="editModal(item)" class=" cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
+                    <td class="text-center"><a @click.prevent="editModal(it)" class=" cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
                 </tr>
-                <tr v-for="(item,i) in item.doan_duong" :key="i">
-                    <td class="text-center" scope="row"></td>
+                <tr v-for="(item,i) in it.doan_duong" :key="i">
+                    <td class="text-center" scope="row"><a @click.prevent="openModal(item)" class="edit cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a></td>
                     <td class="text-left" scope="row"></td>
                     <td class="text-left" scope="row">{{ item.noi_dung }}</td>
                     <td class="text-center">{{ item.tu_km}}</td>
@@ -272,6 +278,7 @@ const chooseFile = (id) => {
          :duong_cam="duong_cam_selected"
          :duong_cam_cha="duong_cam_cha_selected"
          :don_vi="don_vi"
+         :flag="flag"
      />
 </MainLayout>
 </template>

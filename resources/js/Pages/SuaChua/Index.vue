@@ -28,7 +28,7 @@ const ngay_khoi_cong = ref('');
 const ngay_hoan_thanh = ref('');
 const showModal = ref(false);
 const sua_chua_cha_selected = ref(null);
-
+const flag = ref(false);
 
 const changePage = (page) => {
     router.visit(route('sua-chua.index', {
@@ -68,6 +68,11 @@ const openModal = (item) => {
     keyModal.value++
     sua_chua_selected.value = null;
     sua_chua_cha_selected.value = item;
+    if(item && item.id) {
+        flag.value = true;
+    } else {
+        flag.value = false;
+    }
     isEdit.value = false;
     modal.showModal();
 }
@@ -77,8 +82,10 @@ const editModal = (item) => {
     sua_chua_selected.value = item;
     if (item.sua_chua_id) {
         sua_chua_cha_selected.value = props.sua_chua.data.find(item => item.id === item.sua_chua_id);
+        flag.value = true;
     } else {
         sua_chua_cha_selected.value = null;
+        flag.value = false;
     }
     isEdit.value = true;
     modal.showModal();
@@ -189,7 +196,7 @@ const chooseFile = (id) => {
                 <thead>
                     <tr>
                     <th class="text-center"></th>
-                    <th class="text-left">Tuyến đường</th>
+                    <th class="text-left">Tên tuyến đường</th>
                     <th class="text-left">Loại sửa chữa</th>
                     <th class="text-left">Từ km</th>
                     <th class="text-left">Đến km</th>
@@ -204,33 +211,36 @@ const chooseFile = (id) => {
                     </tr>
                 </thead>
                 <tbody>
-                    <template v-for="(item, i) in sua_chua.data" :key="i">
-                    <tr v-if="!item.sua_chua_id">
-                    <td class="text-center" scope="row"><a @click.prevent="openModal(item)" class="edit cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a></td>  
-                    <td>{{ i+1 }}. {{ item.tuyen_duong ? item.tuyen_duong.ten : ''}}</td>                    
-                    <td>{{ item.loai_sua_chua ? item.loai_sua_chua.ten : ''}}</td>
-                    <td class="text-center">{{ item.tu_km}}</td>
-                    <td class="text-center">{{ item.den_km}}</td>
-                    <td class="text-center" > <span v-if="item.ngay_duyet">{{ moment(item.ngay_duyet).format("DD/MM/YYYY") }}</span></td>
-                    <td class="text-center" ><span v-if="item.ngay_khoi_cong">{{ moment(item.ngay_khoi_cong).format("DD/MM/YYYY") }}</span></td>
-                    <td class="text-center" ><span v-if="item.ngay_hoan_thanh">{{ moment(item.ngay_hoan_thanh).format("DD/MM/YYYY") }}</span></td>
+                    <template v-for="(it, i) in sua_chua.data" :key="i">
+                    <tr v-if="!it.sua_chua_id">
+                    <td class="text-center" scope="row">
+                        <a @click.prevent="openModal(it)" class="edit cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a>
+                    </td>  
+                    <td>{{ i+1 }}. {{ it.tuyen_duong ? it.tuyen_duong.ten : ''}}</td>                    
+                    <td>{{ it.loai_sua_chua ? it.loai_sua_chua.ten : ''}}</td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center" ></td>
+                    <td class="text-center" ></td>
+                    <td class="text-center" ></td>
                    
-                    <td>{{ item.don_vi ? item.don_vi.ten : ''}}</td>
-                    <td class="text-center">{{ item.noi_dung}}</td>
+                    <td></td>
+                    <td class="text-center"></td>
                     <td style="vertical-align: unset !important;">
-                            <label style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(item.id)"
+                            <label style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(it.id)"
                             class="cursor-pointer border-0 w-full text-start rounded-md mb-0">
                             <i class="fa fa-paperclip mr-2"></i>
                         </label>
                             <Upload
-                               :listFile ="item.tai_lieu"
+                               :listFile ="it.tai_lieu"
                                 @refresh="onRefresh"
                             />
                     </td>
-                    <td class="text-center"><a @click.prevent="editModal(item)" class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
+                    <td class="text-center"><a @click.prevent="editModal(it)" class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
                 </tr>
-                <tr v-for="(item, i) in item.doan_duong" :key="i">
-                    <td class="text-center" scope="row"></td>  
+                <tr v-for="(item, i) in it.doan_duong" :key="i">
+                    <td class="text-center" scope="row">    <a @click.prevent="openModal(it)" class="edit cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a>
+                    </td>  
                     <td></td>                    
                     <td>{{ item.loai_sua_chua ? item.loai_sua_chua.ten : ''}}</td>
                     <td class="text-center">{{ item.tu_km}}</td>
@@ -274,6 +284,7 @@ const chooseFile = (id) => {
          :don_vi="don_vi"
          :sua_chua_cha="sua_chua_cha_selected"
          :nguoi_duyet="nguoi_duyet"
+         :flag="flag"
      />
      <!---
      <ModelHangMuc 

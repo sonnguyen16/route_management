@@ -22,13 +22,17 @@ const props = defineProps({
     phan_cap: Object,
     loai_tuan_tra: Object,
     tuyen_duong_cha: Object,
+    flag: {
+        type: Boolean,
+        default: false
+    },
     isEdit: {
         type: Boolean,
         default: false
     },
     keyModal: Number
 })
-const flag = ref(false);
+
 const emits = defineEmits(['closeModal', 'refresh', 'fileChange']);
 
 let form = useForm({
@@ -64,13 +68,7 @@ const cuoi_xa = computed(() => {
     }
 })
 
-const submit = () => {
-    if(flag) {
-       // form.ten = "";
-     //   form.loai_tuyen_duong_id = "";
-     //   form.phan_cap_id ="";
-       
-    }
+const submit = () => {    
     form.post(route('tuyen-duong.store'), {
         onSuccess: () => {
             closeModal()
@@ -82,82 +80,44 @@ const submit = () => {
     })
 }
 
-let formFile = useForm({
-    tuyen_duong_id: '',
-    danh_muc: null,
-    file: []
-})
 
 watch(() => props.keyModal, () => {
-    console.log(props.tuyen_duong_cha);
-     if(props.tuyen_duong) {
+    console.log(props.huyen);
+    if(props.tuyen_duong) {
         Object.assign(form, props.tuyen_duong);
-        formFile.tuyen_duong_id = props.tuyen_duong.id;
-        formFile.danh_muc = danhMucTaiLieuOptions.tuyen_duong;
-        uploadedFiles.value = props.tuyen_duong.tai_lieu;
+        form.don_vi_id = props.tuyen_duong.don_vi_id;
     } else {
         form.reset();
-        formFile.reset();
-        
-          form.id = "";
-          form.ten = "";
-          form.loai_tuyen_duong_id = "";
-          form.phan_cap_id = "";
-          form.diem_dau_huyen_id = "";
-          form.diem_cuoi_huyen_id = "";
-          form.diem_dau_lat = "";
-          form.diem_dau_lng = "";
-          form.diem_dau_xa_id = "";
-          form.diem_cuoi_xa_id = "";
-          form.diem_cuoi_lat = "";
-          form.diem_cuoi_lng = "";
-          form.chieu_dai = "";
-          form.chieu_rong = "";
-          form.don_vi_id = "";
-          form.lo_gioi = "";
-       
-      
+        form.id = "";
+        form.ten = "";
+        form.loai_tuyen_duong_id = "";
+        form.phan_cap_id = "";
+        form.diem_dau_huyen_id = "";
+        form.diem_cuoi_huyen_id = "";
+        form.diem_dau_lat = "";
+        form.diem_dau_lng = "";
+        form.diem_dau_xa_id = "";
+        form.diem_cuoi_xa_id = "";
+        form.diem_cuoi_lat = "";
+        form.diem_cuoi_lng = "";
+        form.chieu_dai = "";
+        form.chieu_rong = "";
+        form.don_vi_id = "";
+        form.lo_gioi = "";
     }
-    console.log(props.tuyen_duong_cha);
     if (props.tuyen_duong_cha) {
         form.ten = props.tuyen_duong_cha.ten;
         form.loai_tuyen_duong_id = props.tuyen_duong_cha.loai_tuyen_duong_id;
         form.phan_cap_id = props.tuyen_duong_cha.phan_cap_id;
         form.tuyen_duong_id = props.tuyen_duong_cha.id;
-        flag.value = true;
     }
-    
 })
 
 const closeModal = () => {
     emits('closeModal');
     form.reset();
-    formFile.reset();
     form.clearErrors();
 }
-
-const uploadedFiles = ref([]);
-const removeFileUploaded = (id) => {
-    uploadedFiles.value = uploadedFiles.value.filter(file => file.id !== id)
-    router.delete(route('tai-lieu.delete', {id: id}), {
-        onSuccess: () => {
-            emits('refresh')
-        }
-    })
-}
-
-const uploadFiles = (files) => {
-    formFile.file = files;
-    formFile.post(route('tai-lieu.store'), {
-        onSuccess: () => {
-            emits('refresh')
-        },
-        onError: (err) => {
-            console.log(err)
-        }
-    })
-}
-
 
 </script>
 
@@ -172,27 +132,29 @@ const uploadFiles = (files) => {
                     <div class="row">
                         <!-- Main Content -->
                          <div :class="['px-4 pt-4', isEdit ? 'col-md-12' : 'col-md-12']">
-                            <div class="form-group">
-                                <label for="ten_tuyen_duong">Tên tuyến đường</label>
-                                <Input v-model="form.ten" :errors="form.errors.ten"/>
+                            <div :class="[props.flag ? 'disable_tr' : '']">
+                                <div class="form-group">
+                                    <label for="ten_tuyen_duong">Tên tuyến đường</label>
+                                    <Input v-model="form.ten" :errors="form.errors.ten"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="loai_tuyen_duong_id">Loại đường</label>
+                                    <Select v-model="form.loai_tuyen_duong_id"
+                                            :errors="form.errors.loai_tuyen_duong_id"
+                                            :options="loai_tuyen_duong"
+                                            id="loai_tuyen_duong_id"
+                                            option-default="Chọn loại" :disabled="flag"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phan_cap_id">Mã quản lý</label>
+                                    <Select v-model="form.phan_cap_id"
+                                            :errors="form.errors.phan_cap_id"
+                                            :options="phan_cap"
+                                            id="phan_cap_id"
+                                            option-default="Chọn mã phân cấp" :disabled="flag"/>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="loai_tuyen_duong_id">Loại đường</label>
-                                <Select v-model="form.loai_tuyen_duong_id"
-                                        :errors="form.errors.loai_tuyen_duong_id"
-                                        :options="loai_tuyen_duong"
-                                        id="loai_tuyen_duong_id"
-                                        option-default="Chọn loại" :disabled="flag"/>
-                            </div>
-                            <div class="form-group">
-                                <label for="phan_cap_id">Mã quản lý</label>
-                                <Select v-model="form.phan_cap_id"
-                                        :errors="form.errors.phan_cap_id"
-                                        :options="phan_cap"
-                                        id="phan_cap_id"
-                                        option-default="Chọn mã phân cấp" :disabled="flag"/>
-                            </div>
-
+                            <div :class="[props.flag ? '' : 'disable_tr']">
                             <div class="form-group">
                                 <label for="diem_dau_huyen_id">Điểm đầu</label>
                                 <div class="grid grid-cols-2 gap-x-3">
@@ -206,10 +168,6 @@ const uploadFiles = (files) => {
                                             :options="dau_xa"
                                             id="diem_dau_xa_id"
                                             option-default="Chọn xã"/>
-                                    <!--
-                                    <Input v-model="form.diem_dau_lat" :errors="form.errors.diem_dau_lat" />
-                                    <Input v-model="form.diem_dau_lng" :errors="form.errors.diem_dau_lng" />
-                                    -->
                                 </div>
                             </div>
 
@@ -226,10 +184,6 @@ const uploadFiles = (files) => {
                                             :options="cuoi_xa"
                                             id="diem_cuoi_xa_id"
                                             option-default="Chọn xã"/>
-                                            <!--
-                                    <Input v-model="form.diem_cuoi_lat" :errors="form.errors.diem_cuoi_lat" />
-                                    <Input v-model="form.diem_cuoi_lng" :errors="form.errors.diem_cuoi_lng" />
-                                    -->
                                 </div>
                             </div>
 
@@ -257,7 +211,7 @@ const uploadFiles = (files) => {
                                         id="don_vi_id"
                                         option-default="Chọn đơn vị"/>
                             </div>
-
+                        </div>
                            
                         </div>
 

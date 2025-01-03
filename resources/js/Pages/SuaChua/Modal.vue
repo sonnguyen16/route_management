@@ -15,6 +15,10 @@ const props = defineProps({
     loai_sua_chua: Object,
     sua_chua_cha: Object,
     keyModal: Number,
+    flag: {
+        type: Boolean,
+        default: false
+    },
     isEdit: {
         type: Boolean,
         default: false
@@ -98,6 +102,7 @@ const closeModal = () => {
                         <!-- Main Content -->
                         
                         <div :class="['px-4 pt-4', isEdit ? 'col-md-12' : 'col-md-12']">
+                            <div :class="[props.flag ? 'disable_tr' : '']">
                             <div class="form-group">
                                 <label for="tuyen_duong_id">Tuyến đường</label>
                                 <Select
@@ -119,6 +124,8 @@ const closeModal = () => {
                                     option-default="Chọn đơn vị thi công"
                                 />
                             </div>
+                        </div>
+                        <div :class="[props.flag ? '' : 'disable_tr']">
                             <div class="form-group">
                               <label for="tu_km_id">Từ km</label>
                               <Input
@@ -184,7 +191,7 @@ const closeModal = () => {
                                   id="noi_dung"
                               />
                           </div>
-
+                        </div>
                             <div class="form-group">
                                 
                             </div>

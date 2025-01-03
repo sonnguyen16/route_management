@@ -22,9 +22,9 @@ const props = defineProps({
 })
 
 const tuyen_duong_selected = ref(null);
-const tuyen_duong_diem_selected = ref(null);
 const tuyen_duong_cha_selected = ref(null);
 const keyModal = ref(0);
+const flag = ref(false);
 const key = ref(0);
 const changePage = (page) => {
     router.visit(route('tuyen-duong.index', {page: page, ten_duong: search.value}), {
@@ -43,54 +43,40 @@ onMounted(() => {
 const onRefresh = () => {
     key.value++
     keyModal.value++
-    nextTick(() => {
-        eventForEditBtn()
+    nextTick(() => {       
     })
     if(tuyen_duong_selected.value){
         tuyen_duong_selected.value = props.tuyen_duong.data.
         find(item => item.id === tuyen_duong_selected.value.id);
     }
 }
-const eventForEditBtn = () => {
-    $('.edit').click(function () {
-      /*  const id = $(this).data('id');
-        tuyen_duong_selected.value = props.tuyen_duong.data.find(item => item.id === id);
-        console.log(tuyen_duong_selected.value);
-        if (tuyen_duong_selected.tuyen_duong_id) {
-            tuyen_duong_cha_selected.value = props.tuyen_duong.data.find(item => item.id === tuyen_duong_selected.value.tuyen_duong_id);
-        } else {
-            tuyen_duong_cha_selected.value = null;
-        }
-        
-        isEdit.value = true;
-        keyModal.value++;
-        
-        modal.showModal();
-        */
-    });
-}
 
-const openModal = (value) => {
-    keyModal.value++
+const openModal = (value) => {    
     tuyen_duong_selected.value = null;
     tuyen_duong_cha_selected.value = value;
+   
+    if(value && value.id) {
+        flag.value = true;
+    } else {
+        flag.value = false;
+    }
     isEdit.value = false;
+    keyModal.value++
     modal.showModal();
 }
 
-const editModal = (value) => {
-    tuyen_duong_selected.value = value;// props.tuyen_duong.data.find(item => item.id === id);
-   
+const editModal = (value) => {   
+    tuyen_duong_selected.value =  value;
     if (value.tuyen_duong_id) {
-            tuyen_duong_cha_selected.value = props.tuyen_duong.data.find(item => item.id === value.tuyen_duong_id);
-        } else {
-            tuyen_duong_cha_selected.value = null;
-        }
-        
-        isEdit.value = true;
-        keyModal.value++;
-        
-        modal.showModal();
+        tuyen_duong_cha_selected.value = props.tuyen_duong.data.find(item => item.id === value.tuyen_duong_id);
+        flag.value = true;
+   } else {
+        tuyen_duong_cha_selected.value = null;
+        flag.value = false;
+    }
+    isEdit.value = true;
+    keyModal.value++;
+    modal.showModal();
 }
 const search = ref('');
 
@@ -109,14 +95,6 @@ const searchDebounce = debounce((value) => {
 
 const isEdit = ref(false);
 
-function deleteDiemCam(id) {
-    router.visit(route('tuyen-duong.deleteDiem', {id: id}), {
-        preserveState: true,
-        onSuccess: () => {
-            onRefresh()
-        }
-    });
-}
 // upload hình ảnh
 let formFile = useForm({
     type: '',
@@ -175,43 +153,39 @@ const chooseFile = (id) => {
                     </tr>
                 </thead>
                 <tbody>
-                    <template v-for="(item, i) in tuyen_duong.data" :key="i">
-                    <tr v-if="!item.tuyen_duong_id">
+                    <template v-for="(it, i) in tuyen_duong.data" :key="i">
+                    
+                    <tr v-if="!it.tuyen_duong_id">
                     <td class="text-center" scope="row">
-                       <a @click.prevent="openModal(item)" class="cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a>
+                       <a @click.prevent="openModal(it)" class="cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a>
                     </td>
-                    <td><a :data-id=item.id class=" cursor-pointer" title="Sửa"> {{ i+1 }}
-                        .{{ item.ten }}</a>
-                    </td>
-                    <td>{{ item.loai_tuyen_duong ? item.loai_tuyen_duong.ten : ''}}</td>
-                    <td>{{ item.phan_cap ? item.phan_cap.ten : ''}}</td>
-                    <td style="line-height: 1.5;">
-                        {{ item.diem_dau_xa ? item.diem_dau_xa.name : ''}}, {{ item.diem_dau_huyen ? item.diem_dau_huyen.name : ''}}
-                    </td>
-                    <td>
-                        {{ item.diem_cuoi_xa ? item.diem_cuoi_xa.name : ''}}, {{ item.diem_cuoi_huyen ? item.diem_cuoi_huyen.name : ''}}
-                    </td>
-                    <td class="text-center">{{ item.chieu_dai }}</td>
-                    <td class="text-center">{{ item.chieu_rong }}</td>
-                    <td class="text-center">{{ item.lo_gioi }}</td>
-                    <td><a href="#">{{ item.don_vi ? item.don_vi.ten : ''}}</a></td>
+                    <td>{{ i+1 }}. {{ it.ten }}</td>
+                    <td>{{ it.loai_tuyen_duong ? it.loai_tuyen_duong.ten : ''}}</td>
+                    <td>{{ it.phan_cap ? it.phan_cap.ten : ''}}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     <td style="vertical-align: unset !important;">
                             <Upload
-                                :listFile ="item.tai_lieu"
+                                :listFile ="it.tai_lieu"
                                 @refresh="onRefresh"
                             />
-                            <label title="Thêm tài liệu" style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(item.id)"
+                            <label title="Thêm tài liệu" style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(it.id)"
                             class="cursor-pointer border-0 w-full text-start rounded-md mb-0">
                             <i class="fa fa-paperclip mr-2"></i>
                         </label>
-                        </td>
-                        <td class="text-right">
-                       <a @click.prevent="editModal(item)"  class="cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a>
-                        </td>
+                    </td>
+                    <td class="text-right">
+                        <a @click.prevent="editModal(it)"  class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a>
+                    </td>
                     </tr>
 
-                    <tr v-for="(item, k) in item.doan_duong" :key="k">
+                    <tr v-for="(item, k) in it.doan_duong" :key="k">
                     <td class="text-center" scope="row">
+                        <a @click.prevent="openModal(it)" class="cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a>
                     </td>
                     <td>
                     </td>
@@ -238,7 +212,7 @@ const chooseFile = (id) => {
                         </label>
                         </td>
                         <td class="text-right">
-                            <a @click.prevent="editModal(item)" class="cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a>
+                            <a @click.prevent="editModal(item)" class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a>
                         </td>
                     </tr>
                     </template>
@@ -262,6 +236,7 @@ const chooseFile = (id) => {
          :tuyen_duong_cha="tuyen_duong_cha_selected"
          :don_vi="don_vi"
          :is-edit="isEdit"
+         :flag="flag"
      />
 </MainLayout>
 </template>

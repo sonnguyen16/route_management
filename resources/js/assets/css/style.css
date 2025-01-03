@@ -332,4 +332,7 @@ ul li {
   text-align: -webkit-match-parent;
   unicode-bidi: isolate;
 }
+.disable_tr {
+  display: none;
+}
 /*test abc*/

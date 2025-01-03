@@ -21,7 +21,7 @@ const props = defineProps({
 
 const cap_phep_selected = ref(null);
 const cap_phep_cha_selected = ref(null);
-const cap_phep_diem_selected = ref(null);
+const flag = ref(false);
 const key = ref(0);
 const keyModal = ref(0);
 const isEdit = ref(false);
@@ -54,7 +54,7 @@ const onRefresh = () => {
     key.value++
     keyModal.value++
     nextTick(() => {
-        eventForEditBtn()
+       // eventForEditBtn()
     })
     if(cap_phep_selected.value) {
         cap_phep_selected.value = props.cap_phep.data.
@@ -75,13 +75,25 @@ const openModal = (item) => {
     keyModal.value++;
     cap_phep_selected.value = null;
     cap_phep_cha_selected.value = item;
+    if(item && item.id) {
+        flag.value = true;
+    } else {
+        flag.value = false;
+    }
     isEdit.value = false;
     modal.showModal();
 }
 const editModal = (item) => {
+   
+    cap_phep_selected.value = item;    
+    if (item.cap_phep_id) {
+        flag.value = true;
+        cap_phep_cha_selected.value = props.cap_phep.data.find(item => item.id === item.cap_phep_id);;
+    } else {
+        flag.value = false;
+        cap_phep_cha_selected.value = null;
+    }
     keyModal.value++;
-    cap_phep_selected.value = item;
-    cap_phep_cha_selected.value = props.cap_phep.data.find(item => item.id === item.cap_phep_id);;
     isEdit.value = false;
     modal.showModal();
 }
@@ -167,35 +179,35 @@ function deleteDiemCapPhep(value) {
                     </tr>
                 </thead>
                 <tbody>
-                    <template v-for="(item,i) in cap_phep.data" :key="i">
-                    <tr v-if="!item.cap_phep_id">
+                    <template v-for="(it,i) in cap_phep.data" :key="i">
+                    <tr v-if="!it.cap_phep_id">
                     <td class="text-center" scope="row">
-                        <a @click.prevent="openModal(item)" class="cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a>
+                        <a @click.prevent="openModal(it)" class="cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a>
                     </td>
-                    <td>{{ i+1 }}. {{ item.tuyen_duong.ten }}</td>
-                   
-                    <td>{{ item.noi_dung }}</td>
-                    <td>{{ item.tu_km }}</td>
-                    <td>{{ item.den_km }}</td>
-                    <td><span v-if="item.ngay_cap_phep">{{ moment(item.ngay_cap_phep).format("DD/MM/YYYY") }}</span></td>
-                    <td><span v-if="item.ngay_het_han">{{ moment(item.ngay_het_han).format("DD/MM/YYYY") }}</span></td>
-                    <td>{{ item.so_cap_phep }}</td>
-                    <td><span v-if="item.don_vi">{{ item.don_vi.ten }}</span></td>
+                    <td>{{ i+1 }}. {{ it.tuyen_duong.ten }}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                    
                     <td style="vertical-align: unset !important;">
-                        <label style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(item.id)"
+                        <label style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(it.id)"
                             class="cursor-pointer border-0 w-full text-start rounded-md mb-0">
                             <i class="fa fa-paperclip mr-2"></i>
                         </label>
                         <Upload
-                            :listFile ="item.tai_lieu"
+                            :listFile ="it.tai_lieu"
                             @refresh="onRefresh"
                         />
                     </td>
-                    <td class="text-center"><a @click.prevent="editModal(item)" class="cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
+                    <td class="text-center"><a @click.prevent="editModal(it)" class="cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
                     </tr>
-                    <tr v-for="(item,i) in item.doan_duong" :key="i">
+                    <tr v-for="(item,i) in it.doan_duong" :key="i">
                     <td class="text-center" scope="row">
+                        <a @click.prevent="openModal(it)" class="cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a>
                     </td>
                     <td></td>
                    
@@ -237,6 +249,7 @@ function deleteDiemCapPhep(value) {
          :tuyen_duong="tuyen_duong"
          :cap_phep_cha="cap_phep_cha_selected"
          :don_vi="don_vi"
+         :flag="flag"
      />
 </MainLayout>
 </template>

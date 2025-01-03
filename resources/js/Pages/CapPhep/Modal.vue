@@ -17,6 +17,10 @@ const props = defineProps({
         type: Boolean,
         default: false
     },
+    flag: {
+        type: Boolean,
+        default: false
+    },
     keyModal: Number
 })
 
@@ -115,6 +119,7 @@ const uploadFiles = (files) => {
                     <div class="row">
                         <!-- Main Content -->
                         <div :class="['px-4 pt-4', isEdit ? 'col-md-12' : 'col-md-12']">
+                            <div :class="[props.flag ? 'disable_tr' : '']">
                             <div class="form-group">
                                 <label for="loai_tuyen_duong">Tuyến đường</label>
                                 <Select v-model="form.tuyen_duong_id"
@@ -123,7 +128,8 @@ const uploadFiles = (files) => {
                                         id="tuyen_duong_id"
                                         option-default="Chọn tuyến đường"/>
                             </div>
-                           
+                            </div>
+                            <div :class="[props.flag ? '' : 'disable_tr']">
                             <div class="form-group">
                                 <label for="so_cap_phep">Nội dung</label>
                                 <Input v-model="form.noi_dung"
@@ -174,7 +180,7 @@ const uploadFiles = (files) => {
                                         id="don_vi_id"
                                         option-default="Chọn đơn vị"/>
                             </div>
-                            
+                        </div>
                         </div>
 
                         

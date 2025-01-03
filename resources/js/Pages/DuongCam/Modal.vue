@@ -17,6 +17,10 @@ const props = defineProps({
         type: Boolean,
         default: false
     },
+    flag: {
+        type: Boolean,
+        default: false
+    },
     keyModal: Number
 })
 
@@ -89,8 +93,9 @@ const closeModal = () => {
                     <div class="row">
                         <!-- Main Content -->
                         <div :class="['px-4 pt-4', isEdit ? 'col-md-12' : 'col-md-12']">
+                            <div :class="[props.flag ? 'disable_tr' : '']">
                             <div class="form-group">
-                                <label for="tuyen_duong_id">Tuyến đường</label>
+                                <label for="tuyen_duong_id">Tên tuyến đường</label>
                                
                                 <Select
                                     v-model="form.tuyen_duong_id"
@@ -100,6 +105,8 @@ const closeModal = () => {
                                     option-default="Chọn tuyến đường"
                                 />
                             </div>
+                        </div>
+                        <div :class="[props.flag ? '' : 'disable_tr']">
                             <div class="form-group">
                                 <label for="ly_do">Nội dung cấm</label>
                                 <Input
@@ -153,7 +160,6 @@ const closeModal = () => {
                                     option-default="Chọn đơn vị quyết định"
                                 />
                             </div>
-
                             <div class="form-group">
                                 <label for="don_vi_thuc_hien_id">Đơn vị thực hiện</label>
                                 <Select
@@ -164,10 +170,7 @@ const closeModal = () => {
                                     option-default="Chọn đơn vị thực hiện"
                                 />
                             </div>
-
-                         
-                            
-                           
+                        </div>
                         </div>
 
                     </div>
