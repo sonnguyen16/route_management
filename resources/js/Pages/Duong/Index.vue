@@ -213,7 +213,7 @@ const chooseFile = (id) => {
                     <tr v-for="(item, k) in item.doan_duong" :key="k">
                     <td class="text-center" scope="row">
                     </td>
-                    <td><a :data-id=item.id class=" cursor-pointer" title="Sửa">{{ item.ten }}</a>
+                    <td>
                     </td>
                     <td></td>
                     <td></td>
