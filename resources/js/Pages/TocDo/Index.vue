@@ -141,7 +141,7 @@ const chooseFile = (id) => {
                     <th class="text-center">Đến km</th>
                     <th class="text-center">Từ ngày</th>
                     <th class="text-center">Đến ngày</th>
-                    <th class="text-left">Đơn vị</th>
+                    <th class="text-left">Đơn vị quyết định</th>
                     <th class="text-left">File đính kèm</th>
                     <th class="text-center">Thao tác</th>
                     </tr>
