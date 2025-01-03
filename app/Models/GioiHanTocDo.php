@@ -21,8 +21,9 @@ class GioiHanTocDo extends Model
         'tu_km',
         'den_km',
         'gioi_han_toc_do_id',
+        'don_vi_thuc_hien_id',
         'tai_lieu',
-        
+
     ];
 
     public function tuyen_duong()
@@ -33,6 +34,10 @@ class GioiHanTocDo extends Model
     public function don_vi()
     {
         return $this->belongsTo(DonVi::class, 'don_vi_id');
+    }
+    public function don_vi_thuc_hien()
+    {
+        return $this->belongsTo(DonVi::class, 'don_vi_thuc_hien_id');
     }
 
     public function tai_lieu()

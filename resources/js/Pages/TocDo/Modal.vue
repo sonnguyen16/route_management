@@ -33,6 +33,7 @@ let form = useForm({
     tu_km: '',
     den_km:'',
     gioi_han_toc_do_id:'',
+    don_vi_thuc_hien_id: '',
     tai_lieu: [],
 })
 
@@ -68,6 +69,7 @@ watch(() => props.keyModal, () => {
         form.tu_km = '';
         form.den_km ='';
         form.gioi_han_toc_do_id = '';
+        form.don_vi_thuc_hien_id ='';
     }
     console.log(props.gioi_han_toc_do_cha);
     if(props.gioi_han_toc_do_cha) {
@@ -173,13 +175,23 @@ const uploadFiles = (files) => {
                                 />
                             </div>
                             <div class="form-group">
-                                <label for="don_vi_id">Đơn vị</label>
+                                <label for="don_vi_id">Đơn vị quyết định</label>
                                 <Select
                                     v-model="form.don_vi_id"
                                     :options="don_vi"
                                     :errors="form.errors.don_vi_id"
                                     id="don_vi_id"
                                     option-default="Chọn đơn vị thi công"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label for="don_vi_thuc_hien_id">Đơn vị thực hiện</label>
+                                <Select
+                                    v-model="form.don_vi_thuc_hien_id"
+                                    :options="don_vi"
+                                    :errors="form.errors.don_vi_thuc_hien_id"
+                                    id="don_vi_thuc_hien_id"
+                                    option-default="Chọn đơn vị thực hiện"
                                 />
                             </div>
                         </div>

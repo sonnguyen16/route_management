@@ -66,7 +66,7 @@ const cuoi_xa = computed(() => {
 
 const submit = () => {
     if(flag) {
-        form.ten = "";
+       // form.ten = "";
         form.loai_tuyen_duong_id = "";
         form.phan_cap_id ="";
        
@@ -174,7 +174,7 @@ const uploadFiles = (files) => {
                          <div :class="['px-4 pt-4', isEdit ? 'col-md-12' : 'col-md-12']">
                             <div class="form-group">
                                 <label for="ten_tuyen_duong">Tên đường</label>
-                                <Input v-model="form.ten" :errors="form.errors.ten" :disabled="flag"/>
+                                <Input v-model="form.ten" :errors="form.errors.ten"/>
                             </div>
                             <div class="form-group">
                                 <label for="loai_tuyen_duong_id">Loại tuyến đường</label>
