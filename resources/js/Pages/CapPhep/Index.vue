@@ -198,13 +198,15 @@ function deleteDiemCapPhep(value) {
                     <td class="text-center" scope="row">
                     </td>
                     <td></td>
-                    <td><span v-if="item.don_vi">{{ item.don_vi.ten }}</span></td>
-                    <td>{{ item.so_cap_phep }}</td>
+                   
                     <td>{{ item.noi_dung }}</td>
                     <td>{{ item.tu_km }}</td>
                     <td>{{ item.den_km }}</td>
                     <td><span v-if="item.ngay_cap_phep">{{ moment(item.ngay_cap_phep).format("DD/MM/YYYY") }}</span></td>
                     <td><span v-if="item.ngay_het_han">{{ moment(item.ngay_het_han).format("DD/MM/YYYY") }}</span></td>
+                    <td>{{ item.so_cap_phep }}</td>
+                    <td><span v-if="item.don_vi">{{ item.don_vi.ten }}</span></td>
+                   
                     <td style="vertical-align: unset !important;">
                         <label style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(item.id)"
                             class="cursor-pointer border-0 w-full text-start rounded-md mb-0">
