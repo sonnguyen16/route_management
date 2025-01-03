@@ -207,8 +207,8 @@ const chooseFile = (id) => {
                 <tbody>
                     <template v-for="(it,i) in duong_cam.data" :key="i">
                     <tr v-if="!it.duong_cam_id" >
-                    <td class="text-center" scope="row"><a @click.prevent="openModal(item)" class="edit cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a></td>
-                    <td class="text-left" scope="row">{{i+1}}. {{ it.tuyen_duong ? it.tuyen_duong.ten : ''}}</td>
+                    <td class="text-center" scope="row">{{i+1}}</td>
+                    <td class="text-left" scope="row">{{ it.tuyen_duong ? it.tuyen_duong.ten : ''}}</td>
                     <td class="text-left" scope="row"></td>
                     <td class="text-center"></td>
                     <td class="text-center"></td>
@@ -231,7 +231,7 @@ const chooseFile = (id) => {
                     <td class="text-center"><a @click.prevent="editModal(it)" class=" cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
                 </tr>
                 <tr v-for="(item,i) in it.doan_duong" :key="i">
-                    <td class="text-center" scope="row"><a @click.prevent="openModal(item)" class="edit cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a></td>
+                    <td class="text-center" scope="row"></td>
                     <td class="text-left" scope="row"></td>
                     <td class="text-left" scope="row">{{ item.noi_dung }}</td>
                     <td class="text-center">{{ item.tu_km}}</td>
@@ -256,6 +256,25 @@ const chooseFile = (id) => {
                         </td>
                     <td class="text-center"><a @click.prevent="editModal(item)" class=" cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
                 </tr>
+
+                <tr v-if="!it.duong_cam_id">
+                    <td class="text-left" scope="row"></td>
+                    <td class="text-left" scope="row"><a @click.prevent="openModal(it)" class="edit cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a></td>
+                   
+                    <td class="text-left" scope="row"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center" ></td>
+                    <td class="text-center" ></td>
+                    
+                    <td class="text-left" scope="row"></td>
+                    <td class="text-left" scope="row"></td>
+                        <td style="vertical-align: unset !important;">
+                           
+                        </td>
+                    <td class="text-center"></td>
+                </tr>
+
             </template>
                 </tbody>
                 </table>

@@ -214,9 +214,9 @@ const chooseFile = (id) => {
                     <template v-for="(it, i) in sua_chua.data" :key="i">
                     <tr v-if="!it.sua_chua_id">
                     <td class="text-center" scope="row">
-                        <a @click.prevent="openModal(it)" class="edit cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a>
+                        {{ i+1 }}
                     </td>  
-                    <td>{{ i+1 }}. {{ it.tuyen_duong ? it.tuyen_duong.ten : ''}}</td>                    
+                    <td>{{ it.tuyen_duong ? it.tuyen_duong.ten : ''}}</td>                    
                     <td>{{ it.loai_sua_chua ? it.loai_sua_chua.ten : ''}}</td>
                     <td class="text-center"></td>
                     <td class="text-center"></td>
@@ -239,7 +239,8 @@ const chooseFile = (id) => {
                     <td class="text-center"><a @click.prevent="editModal(it)" class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
                 </tr>
                 <tr v-for="(item, i) in it.doan_duong" :key="i">
-                    <td class="text-center" scope="row">    <a @click.prevent="openModal(it)" class="edit cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a>
+                    <td class="text-center" scope="row">   
+                        <!-- <a @click.prevent="openModal(it)" class="edit cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a>-->
                     </td>  
                     <td></td>                    
                     <td>{{ item.loai_sua_chua ? item.loai_sua_chua.ten : ''}}</td>
@@ -264,6 +265,28 @@ const chooseFile = (id) => {
                         
                     <td class="text-center"><a @click.prevent="editModal(item)" class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
                 </tr>
+
+
+                <tr v-if="!it.sua_chua_id">
+                    <td class="text-center" scope="row">
+                    </td>  
+                    <td>
+                        <a @click.prevent="openModal(it)" class="edit cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a>
+                    </td>                    
+                    <td></td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center" ></td>
+                    <td class="text-center" ></td>
+                    <td class="text-center" ></td>
+                   
+                    <td></td>
+                    <td class="text-center"></td>
+                    <td >
+                    </td>
+                    <td class="text-center"></td>
+                </tr>
+
                 </template>
                 </tbody>
                 </table>

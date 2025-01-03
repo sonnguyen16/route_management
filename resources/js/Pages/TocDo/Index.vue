@@ -159,8 +159,8 @@ const chooseFile = (id) => {
                 <tbody>
                     <template v-for="(it,i) in gioi_han_toc_do.data" :key="i">
                     <tr v-if="!it.gioi_han_toc_do_id">
-                    <td><a @click.prevent="openModal(it)" class=" cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a></td>
-                    <td>{{ i+1 }}. {{ it.tuyen_duong ? it.tuyen_duong.ten : ''}}</td>
+                    <td>{{ i+1 }}</td>
+                    <td>{{ it.tuyen_duong ? it.tuyen_duong.ten : ''}}</td>
                     <td></td>
                     <td class="text-center"></td>
                     <td class="text-center"></td>
@@ -181,7 +181,7 @@ const chooseFile = (id) => {
                     <td class="text-center"><a @click.prevent="editModal(it)" class="cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
                 </tr>
                 <tr v-for="(item,i) in it.doan_duong" :key="i">
-                    <td><a @click.prevent="openModal(it)" class=" cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a></td>
+                    <td></td>
                     <td></td>
                     <td>{{ item.noi_dung}}</td>
                     <td class="text-center">{{ item.tu_km}}</td>
@@ -201,6 +201,21 @@ const chooseFile = (id) => {
                             />
                     </td>
                     <td class="text-center"><a @click.prevent="editModal(item)" class="cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
+                </tr>
+                <tr  v-if="!it.gioi_han_toc_do_id">
+                    <td></td>
+                    <td><a @click.prevent="openModal(it)" class=" cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a></td>
+                    <td></td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td  class="text-left"></td>
+                    <td  class="text-left"></td>
+                    <td>
+                          
+                    </td>
+                    <td class="text-center"></td>
                 </tr>
                 </template>
                 </tbody>

@@ -182,9 +182,9 @@ function deleteDiemCapPhep(value) {
                     <template v-for="(it,i) in cap_phep.data" :key="i">
                     <tr v-if="!it.cap_phep_id">
                     <td class="text-center" scope="row">
-                        <a @click.prevent="openModal(it)" class="cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a>
-                    </td>
-                    <td>{{ i+1 }}. {{ it.tuyen_duong.ten }}</td>
+                        {{ i+1 }}
+                   </td>
+                    <td>{{ it.tuyen_duong.ten }}</td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -207,8 +207,7 @@ function deleteDiemCapPhep(value) {
                     </tr>
                     <tr v-for="(item,i) in it.doan_duong" :key="i">
                     <td class="text-center" scope="row">
-                        <a @click.prevent="openModal(it)" class="cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a>
-                    </td>
+                   </td>
                     <td></td>
                    
                     <td>{{ item.noi_dung }}</td>
@@ -230,6 +229,24 @@ function deleteDiemCapPhep(value) {
                         />
                     </td>
                     <td class="text-center"><a @click.prevent="editModal(item)" class="cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
+                    </tr>
+                    <tr v-if="!it.cap_phep_id">
+                        <td></td>
+                    <td class="text-left" >
+                        <a @click.prevent="openModal(it)" class="cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a>
+                    </td>
+                    
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                   
+                    <td>
+                    </td>
+                    <td></td>
                     </tr>
                     </template>
                 </tbody>
