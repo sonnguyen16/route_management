@@ -179,7 +179,7 @@ const chooseFile = (id) => {
                     <td class="text-center">{{ item.tu_km}}</td>
                     <td class="text-center">{{ item.den_km }}</td>
                     <td class="text-center"><span v-if="item.tu_ngay">{{ moment(item.tu_ngay).format("DD/MM/YYYY HH:mm") }}</span></td>
-                    <td class="text-left"><span v-if="item.den_ngay">{{ moment(item.den_ngay).format("DD/MM/YYYY HH:mm") }}</span></td>
+                    <td class="text-center"><span v-if="item.den_ngay">{{ moment(item.den_ngay).format("DD/MM/YYYY HH:mm") }}</span></td>
                     <td>{{ item.don_vi ? item.don_vi.ten : ''}}</td>  
                     <td  class="text-left">{{ item.don_vi_thuc_hien ? item.don_vi_thuc_hien.ten : ''}}</td> 
                     <td style="vertical-align: unset !important;">
