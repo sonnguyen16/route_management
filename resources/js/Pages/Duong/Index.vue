@@ -162,13 +162,13 @@ const chooseFile = (id) => {
                     <tr>
                     <th class="text-center"></th>
                     <th class="text-left" style="min-width: 100px;">Tên tuyến đường</th>
-                    <th class="text-left" style="min-width: 120px;">Loại tuyến đường</th>
-                    <th class="text-left"  style="min-width: 90px;">Mã phân cấp</th>
+                    <th class="text-left" style="min-width: 120px;">Loại đường</th>
+                    <th class="text-left"  style="min-width: 90px;">Mã quản lý</th>
                     <th class="text-left">Điểm đầu</th>
                     <th class="text-left">Điểm cuối</th>
-                    <th class="text-center" style="min-width: 80px;">Chiều dài</th>
-                    <th class="text-center" style="min-width: 80px;">Chiều rộng</th>
-                    <th class="text-center" style="min-width: 80px;">Lộ giới</th>
+                    <th class="text-center" style="min-width: 80px;">Chiều dài<br>(km)</th>
+                    <th class="text-center" style="min-width: 80px;">Chiều rộng<br>(m)</th>
+                    <th class="text-center" style="min-width: 80px;">Lộ giới<br>(m)</th>
                     <th class="text-center">Đơn vị quản lý</th>
                     <th class="text-center">File đính kèm</th>
                     <th class="text-center">Thao tác</th>

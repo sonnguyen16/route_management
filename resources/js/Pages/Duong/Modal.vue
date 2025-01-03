@@ -173,11 +173,11 @@ const uploadFiles = (files) => {
                         <!-- Main Content -->
                          <div :class="['px-4 pt-4', isEdit ? 'col-md-12' : 'col-md-12']">
                             <div class="form-group">
-                                <label for="ten_tuyen_duong">Tên đường</label>
+                                <label for="ten_tuyen_duong">Tên tuyến đường</label>
                                 <Input v-model="form.ten" :errors="form.errors.ten"/>
                             </div>
                             <div class="form-group">
-                                <label for="loai_tuyen_duong_id">Loại tuyến đường</label>
+                                <label for="loai_tuyen_duong_id">Loại đường</label>
                                 <Select v-model="form.loai_tuyen_duong_id"
                                         :errors="form.errors.loai_tuyen_duong_id"
                                         :options="loai_tuyen_duong"
@@ -185,7 +185,7 @@ const uploadFiles = (files) => {
                                         option-default="Chọn loại" :disabled="flag"/>
                             </div>
                             <div class="form-group">
-                                <label for="phan_cap_id">Mã phân cấp</label>
+                                <label for="phan_cap_id">Mã quản lý</label>
                                 <Select v-model="form.phan_cap_id"
                                         :errors="form.errors.phan_cap_id"
                                         :options="phan_cap"
@@ -234,17 +234,17 @@ const uploadFiles = (files) => {
                             </div>
 
                             <div class="form-group">
-                                <label for="chieu_dai">Chiều dài</label>
+                                <label for="chieu_dai">Chiều dài (km)</label>
                                 <Input v-model="form.chieu_dai" :errors="form.errors.chieu_dai" />
                             </div>
                             <div class="form-group">
-                                <label for="chieu_rong">Chiều rộng</label>
+                                <label for="chieu_rong">Chiều rộng (m)</label>
                                 <Input v-model="form.chieu_rong" :errors="form.errors.chieu_rong" />
                             </div>
 
 
                             <div class="form-group">
-                                <label for="dien_tich">Lộ giới</label>
+                                <label for="dien_tich">Lộ giới (m)</label>
                                 <Input v-model="form.lo_gioi" :errors="form.errors.lo_gioi" />
                             </div>
 
