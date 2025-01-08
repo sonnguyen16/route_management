@@ -106,7 +106,7 @@ watch(() => props.keyModal, () => {
         form.chieu_rong = "";
         form.don_vi_id = "";
         form.lo_gioi = "";
-        form.diem_cuoi = "";
+        form.diem_dau = "";
         form.diem_cuoi= "";
     }
     if (props.tuyen_duong_cha) {
