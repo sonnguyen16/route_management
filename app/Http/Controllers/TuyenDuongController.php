@@ -34,16 +34,22 @@ class TuyenDuongController extends Controller
 
     public function store(StoreTuyenDuongRequest $request)
     {
+       
         $validated = $request->validated();
         $validated['key'] = Str::slug($validated['ten']);
+        
         $obj = TuyenDuong::updateOrCreate(['id' => $validated['id']], $validated);
-        $s = new GiamSat;
-        $s->tuyen_duong_id = $obj->id;
-        $s->don_vi_id  = $obj->don_vi_id;
-        $s->save();
-        $c = new SuaChua;
-        $c->tuyen_duong_id = $obj->id;
-        $c->save();
+
+        if(!isset($request->id) && !isset($request->tuyen_duong_id)) {
+            $s = new GiamSat;
+            $s->tuyen_duong_id = $obj->id;
+            $s->don_vi_id  = $obj->don_vi_id;
+            $s->save();
+            $c = new SuaChua;
+            $c->tuyen_duong_id = $obj->id;
+            $c->save();
+        }
+       
     }
     public function deleteDiem(Request $request)
     {
