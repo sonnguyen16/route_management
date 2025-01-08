@@ -18,7 +18,7 @@ class CauController extends Controller
         }
         $cau = $cau->paginate(18)->withQueryString();
        
-        $tuyen_duong = TuyenDuong::all();
+        $tuyen_duong = TuyenDuong::where('isdelete',0)->where('tuyen_duong_id',null)->get();
         $loai_ket_cau_nhip = CauHinh::where('loai','loai_ket_cau_nhip')->get();
         $loai_cau = CauHinh::where('loai','loai_cau')->get();
        

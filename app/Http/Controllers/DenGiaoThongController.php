@@ -21,7 +21,7 @@ class DenGiaoThongController extends Controller
             $den_giao_thong = $den_giao_thong->where('nut_giao', 'like', '%'.$request->search.'%');
         }
         $den_giao_thong = $den_giao_thong->paginate(15);
-        $tuyen_duong = TuyenDuong::all();
+        $tuyen_duong = TuyenDuong::where('isdelete',0)->where('tuyen_duong_id',null)->get();
        
         return Inertia::render('DenGiaoThong/Index', compact('den_giao_thong', 'tuyen_duong'));
     }
