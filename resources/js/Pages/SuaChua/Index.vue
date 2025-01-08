@@ -242,7 +242,7 @@ const chooseFile = (id) => {
                         <!-- <a @click.prevent="openModal(it)" class="edit cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a>-->
                     </td>  
                     <td></td>                    
-                    <td class="text-center">{{ item.noi_dung}}</td>
+                    <td class="text-left">{{ item.noi_dung}}</td>
                     <td class="text-center">{{ item.tu_km}}</td>
                     <td class="text-center">{{ item.den_km}}</td>
                     <td class="text-center" > <span v-if="item.ngay_duyet">{{ moment(item.ngay_duyet).format("DD/MM/YYYY") }}</span></td>
