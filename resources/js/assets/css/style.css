@@ -335,4 +335,7 @@ ul li {
 .disable_tr {
   display: none;
 }
+.form-group {
+  margin-bottom: 0rem!important;
+}
 /*test abc*/
