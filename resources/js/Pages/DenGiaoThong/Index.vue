@@ -126,6 +126,7 @@ const chooseFile = (id) => {
                     <tr>
                     <th class="text-center">STT</th>
                     <th class="text-left">Nút giao</th>
+                    <th class="text-left">Ngày lắp đặt</th>
                     <th class="text-left">Số pha đèn</th>
                     <th class="text-left">Thời gian pha đèn</th>
                     <th class="text-left">Thời gian hoạt động</th>
@@ -138,6 +139,7 @@ const chooseFile = (id) => {
                     <tr v-for="(item,i) in den_giao_thong.data" :key="i">
                     <td class="text-center" scope="row">{{ i+1 }}</td>
                     <td>{{ item.nut_giao }}</td>
+                    <td>1/2/2025</td>
                     <td>{{ item.so_pha_den }}</td>
                     <td>{{ item.thoi_gian_pha_den }}</td>
                     <td>{{ item.thoi_gian_hoat_dong }}</td>

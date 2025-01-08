@@ -22,7 +22,7 @@ class GiamSatController extends Controller
             'tuyen_duong.diem_dau_xa',
             'tuyen_duong.diem_cuoi_xa',
             'tuyen_duong.loai_tuyen_duong',
-            'don_vi']);
+            'don_vi','doan_duong']);
 
         if($request->filled('ten_duong')){
             $giam_sat = $giam_sat->whereHas('tuyen_duong', function($query){
@@ -37,8 +37,8 @@ class GiamSatController extends Controller
 
     public function store(StoreGiamSatRequest $request)
     {
-        $validated = $request->validated();
-        unset($validated['tai_lieu']);
+       $validated = $request->validated();
+        // unset($validated['tai_lieu']);
         $giam_sat = GiamSat::updateOrCreate(['id' => $validated['id']],$validated);
     }
 }

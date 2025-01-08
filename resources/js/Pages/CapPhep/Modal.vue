@@ -180,6 +180,11 @@ const uploadFiles = (files) => {
                                         id="don_vi_id"
                                         option-default="Chọn đơn vị"/>
                             </div>
+                            <div class="form-group">
+                                <label for="so_cap_phep">Vi phạm</label>
+                                <Input v-model="form.so_cap_phep"
+                                       :errors="form.errors.so_cap_phep"/>
+                            </div>
                         </div>
                         </div>
 

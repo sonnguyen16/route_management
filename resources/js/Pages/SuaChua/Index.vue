@@ -205,7 +205,7 @@ const chooseFile = (id) => {
                     <th class="text-center">Ngày hoàn thành</th>
                    
                     <th class="text-left">Đơn vị thi công</th>
-                    <th class="text-left">Ghi chú</th>
+                    
                     <th class="text-left">File đính kèm</th>
                     <th class="text-center">Thao tác</th>
                     </tr>
@@ -220,7 +220,6 @@ const chooseFile = (id) => {
                     <td></td>
                     <td class="text-center"></td>
                     <td class="text-center"></td>
-                    <td class="text-center" ></td>
                     <td class="text-center" ></td>
                     <td class="text-center" ></td>
                    
@@ -243,7 +242,7 @@ const chooseFile = (id) => {
                         <!-- <a @click.prevent="openModal(it)" class="edit cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a>-->
                     </td>  
                     <td></td>                    
-                    <td>{{ item.loai_sua_chua ? item.loai_sua_chua.ten : ''}}</td>
+                    <td class="text-center">{{ item.noi_dung}}</td>
                     <td class="text-center">{{ item.tu_km}}</td>
                     <td class="text-center">{{ item.den_km}}</td>
                     <td class="text-center" > <span v-if="item.ngay_duyet">{{ moment(item.ngay_duyet).format("DD/MM/YYYY") }}</span></td>
@@ -251,7 +250,7 @@ const chooseFile = (id) => {
                     <td class="text-center" ><span v-if="item.ngay_hoan_thanh">{{ moment(item.ngay_hoan_thanh).format("DD/MM/YYYY") }}</span></td>
                    
                     <td>{{ item.don_vi ? item.don_vi.ten : ''}}</td>
-                    <td class="text-center">{{ item.noi_dung}}</td>
+                    
                     <td style="vertical-align: unset !important;">
                             <label style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(item.id)"
                             class="cursor-pointer border-0 w-full text-start rounded-md mb-0">
@@ -282,8 +281,7 @@ const chooseFile = (id) => {
                    
                     <td></td>
                     <td class="text-center"></td>
-                    <td >
-                    </td>
+                    
                     <td class="text-center"></td>
                 </tr>
 

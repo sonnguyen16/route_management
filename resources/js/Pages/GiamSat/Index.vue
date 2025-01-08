@@ -20,6 +20,9 @@ const giam_sat_selected = ref(null);
 const isEdit = ref(false);
 const key = ref(0);
 const keyModal = ref(0);
+const giam_sat_cha_selected = ref(null);
+const flag = ref(false);
+
 const changePage = (page) => {
     router.visit(route('giam-sat.index', {page: page, ten_duong: search.value}), {
         preserveState: true,
@@ -60,22 +63,42 @@ const onRefresh = () => {
     }
 }
 const eventForEditBtn = () => {
-    $('.edit').click(function () {
+   /*  $('.edit').click(function () {
         const id = $(this).data('id');
         giam_sat_selected.value = props.giam_sat.data.find(item => item.id === id);
         isEdit.value = true;
         keyModal.value++
         modal.showModal();
-    });
+    }); */
 }
 
-const openModal = () => {
+const openModal = (item) => {
     keyModal.value++
     giam_sat_selected.value = null;
+    giam_sat_cha_selected.value = item;
+    if(item && item.id) {
+        flag.value = true;
+    } else {
+        flag.value = false;
+    }
     isEdit.value = false;
     modal.showModal();
 }
 
+const editModal = (item) => {
+    console.log(item);
+    keyModal.value++
+    giam_sat_selected.value = item;
+    if (item.giam_sat_id) {
+        giam_sat_cha_selected.value = props.giam_sat.data.find(item => item.id === item.giam_sat_id);
+        flag.value = true;
+    } else {
+        giam_sat_cha_selected.value = null;
+        flag.value = false;
+    }
+    isEdit.value = true;
+    modal.showModal();
+}
 const search = ref('');
 
 watch(search, (value) => {
@@ -124,31 +147,55 @@ const chooseFile = (id) => {
  <MainLayout>
      <div class="py-3 px-4">
          <div class="mb-3 flex justify-between">
-             <button @click.prevent="openModal" class="btn btn-success">Thêm giám sát</button>
+             <button @click.prevent="openModal(null)" class="btn btn-success">Thêm giám sát</button>
              <input v-model="search" class="border-gray-300 rounded-lg w-1/5" placeholder="Tìm kiếm giám sát">
          </div>
          <div class="table-responsive">
-            <table class="table table-striped text-2xl">
+            <table class="table table-striped text-2xl table-line">
                 <thead>
                     <tr>
                     <th class="text-center">STT</th>
-                    <th class="text-left">Tên đường</th>
-                    <th class="text-left">Loại tuyến đường</th>
-                    <th class="text-left">Chiều dài</th>
-                    <th class="text-left">Lộ giới</th>
-                    <th class="text-left">Đơn vị giám sát</th>
+                    <th class="text-left">Tên tuyến đường</th>
+                    <th class="text-left">Hư hỏng bất cập</th>
+                    <th class="text-left">Vị trí</th>
+                    <th class="text-left">Mức độ</th>
+                    <th class="text-left">Tình trạng khắc phục</th>   
+                    <th class="text-left">Đơn vị giám sát</th>                 
                     <th class="text-left">File đính kèm</th>
                     <th class="text-center">Thao tác</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(item,i) in giam_sat.data" :key="i">
-                    <td class="text-center" scope="row">{{ i+1 }}</td>
-                    <td>{{ item.tuyen_duong.ten }}</td>
-                   <td>{{ item.tuyen_duong.loai_tuyen_duong ? item.tuyen_duong.loai_tuyen_duong.ten : ''}}</td>
-                    <td>{{ item.tuyen_duong.chieu_dai }} km</td>
-                    <td>{{ item.tuyen_duong.lo_gioi }}</td>
-                    <td>{{ item.don_vi.ten }}</td>
+                    <template v-for="(it, i) in giam_sat.data" :key="i">
+                    <tr v-if="!it.giam_sat_id">
+                        <td class="text-center" scope="row">{{ i+1 }}</td>
+                        <td>{{ it.tuyen_duong ? it.tuyen_duong.ten : '' }}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><a href="#">{{ it.don_vi ? it.don_vi.ten : ''}}</a></td>
+                        <td>
+                            <Upload
+                            :listFile ="it.tai_lieu"
+                            @refresh="onRefresh"
+                        />
+                        <label style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(it.id)"
+                            class="cursor-pointer border-0 w-full text-start rounded-md mb-0">
+                            <i class="fa fa-paperclip mr-2"></i>
+                        </label>
+                        </td>
+                        <td class="text-center"><a @click.prevent="editModal(it)" class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
+                    </tr>
+                   
+                    <tr v-for="(item,i) in it.doan_duong" :key="i">
+                    <td class="text-center" scope="row"></td>
+                    <td></td>
+                    <td>{{ item.hu_hong }}</td>
+                    <td>{{ item.vi_tri }}</td>
+                    <td><span v-if="item.muc_do !== null"></span>{{ item.muc_do == 0 ? 'Nghiêm trọng' : 'X Nghiêm trọng' }}</td>
+                    <td><span v-if="item.tinh_trang_khac_phuc !== null">{{ item.tinh_trang_khac_phuc == 0 ? 'Khắc phục' : 'Chưa khắc phục' }}</span></td>
+                    <td></td>
                     <td style="vertical-align: unset !important;">
                         <Upload
                             :listFile ="item.tai_lieu"
@@ -157,18 +204,25 @@ const chooseFile = (id) => {
                         <label style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(item.id)"
                             class="cursor-pointer border-0 w-full text-start rounded-md mb-0">
                             <i class="fa fa-paperclip mr-2"></i>
-                            Tải lên tệp
                         </label>
                     </td>
-                    <td class="text-center"><a :data-id=item.id class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
-                </tr>
+                    <td class="text-center"><a @click.prevent="editModal(item)" class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
+                    </tr>
+                    <tr v-if="!it.giam_sat_id">
+                        <td class="text-center" scope="row"></td>
+                        <td><a @click.prevent="openModal(it)" class="edit cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </template>
                 </tbody>
                 </table>
-            <!-- <table :key="key"
-                    class="table table-striped text-2xl"
-                    v-data="{ data: giam_sat.data, columns: columns }">
-             </table>
-             -->
          </div>
          <Pagination
              :all-data="giam_sat"
@@ -182,7 +236,9 @@ const chooseFile = (id) => {
          :key-modal="keyModal"
          :giam_sat="giam_sat_selected"
          :tuyen_duong="tuyen_duong"
+         :giam_sat_cha="giam_sat_cha_selected"
          :don_vi="don_vi"
+         :flag="flag"
      />
 </MainLayout>
 </template>

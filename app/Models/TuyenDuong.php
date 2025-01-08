@@ -30,6 +30,8 @@ class TuyenDuong extends Model
         'don_vi_id',
         'key',
         'tuyen_duong_id',
+        'diem_dau',
+        'diem_cuoi',
     ];
 
     public function tai_lieu()

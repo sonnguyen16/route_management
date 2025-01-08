@@ -118,6 +118,15 @@ const closeModal = () => {
                         </div>
                         <div :class="[props.flag ? '' : 'disable_tr']">
                             <div class="form-group">
+                              <label for="noi_dung">Loại sửa chữa</label>
+                              <Input v-model="form.noi_dung"
+                                  type="text"
+                                  :errors="form.errors.noi_dung"
+                                  placeholder="Loại sửa chữa"
+                                  id="noi_dung"
+                              />
+                          </div>
+                            <div class="form-group" style="display: none;">
                                 <label for="loai_sua_chua_id">Loại sửa chữa</label>
                                 <Select
                                     v-model="form.loai_sua_chua_id"
@@ -183,15 +192,7 @@ const closeModal = () => {
                                     option-default="Chọn đơn vị thi công"
                                 />
                             </div>
-                          <div class="form-group">
-                              <label for="noi_dung">Ghi chú</label>
-                              <Input v-model="form.noi_dung"
-                                  type="text"
-                                  :errors="form.errors.noi_dung"
-                                  placeholder="Ghi chú"
-                                  id="noi_dung"
-                              />
-                          </div>
+                          
                         </div>
                             <div class="form-group">
                                 

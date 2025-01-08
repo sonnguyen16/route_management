@@ -12,6 +12,8 @@ use App\Models\Huyen;
 use App\Http\Requests\StoreTuyenDuongRequest;
 use App\Models\DonVi;
 use App\Models\CauHinh;
+use App\Models\SuaChua;
+use App\Models\GiamSat;
 
 class TuyenDuongController extends Controller
 {
@@ -34,7 +36,14 @@ class TuyenDuongController extends Controller
     {
         $validated = $request->validated();
         $validated['key'] = Str::slug($validated['ten']);
-        TuyenDuong::updateOrCreate(['id' => $validated['id']], $validated);
+        $obj = TuyenDuong::updateOrCreate(['id' => $validated['id']], $validated);
+        $s = new GiamSat;
+        $s->tuyen_duong_id = $obj->id;
+        $s->don_vi_id  = $obj->don_vi_id;
+        $s->save();
+        $c = new SuaChua;
+        $c->tuyen_duong_id = $obj->id;
+        $c->save();
     }
     public function deleteDiem(Request $request)
     {

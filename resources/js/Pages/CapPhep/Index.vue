@@ -173,7 +173,7 @@ function deleteDiemCapPhep(value) {
                     <th class="text-left">Đến ngày</th>
                     <th class="text-left">Số cấp phép</th>
                     <th class="text-left">Đơn vị cấp phép</th>
-                    
+                    <th class="text-left">Vi phạm</th>
                     <th class="text-left">File đính kèm</th>
                     <th class="text-center">Thao tác</th>
                     </tr>
@@ -192,7 +192,7 @@ function deleteDiemCapPhep(value) {
                     <td></td>
                     <td></td>
                     <td></td>
-                   
+                    <td></td>
                     <td style="vertical-align: unset !important;">
                         <label style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(it.id)"
                             class="cursor-pointer border-0 w-full text-start rounded-md mb-0">
@@ -217,7 +217,7 @@ function deleteDiemCapPhep(value) {
                     <td><span v-if="item.ngay_het_han">{{ moment(item.ngay_het_han).format("DD/MM/YYYY") }}</span></td>
                     <td>{{ item.so_cap_phep }}</td>
                     <td><span v-if="item.don_vi">{{ item.don_vi.ten }}</span></td>
-                   
+                   <td>Vi phạm abc</td>
                     <td style="vertical-align: unset !important;">
                         <label style="font-weight: normal;color: #007bff;" @click.prevent="chooseFile(item.id)"
                             class="cursor-pointer border-0 w-full text-start rounded-md mb-0">
@@ -246,6 +246,7 @@ function deleteDiemCapPhep(value) {
                    
                     <td>
                     </td>
+                    <td></td>
                     <td></td>
                     </tr>
                     </template>

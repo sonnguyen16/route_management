@@ -39,6 +39,8 @@ class StoreTuyenDuongRequest extends FormRequest
             'don_vi_id' => 'nullable|Int',
             'lo_gioi' => 'nullable|string',
             'tuyen_duong_id' => 'nullable|Int',
+            'diem_dau' => 'nullable',
+            'diem_cuoi' => 'nullable',
         ];
     }
 

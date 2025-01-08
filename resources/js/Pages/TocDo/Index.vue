@@ -151,15 +151,14 @@ const chooseFile = (id) => {
                     <th class="text-center">Đến ngày</th>
                     <th class="text-left">Đơn vị quyết định</th>
                     <th class="text-left">Đơn vị thực hiện</th>
-                    
                     <th class="text-left">File đính kèm</th>
                     <th class="text-center">Thao tác</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <template v-for="(it,i) in gioi_han_toc_do.data" :key="i">
+                    <template v-for="(it,k) in gioi_han_toc_do.data" :key="k">
                     <tr v-if="!it.gioi_han_toc_do_id">
-                    <td>{{ i+1 }}</td>
+                    <td>{{ k+1 }}</td>
                     <td>{{ it.tuyen_duong ? it.tuyen_duong.ten : ''}}</td>
                     <td></td>
                     <td class="text-center"></td>
@@ -186,8 +185,8 @@ const chooseFile = (id) => {
                     <td>{{ item.noi_dung}}</td>
                     <td class="text-center">{{ item.tu_km}}</td>
                     <td class="text-center">{{ item.den_km }}</td>
-                    <td class="text-center"><span v-if="item.tu_ngay">{{ moment(item.tu_ngay).format("DD/MM/YYYY HH:mm") }}</span></td>
-                    <td class="text-center"><span v-if="item.den_ngay">{{ moment(item.den_ngay).format("DD/MM/YYYY HH:mm") }}</span></td>
+                    <td class="text-center"><span v-if="item.tu_ngay">{{ moment(item.tu_ngay).format("DD/MM/YYYY") }}</span></td>
+                    <td class="text-center"><span v-if="item.den_ngay">{{ moment(item.den_ngay).format("DD/MM/YYYY") }}</span></td>
                     <td>{{ item.don_vi ? item.don_vi.ten : ''}}</td>  
                     <td  class="text-left">{{ item.don_vi_thuc_hien ? item.don_vi_thuc_hien.ten : ''}}</td> 
                     <td style="vertical-align: unset !important;">

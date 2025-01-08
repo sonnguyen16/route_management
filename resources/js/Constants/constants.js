@@ -55,6 +55,15 @@ export const iconFileTypes = {
     jpeg: 'fa-file-image',
 }
 
+export const MucDo = [
+    {id: 0, name: 'Nghiêm trọng'},
+    {id: 1, name: 'X Nghiêm trọng'},
+]
+
+export const TinhTrang = [
+    {id: 0, name: 'Khắc phục'},
+    {id: 1, name: 'Chưa khắc phục'},
+]
 export const _TIME_DEBOUNCE = 300;
 
 export const MEDIA_ENDPOINT = '/storage/';// /storage/

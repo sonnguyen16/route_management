@@ -167,7 +167,7 @@ const uploadFiles = (files) => {
                                 <label for="tu_ngay">Từ ngày</label>
                                 <Input
                                     v-model="form.tu_ngay"
-                                    type="datetime-local"
+                                    type="date"
                                     :errors="form.errors.tu_ngay"
                                 />
                             </div>
@@ -176,7 +176,7 @@ const uploadFiles = (files) => {
                                 <label for="den_ngay">Đến ngày</label>
                                 <Input
                                     v-model="form.den_ngay"
-                                    type="datetime-local"
+                                    type="date"
                                     :errors="form.errors.den_ngay"
                                 />
                             </div>

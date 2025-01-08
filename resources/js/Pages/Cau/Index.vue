@@ -145,11 +145,11 @@ const chooseFile = (id) => {
                     <th class="text-left">Loại cầu</th>
                     <th class="text-left">Loại kết<br>cấu nhịp</th>
                     <th class="text-left">Lý trình</th>                    
-                    <th class="text-center">Chiều dài</th>
-                    <th class="text-center">Chiều rộng</th>
+                    <th class="text-center">Chiều dài<br>(m)</th>
+                    <th class="text-center">Chiều rộng<br>(m)</th>
                     <th class="text-center">Năm<br>khai thác</th>
-                    <th class="text-center">Tải trọng<br>thiết kế</th>
-                    <th class="text-center">Tải trọng<br>khai thác</th>
+                    <th class="text-center">Tải trọng<br>thiết kế<br>(tấn)</th>
+                    <th class="text-center">Tải trọng<br>khai thác<br>(tấn)</th>
                     <th class="text-center">Năm<br>kiểm định</th>
                     <th class="text-center">Tuyến đường</th>
                     <th class="text-center">File đính kèm</th>
@@ -163,11 +163,11 @@ const chooseFile = (id) => {
                     <td>{{ item.loai_cau ? item.loai_cau.ten : ''}}</td>  
                     <td>{{ item.loai_ket_cau_nhip ? item.loai_ket_cau_nhip.ten : ''}}</td>  
                     <td class="text-left">{{ item.ly_trinh }}</td> 
-                    <td class="text-center">{{ item.chieu_dai }} m</td> 
-                    <td class="text-center">{{ item.chieu_rong }} m</td>
+                    <td class="text-center">{{ item.chieu_dai }}</td> 
+                    <td class="text-center">{{ item.chieu_rong }}</td>
                     <td class="text-center">{{ item.nam_khai_thac }}</td>
-                    <td class="text-center">{{ item.tai_trong }} tấn</td>
-                    <td class="text-center">{{ item.trong_tai_khai_thac }} tấn</td>
+                    <td class="text-center">{{ item.tai_trong }}</td>
+                    <td class="text-center">{{ item.trong_tai_khai_thac }}</td>
                     <td class="text-center">{{ item.kiem_dinh }}</td>
                     <td>{{ item.tuyen_duong ? item.tuyen_duong.ten : ''}}</td>
                     <td style="vertical-align: unset !important;">

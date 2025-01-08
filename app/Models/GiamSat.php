@@ -16,6 +16,11 @@ class GiamSat extends Model
         'tuyen_duong_id',
         'don_vi_id',
         'tai_lieu',
+        'hu_hong',
+        'vi_tri',
+        'muc_do',
+        'tinh_trang_khac_phuc',
+        'giam_sat_id',
     ];
 
     public function tuyen_duong()
@@ -31,5 +36,8 @@ class GiamSat extends Model
     {
         return $this->hasMany(TaiLieu::class, 'danh_muc', 'id')->where('isdelete',0)->where('type','giam_sat');
     }
-   
+    public function doan_duong()
+    {
+        return $this->hasMany(GiamSat::class, 'giam_sat_id','id')->where('isdelete',0);
+    }
 }

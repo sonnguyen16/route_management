@@ -53,6 +53,8 @@ let form = useForm({
     don_vi_id: '',
     lo_gioi: '',
     tuyen_duong_id: '',
+    diem_dau: '',
+    diem_cuoi:'',
 })
 
 
@@ -104,6 +106,8 @@ watch(() => props.keyModal, () => {
         form.chieu_rong = "";
         form.don_vi_id = "";
         form.lo_gioi = "";
+        form.diem_cuoi = "";
+        form.diem_cuoi= "";
     }
     if (props.tuyen_duong_cha) {
         form.ten = props.tuyen_duong_cha.ten;
@@ -132,7 +136,7 @@ const closeModal = () => {
                     <div class="row">
                         <!-- Main Content -->
                          <div :class="['px-4 pt-4', isEdit ? 'col-md-12' : 'col-md-12']">
-                            <div>
+                            <div v-if="!props.flag">
                                 <div class="form-group">
                                     <label for="ten_tuyen_duong">Tên tuyến đường</label>
                                     <Input v-model="form.ten" :errors="form.errors.ten"/>
@@ -153,9 +157,16 @@ const closeModal = () => {
                                             id="phan_cap_id"
                                             option-default="Chọn mã phân cấp" :disabled="flag"/>
                                 </div>
-                            </div>
-                            <div >
-                            <div class="form-group">
+                                <div class="form-group">
+                                <label for="don_vi_quan_ly">Đơn vị quản lý</label>
+                                <Select v-model="form.don_vi_id"
+                                        :errors="form.errors.don_vi_id"
+                                        :options="props.don_vi"
+                                        id="don_vi_id"
+                                        option-default="Chọn đơn vị"/>
+                                </div>
+                           
+                            <div class="form-group" style="display: none;">
                                 <label for="diem_dau_huyen_id">Điểm đầu</label>
                                 <div class="grid grid-cols-2 gap-x-3">
                                     <Select v-model="form.diem_dau_huyen_id"
@@ -171,7 +182,7 @@ const closeModal = () => {
                                 </div>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group" style="display: none;">
                                 <label for="diem_cuoi_huyen_id">Điểm cuối</label>
                                 <div class="grid grid-cols-2 gap-x-3">
                                     <Select v-model="form.diem_cuoi_huyen_id"
@@ -186,7 +197,14 @@ const closeModal = () => {
                                             option-default="Chọn xã"/>
                                 </div>
                             </div>
-
+                            <div class="form-group">
+                                <label for="chieu_dai">Điểm đầu</label>
+                                <Input v-model="form.diem_dau" :errors="form.errors.diem_dau" />
+                            </div>
+                            <div class="form-group">
+                                <label for="chieu_dai">Điểm cuối</label>
+                                <Input v-model="form.diem_cuoi" :errors="form.errors.diem_cuoi" />
+                            </div>
                             <div class="form-group">
                                 <label for="chieu_dai">Chiều dài (km)</label>
                                 <Input v-model="form.chieu_dai" :errors="form.errors.chieu_dai" />
@@ -203,16 +221,64 @@ const closeModal = () => {
                             </div>
 
 
-                            <div class="form-group">
-                                <label for="don_vi_quan_ly">Đơn vị quản lý</label>
-                                <Select v-model="form.don_vi_id"
-                                        :errors="form.errors.don_vi_id"
-                                        :options="props.don_vi"
-                                        id="don_vi_id"
-                                        option-default="Chọn đơn vị"/>
-                            </div>
+                            
                         </div>
-                           
+                            <div v-else>
+                                <div class="form-group" style="display: none;">
+                                <label for="diem_dau_huyen_id">Điểm đầu</label>
+                                <div class="grid grid-cols-2 gap-x-3">
+                                    <Select v-model="form.diem_dau_huyen_id"
+                                            :errors="form.errors.diem_dau_huyen_id"
+                                            :options="huyen"
+                                            id="diem_dau_huyen_id"
+                                            option-default="Chọn huyện"/>
+                                    <Select v-model="form.diem_dau_xa_id"
+                                            :errors="form.errors.diem_dau_xa_id"
+                                            :options="dau_xa"
+                                            id="diem_dau_xa_id"
+                                            option-default="Chọn xã"/>
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="display: none;">
+                                <label for="diem_cuoi_huyen_id">Điểm cuối</label>
+                                <div class="grid grid-cols-2 gap-x-3">
+                                    <Select v-model="form.diem_cuoi_huyen_id"
+                                            :errors="form.errors.diem_cuoi_huyen_id"
+                                            :options="huyen"
+                                            id="diem_cuoi_huyen_id"
+                                            option-default="Chọn huyện"/>
+                                    <Select v-model="form.diem_cuoi_xa_id"
+                                            :errors="form.errors.diem_cuoi_xa_id"
+                                            :options="cuoi_xa"
+                                            id="diem_cuoi_xa_id"
+                                            option-default="Chọn xã"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="chieu_dai">Điểm đầu</label>
+                                <Input v-model="form.diem_dau" :errors="form.errors.diem_dau" />
+                            </div>
+                            <div class="form-group">
+                                <label for="chieu_dai">Điểm cuối</label>
+                                <Input v-model="form.diem_cuoi" :errors="form.errors.diem_cuoi" />
+                            </div>
+                            <div class="form-group">
+                                <label for="chieu_dai">Chiều dài (km)</label>
+                                <Input v-model="form.chieu_dai" :errors="form.errors.chieu_dai" />
+                            </div>
+                            <div class="form-group">
+                                <label for="chieu_rong">Chiều rộng (m)</label>
+                                <Input v-model="form.chieu_rong" :errors="form.errors.chieu_rong" />
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="dien_tich">Lộ giới (m)</label>
+                                <Input v-model="form.lo_gioi" :errors="form.errors.lo_gioi" />
+                            </div>
+
+                            </div>               
                         </div>
 
                     </div>
