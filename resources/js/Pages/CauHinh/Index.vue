@@ -28,7 +28,6 @@ const changePage = (page) => {
 }
 
 const columns = [
-    {field: 'id', label: 'ID'},
     {field: 'ten', label: 'Tên'},
     {field: 'action', label: 'Hành động'},
 ]
@@ -71,8 +70,7 @@ watch(search, (value) => {
 })
 
 const searchDebounce = debounce((value) => {
-    console.log('aaa');
-    router.visit(route('cau-hinh.index', {search: value, loai: props.loai}), {
+   router.visit(route('cau-hinh.index', {search: value, loai: props.loai}), {
         preserveState: true,
         onSuccess: () => {
             onRefresh()
@@ -93,9 +91,25 @@ const searchDebounce = debounce((value) => {
                 <input v-model="search" class="border-gray-300 rounded-lg w-1/5" placeholder="Tìm kiếm">
             </div>
             <div class="table-responsive">
-                <table :key="key" v-data="{ data: cau_hinh.data, columns: columns }"
-                class="table table-striped text-2xl">
+                <table class="table table-striped text-2xl table-line">
+                <thead>
+                    <tr>
+                    <th class="text-center"  style="width: 50px;">STT</th>
+                    <th class="text-left">Tên</th>
+                    <th class="text-center" style="width: 100px;">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(item, i) in cau_hinh.data" :key="i">
+                        <td class="text-center">{{ i+1 }}</td>
+                        <td>{{ item.ten }}</td>
+                        <td class="text-center"><a :data-id=item.id class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
+                    </tr>
+                </tbody>
                 </table>
+                <!--<table :key="key" v-data="{ data: cau_hinh.data, columns: columns }"
+                class="table table-striped text-2xl">
+                </table> -->
             </div>
             <Pagination
                 :all-data="cau_hinh"
