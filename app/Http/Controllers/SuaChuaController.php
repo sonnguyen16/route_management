@@ -37,7 +37,7 @@ class SuaChuaController extends Controller
 
         $sua_chua = $sua_chua->paginate(15);
        
-        $tuyen_duong = TuyenDuong::all();
+        $tuyen_duong = TuyenDuong::where('isdelete',0)->where('tuyen_duong_id',null)->get();
         $don_vi = DonVi::all();
         $nguoi_duyet = User::all();
         $loai_sua_chua = CauHinh::where('loai','loai_sua_chua')->get();

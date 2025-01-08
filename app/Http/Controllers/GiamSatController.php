@@ -30,7 +30,7 @@ class GiamSatController extends Controller
             });
         }
         $giam_sat = $giam_sat->paginate(15);
-        $tuyen_duong = TuyenDuong::all();
+        $tuyen_duong = TuyenDuong::where('isdelete',0)->where('tuyen_duong_id',null)->get();
         $don_vi = DonVi::all();
         return Inertia::render('GiamSat/Index', compact('giam_sat', 'tuyen_duong', 'don_vi'));
     }

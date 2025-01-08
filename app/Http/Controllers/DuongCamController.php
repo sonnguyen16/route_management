@@ -42,7 +42,7 @@ class DuongCamController extends Controller
 
         $duong_cam = $duong_cam->paginate(15);
         $don_vi = DonVi::all();
-        $tuyen_duong = TuyenDuong::all();
+        $tuyen_duong = TuyenDuong::where('isdelete',0)->where('tuyen_duong_id',null)->get();
 
         return Inertia::render('DuongCam/Index', compact('duong_cam', 'don_vi', 'tuyen_duong'));
     }

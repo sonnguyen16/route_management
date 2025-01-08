@@ -26,7 +26,7 @@ class GioiHanTocDoController extends Controller
             });
         }
         $gioi_han_toc_do = $gioi_han_toc_do->paginate(15);
-        $tuyen_duong = TuyenDuong::all();
+        $tuyen_duong = TuyenDuong::where('isdelete',0)->where('tuyen_duong_id',null)->get();
         $don_vi = DonVi::all();
         
         return Inertia::render('TocDo/Index', compact('gioi_han_toc_do', 'tuyen_duong','don_vi',));

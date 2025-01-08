@@ -30,7 +30,7 @@ class CapPhepController extends Controller
         }
         $cap_phep = $cap_phep->paginate(15);
         $don_vi = DonVi::all();
-        $tuyen_duong = TuyenDuong::all();
+        $tuyen_duong = TuyenDuong::where('isdelete',0)->where('tuyen_duong_id',null)->get();
         return Inertia::render('CapPhep/Index', compact('cap_phep', 'don_vi', 'tuyen_duong'));
     }
 
