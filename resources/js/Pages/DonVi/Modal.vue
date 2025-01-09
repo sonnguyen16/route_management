@@ -49,12 +49,33 @@ watch(() => props.keyModal, () => {
        Object.assign(form, props.don_vi);
     }else{
         form.reset();
+        form.id = "";
+        form.ten = "";
+        form.dia_chi = "";
+        form.dien_thoai = "";
+        form.fax = "";
+        form.email = "";
+        form.website = "";
+        form.ma_so_thue = "";
+        form.lien_he = "";
+        
     }
 })
 const closeModal = () => {
+    form.id = "";
+        form.ten = "";
+        form.dia_chi = "";
+        form.dien_thoai = "";
+        form.fax = "";
+        form.email = "";
+        form.website = "";
+        form.ma_so_thue = "";
+        form.lien_he = "";
     emits('closeModal');
+    
     form.reset();
     form.clearErrors();
+    
 }
 
 </script>

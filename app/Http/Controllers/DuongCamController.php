@@ -12,12 +12,15 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\TaiLieu;
 use App\Enums\DanhMucTaiLieu;
-
+use Illuminate\Support\Facades\DB;
 class DuongCamController extends Controller
 {
     public function index(Request $request)
     {
-        $duong_cam = DuongCam::where('isdelete',0)->where('duong_cam_id',null)->with([
+        $duong_cam = DuongCam::where('isdelete',0)
+        ->where('duong_cam_id',null)
+        ->whereRaw('tuyen_duong_id in (select id from tuyen_duong where isdelete = 0)')
+        ->with([
             'tai_lieu',
             'don_vi_quyet_dinh',
             'don_vi_thuc_hien',

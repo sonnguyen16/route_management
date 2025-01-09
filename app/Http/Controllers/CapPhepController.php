@@ -11,12 +11,16 @@ use Inertia\Inertia;
 use App\Models\CapPhep;
 use App\Http\Requests\StoreCapPhepRequest;
 use App\Http\Requests\StoreCapPhepDiemRequest;
+use Illuminate\Support\Facades\DB;
 
 class CapPhepController extends Controller
 {
     public function index(Request $request)
     {
-        $cap_phep = CapPhep::where('isdelete',0)->where('cap_phep_id',null)->with([
+        $cap_phep = CapPhep::where('isdelete',0)
+        ->where('cap_phep_id',null)
+        ->whereRaw('tuyen_duong_id in (select id from tuyen_duong where isdelete = 0)')
+        ->with([
             'don_vi',
             'tai_lieu',
             'tuyen_duong',

@@ -10,12 +10,16 @@ use App\Models\TaiLieu;
 use App\Enums\DanhMucTaiLieu;
 use App\Models\TuyenDuong;
 use App\Models\DonVi;
+use Illuminate\Support\Facades\DB;
 
 class GioiHanTocDoController extends Controller
 {
     public function index(Request $request)
     {
-        $gioi_han_toc_do = GioiHanTocDo::where('isdelete',0)->where('gioi_han_toc_do_id',null)->with([
+        $gioi_han_toc_do = GioiHanTocDo::where('isdelete',0)
+        ->where('gioi_han_toc_do_id',null)
+        ->whereRaw('tuyen_duong_id in (select id from tuyen_duong where isdelete = 0)')
+        ->with([
             'tai_lieu',
             'tuyen_duong',
             'tuyen_duong.diem_dau_xa',

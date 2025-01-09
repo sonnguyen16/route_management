@@ -78,12 +78,13 @@ const eventForEditBtn = () => {
 }
 */
 const editModal = (value) => {   
-     don_vi_selected.value = value;
+        don_vi_selected.value = value;
         keyModal.value++
         isEdit.value = true;
         modal.showModal();
 }
 const openModal = () => {
+    keyModal.value++;
     don_vi_selected.value = null;
     isEdit.value = false;
     modal.showModal();
@@ -135,9 +136,6 @@ keyModal
 }
 // ket thuc
 
-
-
-// ket thuc
 const msg = ref(null);
 const question = useModal('question');
 const remove = (item) => {    
@@ -145,6 +143,7 @@ const remove = (item) => {
     don_vi_selected.value =  item;
     question.showModal();
 }
+
 const drop = (item) => {
     question.hideModal();
     router.visit(route('don-vi.delete', {id: item.id}), {

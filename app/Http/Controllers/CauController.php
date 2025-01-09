@@ -8,11 +8,14 @@ use App\Models\Cau;
 use App\Models\TuyenDuong;
 use App\Models\CauHinh;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\DB;
 class CauController extends Controller
 {
     public function index(Request $request)
     {
-        $cau = Cau::where('isdelete',0)->with(['loai_ket_cau_nhip','tuyen_duong','loai_cau','tai_lieu']);
+        $cau = Cau::where('isdelete',0)
+        ->whereRaw('tuyen_duong_id in (select id from tuyen_duong where isdelete = 0)')
+        ->with(['loai_ket_cau_nhip','tuyen_duong','loai_cau','tai_lieu']);
         if($request->filled('search')){
             $cau = $cau->where('nut_giao', 'like', '%'.$request->search.'%');
         }

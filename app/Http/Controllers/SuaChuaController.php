@@ -15,13 +15,16 @@ use Inertia\Inertia;
 use App\Models\TaiLieu;
 use App\Models\CauHinh;
 use App\Enums\DanhMucTaiLieu;
+use Illuminate\Support\Facades\DB;
 
 class SuaChuaController extends Controller
 {
     public function index(Request $request)
     {
-        $sua_chua = SuaChua::where('isdelete',0)->where('sua_chua_id',null)->with(['tai_lieu','tuyen_duong', 'don_vi', 'nguoi_duyet','loai_sua_chua','doan_duong','doan_duong.don_vi','doan_duong.loai_sua_chua'])
-        ;
+        $sua_chua = SuaChua::where('isdelete',0)
+        ->where('sua_chua_id',null)
+        ->whereRaw('tuyen_duong_id in (select id from tuyen_duong where isdelete = 0)')
+        ->with(['tai_lieu','tuyen_duong', 'don_vi', 'nguoi_duyet','loai_sua_chua','doan_duong','doan_duong.don_vi','doan_duong.loai_sua_chua']);
         if($request->filled('ten_duong')){
             $sua_chua = $sua_chua->whereHas('tuyen_duong', function($query) use ($request){
                 $query->where('ten', 'like', '%'.$request->ten_duong.'%');

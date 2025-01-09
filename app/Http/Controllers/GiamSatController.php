@@ -10,13 +10,16 @@ use Inertia\Inertia;
 use App\Models\GiamSat;
 use App\Models\DonVi;
 use App\Http\Requests\StoreGiamSatRequest;
-
+use Illuminate\Support\Facades\DB;
 
 class GiamSatController extends Controller
 {
     public function index(Request $request)
     {
-        $giam_sat = GiamSat::where('isdelete',0)->where('giam_sat_id',null)->with([
+        $giam_sat = GiamSat::where('isdelete',0)
+        ->where('giam_sat_id',null)
+        ->whereRaw('tuyen_duong_id in (select id from tuyen_duong where isdelete = 0)')
+        ->with([
             'tai_lieu',
             'tuyen_duong',
             'tuyen_duong.diem_dau_xa',
