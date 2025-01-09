@@ -45,6 +45,6 @@ class CapPhep extends Model
     }
     public function doan_duong()
     {
-        return $this->hasMany(CapPhep::class, 'cap_phep_id', 'id');
+        return $this->hasMany(CapPhep::class, 'cap_phep_id', 'id')->where('isdelete',0);
     }
 }

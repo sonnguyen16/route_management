@@ -20,7 +20,8 @@ class SuaChuaController extends Controller
 {
     public function index(Request $request)
     {
-        $sua_chua = SuaChua::with(['tai_lieu','tuyen_duong', 'don_vi', 'nguoi_duyet','loai_sua_chua','doan_duong','doan_duong.don_vi','doan_duong.loai_sua_chua']);
+        $sua_chua = SuaChua::where('isdelete',0)->where('sua_chua_id',null)->with(['tai_lieu','tuyen_duong', 'don_vi', 'nguoi_duyet','loai_sua_chua','doan_duong','doan_duong.don_vi','doan_duong.loai_sua_chua'])
+        ;
         if($request->filled('ten_duong')){
             $sua_chua = $sua_chua->whereHas('tuyen_duong', function($query) use ($request){
                 $query->where('ten', 'like', '%'.$request->ten_duong.'%');
@@ -35,14 +36,18 @@ class SuaChuaController extends Controller
             $sua_chua = $sua_chua->where('ngay_hoan_thanh', '<=', $request->ngay_hoan_thanh);
         }
 
-        $sua_chua = $sua_chua->paginate(15);
+        $sua_chua = $sua_chua->paginate(20);
        
         $tuyen_duong = TuyenDuong::where('isdelete',0)->where('tuyen_duong_id',null)->get();
-        $don_vi = DonVi::all();
+        $don_vi = DonVi::where('isdelete',0)->get();
         $nguoi_duyet = User::all();
         $loai_sua_chua = CauHinh::where('loai','loai_sua_chua')->get();
-        
-        return Inertia::render('SuaChua/Index', compact('sua_chua', 'tuyen_duong', 'don_vi', 'nguoi_duyet','loai_sua_chua'));
+        if(isset($request->page)) {
+            $stt = $request->page*20 - 19;
+           } else {
+            $stt = 1;
+           }
+        return Inertia::render('SuaChua/Index', compact('sua_chua', 'tuyen_duong', 'don_vi', 'nguoi_duyet','loai_sua_chua','stt'));
     }
 
     public function store(StoreSuaChuaRequest $request)
@@ -52,17 +57,10 @@ class SuaChuaController extends Controller
         unset($validated['tai_lieu']);
         $sua_chua = SuaChua::updateOrCreate(['id' => $validated['id']],$validated);
     }
-    public function storeDiem(StoreSuaChuaDiemRequest $request)
+    public function delete(Request $request)
     {
-        $validated = $request->validated();       
-        $sua_chua = SuaChuaDiem::updateOrCreate(['id' => $validated['id']],$validated);
-    }
-    public function deleteDiem($id)
-    {
-        $obj = SuaChuaDiem::find($id);
+       $obj = SuaChua::find($request->id);
         $obj->isdelete = 1;
         $obj->save();
     }
-    
-    
 }

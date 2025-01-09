@@ -25,6 +25,7 @@ const form = useForm({
     thoi_gian_pha_den: '',
     thoi_gian_hoat_dong: '',
     vi_tri: '',
+    ngay_lap_dat: '',
 })
 
 const submit = () => {
@@ -50,6 +51,7 @@ watch(() => props.keyModal, () => {
         form.thoi_gian_pha_den = "";
         form.thoi_gian_hoat_dong = "";
         form.vi_tri = "";
+        form.ngay_lap_dat ="";
     }
 })
 const closeModal = () => {
@@ -104,6 +106,14 @@ const closeModal = () => {
                                 <Input
                                     v-model="form.vi_tri"
                                     :errors="form.errors.vi_tri"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label for="den_ngay">Đến ngày</label>
+                                <Input
+                                    v-model="form.ngay_lap_dat"
+                                    type="date"
+                                    :errors="form.errors.ngay_lap_dat"
                                 />
                             </div>
                         </div>

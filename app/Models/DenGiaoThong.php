@@ -19,6 +19,7 @@ class DenGiaoThong extends Model
         'vi_tri',
         'isdelete',
         'tai_lieu',
+        'ngay_lap_dat',
     ];
     public function tai_lieu()
     {

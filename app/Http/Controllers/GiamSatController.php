@@ -16,7 +16,7 @@ class GiamSatController extends Controller
 {
     public function index(Request $request)
     {
-        $giam_sat = GiamSat::with([
+        $giam_sat = GiamSat::where('isdelete',0)->where('giam_sat_id',null)->with([
             'tai_lieu',
             'tuyen_duong',
             'tuyen_duong.diem_dau_xa',
@@ -29,10 +29,15 @@ class GiamSatController extends Controller
                 $query->where('ten', 'like', '%'.request('ten_duong').'%');
             });
         }
-        $giam_sat = $giam_sat->paginate(15);
+        $giam_sat = $giam_sat->paginate(20);
         $tuyen_duong = TuyenDuong::where('isdelete',0)->where('tuyen_duong_id',null)->get();
-        $don_vi = DonVi::all();
-        return Inertia::render('GiamSat/Index', compact('giam_sat', 'tuyen_duong', 'don_vi'));
+        $don_vi = DonVi::where('isdelete',0)->get();
+        if(isset($request->page)) {
+            $stt = $request->page*20 - 19;
+           } else {
+            $stt = 1;
+           }
+        return Inertia::render('GiamSat/Index', compact('giam_sat', 'tuyen_duong', 'don_vi','stt'));
     }
 
     public function store(StoreGiamSatRequest $request)
@@ -40,5 +45,11 @@ class GiamSatController extends Controller
        $validated = $request->validated();
         // unset($validated['tai_lieu']);
         $giam_sat = GiamSat::updateOrCreate(['id' => $validated['id']],$validated);
+    }
+    public function delete(Request $request)
+    {
+       $obj = GiamSat::find($request->id);
+        $obj->isdelete = 1;
+        $obj->save();
     }
 }

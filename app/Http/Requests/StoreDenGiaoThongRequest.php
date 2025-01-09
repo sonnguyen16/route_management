@@ -28,6 +28,7 @@ class StoreDenGiaoThongRequest extends FormRequest
             'thoi_gian_pha_den' => 'nullable',
             'thoi_gian_hoat_dong' => 'nullable',
             'vi_tri' => 'nullable',
+            'ngay_lap_dat' => 'nullable',
         ];
     }
     public function messages(): array

@@ -15,7 +15,7 @@ class GioiHanTocDoController extends Controller
 {
     public function index(Request $request)
     {
-        $gioi_han_toc_do = GioiHanTocDo::with([
+        $gioi_han_toc_do = GioiHanTocDo::where('isdelete',0)->where('gioi_han_toc_do_id',null)->with([
             'tai_lieu',
             'tuyen_duong',
             'tuyen_duong.diem_dau_xa',
@@ -25,11 +25,15 @@ class GioiHanTocDoController extends Controller
                 $query->where('ten', 'like', '%'.$request->ten_duong.'%');
             });
         }
-        $gioi_han_toc_do = $gioi_han_toc_do->paginate(15);
+        $gioi_han_toc_do = $gioi_han_toc_do->paginate(20);
         $tuyen_duong = TuyenDuong::where('isdelete',0)->where('tuyen_duong_id',null)->get();
-        $don_vi = DonVi::all();
-        
-        return Inertia::render('TocDo/Index', compact('gioi_han_toc_do', 'tuyen_duong','don_vi',));
+        $don_vi = DonVi::where('isdelete',0)->get();
+        if(isset($request->page)) {
+            $stt = $request->page*20 - 19;
+           } else {
+            $stt = 1;
+           }
+        return Inertia::render('TocDo/Index', compact('gioi_han_toc_do', 'tuyen_duong','don_vi','stt'));
     }
 
     public function store(StoreGioiHanTocDoRequest $request)
@@ -38,25 +42,9 @@ class GioiHanTocDoController extends Controller
         unset($validated['tai_lieu']);
         $toc_do = GioiHanTocDo::updateOrCreate(['id' => $validated['id']],$validated);
     }
-    public function storeDiemGioiHanTocDo(Request $request)
+    public function delete(Request $request)
     {
-        if(isset($request->id)){
-            $obj = DiemGioiHanTocDo::find($request->id);
-        } else {
-            $obj = new DiemGioiHanTocDo;
-        }
-        $obj->gioi_han_toc_do_id = $request->gioi_han_toc_do_id;
-        $obj->toc_do = $request->toc_do;
-        $obj->tu_km = $request->tu_km;
-        $obj->den_km = $request->den_km;
-        $obj->tu_ngay = $request->tu_ngay;
-        $obj->den_ngay = $request->den_ngay;
-        $obj->noi_dung = $request->noi_dung;
-        $obj->save();
-    }
-    public function deleteDiemGioiHanTocDo(Request $request)
-    {
-        $obj = DiemGioiHanTocDo::find($request->id);
+       $obj = GioiHanTocDo::find($request->id);
         $obj->isdelete = 1;
         $obj->save();
     }

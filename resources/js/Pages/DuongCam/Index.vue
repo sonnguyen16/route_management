@@ -11,11 +11,13 @@ import {_TIME_DEBOUNCE} from "@/Constants/constants.js";
 import { debounce } from 'lodash';
 import Upload from "@/Components/UploadFile.vue";
 import moment from "moment";
+import Question from "@/Components/Question.vue";
 
 const props = defineProps({
     duong_cam: Object,
     tuyen_duong: Object,
     don_vi: Object,
+    stt: Number,
 })
 
 const duong_cam_selected = ref(null);
@@ -167,6 +169,23 @@ const chooseFile = (id) => {
 }
 // ket thuc
 
+// ket thuc
+const msg = ref(null);
+const question = useModal('question');
+const remove = (item) => {    
+    msg.value ="Bạn có muốn xóa: "+( item.noi_dung ? item.noi_dung : item.tuyen_duong.ten) +"?";
+    duong_cam_selected.value =  item;
+    question.showModal();
+}
+const drop = (item) => {
+    question.hideModal();
+    router.visit(route('duong-cam.delete', {id: item.id}), {
+        preserveState: true,
+        onSuccess: () => {
+            onRefresh()
+        }
+    });
+}
 </script>
 
 <template>
@@ -207,7 +226,7 @@ const chooseFile = (id) => {
                 <tbody>
                     <template v-for="(it,i) in duong_cam.data" :key="i">
                     <tr v-if="!it.duong_cam_id" >
-                    <td class="text-center" scope="row">{{i+1}}</td>
+                    <td class="text-center" scope="row">{{ props.stt + i }}</td>
                     <td class="text-left" scope="row">{{ it.tuyen_duong ? it.tuyen_duong.ten : ''}}</td>
                     <td class="text-left" scope="row"></td>
                     <td class="text-center"></td>
@@ -228,7 +247,10 @@ const chooseFile = (id) => {
                                 
                             />
                         </td>
-                    <td class="text-center"><a @click.prevent="editModal(it)" class=" cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
+                    <td class="text-center">
+                        <a @click.prevent="editModal(it)" class=" cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a>
+                        <a @click.prevent="remove(it)"  class="edit cursor-pointer" title="Xóa"><i class="fas fa-times-circle mr-1"></i></a>
+                    </td>
                 </tr>
                 <tr v-for="(item,i) in it.doan_duong" :key="i">
                     <td class="text-center" scope="row"></td>
@@ -254,7 +276,10 @@ const chooseFile = (id) => {
                                 
                             />
                         </td>
-                    <td class="text-center"><a @click.prevent="editModal(item)" class=" cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
+                    <td class="text-center">
+                        <a @click.prevent="editModal(item)" class=" cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a>
+                        <a @click.prevent="remove(item)"  class="edit cursor-pointer" title="Xóa"><i class="fas fa-times-circle mr-1"></i></a>
+                    </td>
                 </tr>
 
                 <tr v-if="!it.duong_cam_id">
@@ -299,5 +324,11 @@ const chooseFile = (id) => {
          :don_vi="don_vi"
          :flag="flag"
      />
+     <Question
+        @close-modal="question.hideModal"
+        @drop="drop"
+        :obj="duong_cam_selected"
+        :msg="msg"
+    />
 </MainLayout>
 </template>

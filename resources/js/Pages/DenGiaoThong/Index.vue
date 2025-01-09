@@ -9,9 +9,12 @@ import {nextTick, onMounted, ref, watch} from "vue";
 import { debounce } from 'lodash';
 import {_TIME_DEBOUNCE, maPhanCapOptions} from "@/Constants/constants.js";
 import Upload from "@/Components/UploadFile.vue";
+import moment from "moment";
+import Question from "@/Components/Question.vue";
 
 const props = defineProps({
     den_giao_thong: Object,
+    stt: Number,
 })
 
 const den_giao_thong_selected = ref(null);
@@ -38,20 +41,21 @@ const columns = [
 const modal = useModal('modal');
 
 onMounted(() => {
-    eventForEditBtn()
+   // eventForEditBtn()
 })
 
 const onRefresh = () => {
     key.value++
     keyModal.value++
     nextTick(() => {
-        eventForEditBtn()
+        // eventForEditBtn()
     })
     if (den_giao_thong_selected.value) {
         den_giao_thong_selected.value = props.den_giao_thong.data.
         find(item => item.id === den_giao_thong_selected.value.id);
     }
 }
+/*
 const eventForEditBtn = () => {
     $('.edit').click(function () {
         const id = $(this).data('id');
@@ -62,7 +66,13 @@ const eventForEditBtn = () => {
         modal.showModal();
     });
 }
-
+*/
+const editModal = (item) => {
+    den_giao_thong_selected.value = item;
+    isEdit.value = true;
+    keyModal.value++
+    modal.showModal();
+}
 const openModal = () => {
     keyModal.value++
     den_giao_thong_selected.value = null;
@@ -111,6 +121,25 @@ const chooseFile = (id) => {
     input.click();
 }
 // ket thuc
+
+
+// ket thuc
+const msg = ref(null);
+const question = useModal('question');
+const remove = (item) => {   
+    msg.value ="Bạn có muốn xóa: "+ item.nut_giao +"?";
+    den_giao_thong_selected.value =  item;
+    question.showModal();
+}
+const drop = (item) => {
+    question.hideModal();
+    router.visit(route('den-giao-thong.delete', {id: item.id}), {
+        preserveState: true,
+        onSuccess: () => {
+            onRefresh()
+        }
+    });
+}
 </script>
 
 <template>
@@ -137,9 +166,9 @@ const chooseFile = (id) => {
                 </thead>
                 <tbody>
                     <tr v-for="(item,i) in den_giao_thong.data" :key="i">
-                    <td class="text-center" scope="row">{{ i+1 }}</td>
+                    <td class="text-center" scope="row">{{ props.stt + i }}</td>
                     <td>{{ item.nut_giao }}</td>
-                    <td>1/2/2025</td>
+                    <td>{{ item.ngay_lap_dat ? moment(item.ngay_lap_dat).format("DD/MM/YYYY"):'' }}</td>
                     <td>{{ item.so_pha_den }}</td>
                     <td>{{ item.thoi_gian_pha_den }}</td>
                     <td>{{ item.thoi_gian_hoat_dong }}</td>
@@ -154,7 +183,13 @@ const chooseFile = (id) => {
                             @refresh="onRefresh"
                         />
                     </td>
-                    <td class="text-center"><a :data-id=item.id class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
+                    <td class="text-center">
+                        <!--
+                        <a :data-id=item.id class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a>
+                        -->
+                        <a @click.prevent="editModal(item)" class="cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a>
+                        <a @click.prevent="remove(item)"  class="edit cursor-pointer" title="Xóa"><i class="fas fa-times-circle mr-1"></i></a>
+                    </td>
                 </tr>
                 </tbody>
                 </table>
@@ -176,5 +211,11 @@ const chooseFile = (id) => {
          :key-modal="keyModal"
          :den_giao_thong="den_giao_thong_selected"
      />
+     <Question
+        @close-modal="question.hideModal"
+        @drop="drop"
+        :obj="den_giao_thong_selected"
+        :msg="msg"
+    />
 </MainLayout>
 </template>

@@ -10,11 +10,14 @@ import {_TIME_DEBOUNCE, loaiOptions, maPhanCapOptions} from "@/Constants/constan
 import { debounce } from 'lodash';
 import Upload from "@/Components/UploadFile.vue";
 import moment from "moment";
+import Question from "@/Components/Question.vue";
+
 const props = defineProps({
     gioi_han_toc_do: Object,
     tuyen_duong: Object,
     don_vi: Object,
     nguoi_duyet: Object,
+    stt: Number,
 })
 
 const gioi_han_toc_do_selected = ref(null);
@@ -129,6 +132,24 @@ const chooseFile = (id) => {
     input.click();
 }
 // ket thuc
+
+// ket thuc
+const msg = ref(null);
+const question = useModal('question');
+const remove = (item) => {    
+    msg.value ="Bạn có muốn xóa: "+( item.noi_dung ? item.noi_dung : item.tuyen_duong.ten) +"?";
+    gioi_han_toc_do_selected.value =  item;
+    question.showModal();
+}
+const drop = (item) => {
+    question.hideModal();
+    router.visit(route('gioi-han-toc-do.delete', {id: item.id}), {
+        preserveState: true,
+        onSuccess: () => {
+            onRefresh()
+        }
+    });
+}
 </script>
 
 <template>
@@ -158,7 +179,7 @@ const chooseFile = (id) => {
                 <tbody>
                     <template v-for="(it,k) in gioi_han_toc_do.data" :key="k">
                     <tr v-if="!it.gioi_han_toc_do_id">
-                    <td>{{ k+1 }}</td>
+                    <td>{{ props.stt + k }}</td>
                     <td>{{ it.tuyen_duong ? it.tuyen_duong.ten : ''}}</td>
                     <td></td>
                     <td class="text-center"></td>
@@ -177,7 +198,10 @@ const chooseFile = (id) => {
                                 @refresh="onRefresh"
                             />
                     </td>
-                    <td class="text-center"><a @click.prevent="editModal(it)" class="cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
+                    <td class="text-center">
+                        <a @click.prevent="editModal(it)" class="cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a>
+                        <a @click.prevent="remove(it)"  class="edit cursor-pointer" title="Xóa"><i class="fas fa-times-circle mr-1"></i></a>
+                    </td>
                 </tr>
                 <tr v-for="(item,i) in it.doan_duong" :key="i">
                     <td></td>
@@ -199,7 +223,10 @@ const chooseFile = (id) => {
                                 @refresh="onRefresh"
                             />
                     </td>
-                    <td class="text-center"><a @click.prevent="editModal(item)" class="cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
+                    <td class="text-center">
+                        <a @click.prevent="editModal(item)" class="cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a>
+                        <a @click.prevent="remove(item)"  class="edit cursor-pointer" title="Xóa"><i class="fas fa-times-circle mr-1"></i></a>
+                    </td>
                 </tr>
                 <tr  v-if="!it.gioi_han_toc_do_id">
                     <td></td>
@@ -238,5 +265,12 @@ const chooseFile = (id) => {
          :nguoi_duyet="nguoi_duyet"
          :flag="flag"
      />
+     <Question
+        @close-modal="question.hideModal"
+        @drop="drop"
+        :obj="gioi_han_toc_do_selected"
+        :msg="msg"
+    />
+
 </MainLayout>
 </template>

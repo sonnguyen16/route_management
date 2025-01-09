@@ -28,8 +28,7 @@ Route::get('/logout', [AuthController::class, 'destroy'])->name('logout');
 Route::prefix('tuyen-duong')->middleware('auth')->group(function () {
     Route::get('/', [TuyenDuongController::class, 'index'])->name('tuyen-duong.index');
     Route::post('/store', [TuyenDuongController::class, 'store'])->name('tuyen-duong.store');
-    Route::post('/storeDiem', [TuyenDuongController::class, 'storeDiem'])->name('tuyen-duong.storeDiem');
-    Route::get('/delete-diem/{id}', [TuyenDuongController::class, 'deleteDiem'])->name('tuyen-duong.deleteDiem');
+    Route::get('/delete/{id}', [TuyenDuongController::class, 'delete'])->name('tuyen-duong.delete');
 });
 
 Route::prefix('tai-lieu')->middleware('auth')->group(function () {
@@ -41,13 +40,13 @@ Route::prefix('tai-lieu')->middleware('auth')->group(function () {
 Route::prefix('don-vi')->middleware('auth')->group(function () {
     Route::get('/', [DonViController::class, 'index'])->name('don-vi.index');
     Route::post('/store', [DonViController::class, 'store'])->name('don-vi.store');
+    Route::get('/delete/{id}', [DonViController::class, 'delete'])->name('don-vi.delete');
 });
 
 Route::prefix('sua-chua')->middleware('auth')->group(function () {
     Route::get('/', [SuaChuaController::class, 'index'])->name('sua-chua.index');
     Route::post('/store', [SuaChuaController::class, 'store'])->name('sua-chua.store');    
-    Route::post('/storeDiem', [SuaChuaController::class, 'storeDiem'])->name('sua-chua.storeDiem');
-    Route::get('/delete-diem/{id}', [SuaChuaController::class, 'deleteDiem'])->name('sua-chua.deleteDiem');
+    Route::get('/delete/{id}', [SuaChuaController::class, 'delete'])->name('sua-chua.delete');
 });
 
 Route::prefix('cong-van')->middleware('auth')->group(function () {
@@ -58,24 +57,25 @@ Route::prefix('cong-van')->middleware('auth')->group(function () {
 Route::prefix('gioi-han-toc-do')->middleware('auth')->group(function () {
     Route::get('/', [GioiHanTocDoController::class, 'index'])->name('gioi-han-toc-do.index');
     Route::post('/store', [GioiHanTocDoController::class, 'store'])->name('gioi-han-toc-do.store');
-    Route::get('/delete/diem-gioi-han-toc-do', [GioiHanTocDoController::class, 'deleteDiemGioiHanTocDo'])->name('gioi-han-toc-do.deleteDiemGioiHanTocDo');
+    Route::get('/delete/{id}', [GioiHanTocDoController::class, 'delete'])->name('gioi-han-toc-do.delete');
 });
 
 Route::prefix('cap-phep')->middleware('auth')->group(function () {
     Route::get('/', [CapPhepController::class, 'index'])->name('cap-phep.index');
     Route::post('/store', [CapPhepController::class, 'store'])->name('cap-phep.store');
-    Route::get('/delete/diem-cap-phep', [CapPhepController::class, 'deleteDiemCapPhep'])->name('cap-phep.deleteDiemCapPhep');
+    Route::get('/delete/{id}', [CapPhepController::class, 'delete'])->name('cap-phep.delete');
 });
 
 Route::prefix('giam-sat')->middleware('auth')->group(function () {
     Route::get('/', [GiamSatController::class, 'index'])->name('giam-sat.index');
     Route::post('/store', [GiamSatController::class, 'store'])->name('giam-sat.store');
+    Route::get('/delete/{id}', [GiamSatController::class, 'delete'])->name('giam-sat.delete');
 });
 
 Route::prefix('duong-cam')->middleware('auth')->group(function () {
     Route::get('/', [DuongCamController::class, 'index'])->name('duong-cam.index');
     Route::post('/store', [DuongCamController::class, 'store'])->name('duong-cam.store');
-    Route::get('/delete/diem-cam', [DuongCamController::class, 'deleteDiemCam'])->name('duong-cam.deleteDiemCam');
+    Route::get('/delete/{id}', [DuongCamController::class, 'delete'])->name('duong-cam.delete');
 });
 
 Route::prefix('nguoi-dung')->middleware('auth') ->group(function () {
@@ -91,6 +91,7 @@ Route::prefix('map')->middleware('auth')->group(function () {
 Route::prefix('cau-hinh')->middleware('auth') ->group(function () {
     Route::get('/{loai}', [CauHinhController::class, 'index'])->name('cau-hinh.index');
     Route::post('/store', [CauHinhController::class, 'store'])->name('cau-hinh.store');
+    Route::get('/delete/{id}', [CauHinhController::class, 'delete'])->name('cau-hinh.delete');
 });
 
 
@@ -102,9 +103,11 @@ Route::prefix('diem-tai-nan')->middleware('auth')->group(function () {
 Route::prefix('den-giao-thong')->middleware('auth')->group(function () {
     Route::get('/', [DenGiaoThongController::class, 'index'])->name('den-giao-thong.index');
     Route::post('/store', [DenGiaoThongController::class, 'store'])->name('den-giao-thong.store');
+    Route::get('/delete/{id}', [DenGiaoThongController::class, 'delete'])->name('den-giao-thong.delete');
 });
 
 Route::prefix('cau')->middleware('auth')->group(function () {
     Route::get('/', [CauController::class, 'index'])->name('cau.index');
     Route::post('/store', [CauController::class, 'store'])->name('cau.store');
+    Route::get('/delete/{id}', [CauController::class, 'delete'])->name('cau.delete');
 });

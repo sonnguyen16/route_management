@@ -30,7 +30,7 @@ class CongVanController extends Controller
 
         $cong_van = $cong_van->paginate(15);
         $nguoi_xu_ly = User::all();
-        $don_vi = DonVi::all();
+        $don_vi = DonVi::where('isdelete',0)->get();
         return Inertia::render('CongVan/Index', compact('cong_van', 'nguoi_xu_ly', 'don_vi'));
     }
 

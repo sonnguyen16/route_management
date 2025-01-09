@@ -4,6 +4,7 @@ import {vData} from "@/Directives/v-data.js";
 import Pagination from "@/Components/Pagination.vue";
 import {router, useForm} from "@inertiajs/vue3";
 import Modal from "@/Pages/Duong/Modal.vue";
+
 import {useModal} from "@/Hooks/useModal.js";
 import {nextTick, onMounted, ref, watch} from "vue";
 import {debounce} from "lodash";
@@ -11,6 +12,7 @@ import {
     _TIME_DEBOUNCE,
 } from "@/Constants/constants.js";
 import Upload from "@/Components/UploadFile.vue";
+import Question from "@/Components/Question.vue";
 
 const props = defineProps({
     tuyen_duong: Object,
@@ -19,6 +21,7 @@ const props = defineProps({
     loai_tuyen_duong: Object,
     phan_cap: Object,
     loai_tuan_tra: Object,
+    stt: Number,
 })
 
 const tuyen_duong_selected = ref(null);
@@ -26,7 +29,7 @@ const tuyen_duong_cha_selected = ref(null);
 const keyModal = ref(0);
 const flag = ref(false);
 const key = ref(0);
-const item = ref(0);
+
 const changePage = (page) => {
     router.visit(route('tuyen-duong.index', {page: page, ten_duong: search.value}), {
         preserveState: true,
@@ -37,14 +40,14 @@ const changePage = (page) => {
 }
 
 const modal = useModal('modal');
+
+
 onMounted(() => {
-   // eventForEditBtn()
+    // eventForEditBtn()
 })
-const getItem = () => {
-    item.value = item.value +1;
-    return item.value;
-}
+
 const onRefresh = () => {
+   
     key.value++
     keyModal.value++
     nextTick(() => {       
@@ -53,6 +56,7 @@ const onRefresh = () => {
         tuyen_duong_selected.value = props.tuyen_duong.data.
         find(item => item.id === tuyen_duong_selected.value.id);
     }
+    
 }
 
 const openModal = (value) => {    
@@ -125,6 +129,23 @@ const chooseFile = (id) => {
   input.click();
 }
 // ket thuc
+const msg = ref(null);
+const question = useModal('question');
+const remove = (item) => {    
+    msg.value ="Bạn có muốn xóa: "+item.ten +"?";
+    tuyen_duong_selected.value =  item;
+    question.showModal();
+}
+const drop = (item) => {
+    question.hideModal();
+    router.visit(route('tuyen-duong.delete', {id: item.id}), {
+        preserveState: true,
+        onSuccess: () => {
+            onRefresh()
+        }
+    });
+}
+
 </script>
 
 <template>
@@ -161,7 +182,7 @@ const chooseFile = (id) => {
                     
                     <tr v-if="!it.tuyen_duong_id">
                     <td class="text-center" scope="row">
-                        {{ i+1 }}
+                        {{ props.stt + i }}
                     </td>
                     <td>{{ it.ten }}</td>
                     <td>{{ it.loai_tuyen_duong ? it.loai_tuyen_duong.ten : ''}}</td>
@@ -189,6 +210,9 @@ const chooseFile = (id) => {
                     <td class="text-right">
                        
                         <a @click.prevent="editModal(it)"  class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a>
+                        <a @click.prevent="remove(it)"  class="edit cursor-pointer" title="Xóa"><i class="fas fa-times-circle mr-1"></i></a>
+                        
+                        
                     </td>
                     </tr>
 
@@ -221,6 +245,8 @@ const chooseFile = (id) => {
                         </td>
                         <td class="text-right">
                             <a @click.prevent="editModal(item)" class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a>
+                            <a @click.prevent="remove(item)"  class="edit cursor-pointer" title="Xóa"><i class="fas fa-times-circle mr-1"></i></a>
+                        
                         </td>
                     </tr>
 
@@ -230,7 +256,6 @@ const chooseFile = (id) => {
                     </td>
                     <td>
                         <a @click.prevent="openModal(it)" class="cursor-pointer" title="Thêm đoạn đường"><i class="fas fa-plus mr-2"></i></a>
-                    
                     </td>
                     <td></td>
                     <td></td>
@@ -266,5 +291,11 @@ const chooseFile = (id) => {
          :is-edit="isEdit"
          :flag="flag"
      />
+    <Question
+        @close-modal="question.hideModal"
+        @drop="drop"
+        :obj="tuyen_duong_selected"
+        :msg="msg"
+    />
 </MainLayout>
 </template>

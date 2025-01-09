@@ -11,12 +11,13 @@ import { debounce } from 'lodash';
 import {_TIME_DEBOUNCE} from "@/Constants/constants.js";
 import Upload from "@/Components/UploadFile.vue";
 import moment from "moment";
+import Question from "@/Components/Question.vue";
 
 const props = defineProps({
     cap_phep: Object,
     tuyen_duong: Object,
     don_vi: Object,
-
+    stt: Number,
 })
 
 const cap_phep_selected = ref(null);
@@ -150,6 +151,24 @@ function deleteDiemCapPhep(value) {
     });
 }
 
+// ket thuc
+const msg = ref(null);
+const question = useModal('question');
+const remove = (item) => {   
+    msg.value ="Bạn có muốn xóa: "+( item.noi_dung ? item.noi_dung : item.tuyen_duong.ten) +"?";
+    cap_phep_selected.value =  item;
+    question.showModal();
+}
+const drop = (item) => {
+    console.log(item);
+    question.hideModal();
+    router.visit(route('cap-phep.delete', {id: item.id}), {
+        preserveState: true,
+        onSuccess: () => {
+            onRefresh()
+        }
+    });
+}
 </script>
 
 <template>
@@ -182,7 +201,7 @@ function deleteDiemCapPhep(value) {
                     <template v-for="(it,i) in cap_phep.data" :key="i">
                     <tr v-if="!it.cap_phep_id">
                     <td class="text-center" scope="row">
-                        {{ i+1 }}
+                        {{ props.stt + i }}
                    </td>
                     <td>{{ it.tuyen_duong.ten }}</td>
                     <td></td>
@@ -203,7 +222,10 @@ function deleteDiemCapPhep(value) {
                             @refresh="onRefresh"
                         />
                     </td>
-                    <td class="text-center"><a @click.prevent="editModal(it)" class="cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
+                    <td class="text-center">
+                        <a @click.prevent="editModal(it)" class="cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a>
+                        <a @click.prevent="remove(it)"  class="edit cursor-pointer" title="Xóa"><i class="fas fa-times-circle mr-1"></i></a>
+                    </td>
                     </tr>
                     <tr v-for="(item,i) in it.doan_duong" :key="i">
                     <td class="text-center" scope="row">
@@ -228,7 +250,10 @@ function deleteDiemCapPhep(value) {
                             @refresh="onRefresh"
                         />
                     </td>
-                    <td class="text-center"><a @click.prevent="editModal(item)" class="cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
+                    <td class="text-center">
+                        <a @click.prevent="editModal(item)" class="cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a>
+                        <a @click.prevent="remove(item)"  class="edit cursor-pointer" title="Xóa"><i class="fas fa-times-circle mr-1"></i></a>
+                    </td>
                     </tr>
                     <tr v-if="!it.cap_phep_id">
                         <td></td>
@@ -269,5 +294,12 @@ function deleteDiemCapPhep(value) {
          :don_vi="don_vi"
          :flag="flag"
      />
+     
+ <Question
+        @close-modal="question.hideModal"
+        @drop="drop"
+        :obj="cap_phep_selected"
+        :msg="msg"
+    />
 </MainLayout>
 </template>

@@ -16,7 +16,7 @@ class CapPhepController extends Controller
 {
     public function index(Request $request)
     {
-        $cap_phep = CapPhep::with([
+        $cap_phep = CapPhep::where('isdelete',0)->where('cap_phep_id',null)->with([
             'don_vi',
             'tai_lieu',
             'tuyen_duong',
@@ -28,10 +28,15 @@ class CapPhepController extends Controller
                 $query->where('ten', 'like', '%'.$request->ten_duong.'%');
             });
         }
-        $cap_phep = $cap_phep->paginate(15);
-        $don_vi = DonVi::all();
+        $cap_phep = $cap_phep->paginate(20);
+        $don_vi = DonVi::where('isdelete',0)->get();
         $tuyen_duong = TuyenDuong::where('isdelete',0)->where('tuyen_duong_id',null)->get();
-        return Inertia::render('CapPhep/Index', compact('cap_phep', 'don_vi', 'tuyen_duong'));
+        if(isset($request->page)) {
+            $stt = $request->page*20 - 19;
+           } else {
+            $stt = 1;
+           }
+        return Inertia::render('CapPhep/Index', compact('cap_phep', 'don_vi', 'tuyen_duong','stt'));
     }
 
     public function store(StoreCapPhepRequest $request)
@@ -41,11 +46,10 @@ class CapPhepController extends Controller
         $cap_phep = CapPhep::updateOrCreate(['id' => $validated['id']],$validated);
     }
    
-    public function deleteDiemCapPhep(Request $request)
+    public function delete(Request $request)
     {
-       /* $obj = CapPhepDiem::find($request->id);
+       $obj = CapPhep::find($request->id);
         $obj->isdelete = 1;
         $obj->save();
-        */
     }
 }

@@ -17,7 +17,7 @@ class DuongCamController extends Controller
 {
     public function index(Request $request)
     {
-        $duong_cam = DuongCam::with([
+        $duong_cam = DuongCam::where('isdelete',0)->where('duong_cam_id',null)->with([
             'tai_lieu',
             'don_vi_quyet_dinh',
             'don_vi_thuc_hien',
@@ -40,11 +40,15 @@ class DuongCamController extends Controller
             $duong_cam = $duong_cam->where('den_ngay', '<=', $request->den_ngay);
         }
 
-        $duong_cam = $duong_cam->paginate(15);
-        $don_vi = DonVi::all();
+        $duong_cam = $duong_cam->paginate(20);
+        $don_vi = DonVi::where('isdelete',0)->get();
         $tuyen_duong = TuyenDuong::where('isdelete',0)->where('tuyen_duong_id',null)->get();
-
-        return Inertia::render('DuongCam/Index', compact('duong_cam', 'don_vi', 'tuyen_duong'));
+        if(isset($request->page)) {
+            $stt = $request->page*20 - 19;
+           } else {
+            $stt = 1;
+           }
+        return Inertia::render('DuongCam/Index', compact('duong_cam', 'don_vi', 'tuyen_duong','stt'));
     }
 
     public function store(StoreDuongCamRequest $request)
@@ -53,19 +57,11 @@ class DuongCamController extends Controller
         unset($validated['tai_lieu']);
         $duong_cam = DuongCam::updateOrCreate(['id' => $validated['id']],$validated);
     }
-
-    public function storeDiemCam(StoreDuongCamDiemRequest $request)
+    public function delete(Request $request)
     {
-
-        $validated = $request->validated();
-        $duong_cam = DiemCam::updateOrCreate(['id' => $validated['id']],$validated);
-    }
-    public function deleteDiem(Request $request)
-    {
-       /* $obj = TuyenDuongDiem::find($request->id);
+       $obj = DuongCam::find($request->id);
         $obj->isdelete = 1;
         $obj->save();
-        */
     }
 
 }

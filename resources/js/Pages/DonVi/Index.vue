@@ -9,10 +9,13 @@ import {_TIME_DEBOUNCE} from "@/Constants/constants.js";
 import {useModal} from "@/Hooks/useModal.js";
 import Modal from "@/Pages/DonVi/Modal.vue";
 import Upload from "@/Components/UploadFile.vue";
+import Question from "@/Components/Question.vue";
+
 const props = defineProps({
     obj: Object,
     loai: String,
     ten: String,
+    stt: Number,
 })
 const key = ref(0);
 const keyModal = ref(0);
@@ -49,20 +52,21 @@ onMounted(() => {
     files[1] = 1;
     files[2] = 2;
     files[3] = 3;
-    eventForEditBtn()
+   // eventForEditBtn()
 })
 
 const onRefresh = () => {
     key.value++
     keyModal.value++
     nextTick(() => {
-        eventForEditBtn()
+   //     eventForEditBtn()
     })
     if (don_vi_selected.value) {
         don_vi_selected.value = props.obj.data.
         find(item => item.id === don_vi_selected.value.id);
     }
 }
+/*
 const eventForEditBtn = () => {
     $('.edit').click(function () {
         const id = $(this).data('id');
@@ -72,7 +76,13 @@ const eventForEditBtn = () => {
         modal.showModal();
     });
 }
-
+*/
+const editModal = (value) => {   
+     don_vi_selected.value = value;
+        keyModal.value++
+        isEdit.value = true;
+        modal.showModal();
+}
 const openModal = () => {
     don_vi_selected.value = null;
     isEdit.value = false;
@@ -124,6 +134,27 @@ keyModal
   input.click();
 }
 // ket thuc
+
+
+
+// ket thuc
+const msg = ref(null);
+const question = useModal('question');
+const remove = (item) => {    
+    msg.value ="Bạn có muốn xóa: "+item.ten +"?";
+    don_vi_selected.value =  item;
+    question.showModal();
+}
+const drop = (item) => {
+    question.hideModal();
+    router.visit(route('don-vi.delete', {id: item.id}), {
+        preserveState: true,
+        onSuccess: () => {
+            onRefresh()
+        }
+    });
+}
+
 </script>
 
 <template>
@@ -151,7 +182,7 @@ keyModal
                 </thead>
                 <tbody>
                     <tr v-for="(item,i) in obj.data" :key="i">
-                    <td class="text-center" scope="row">{{ i+1 }}</td>
+                    <td class="text-center" scope="row">{{ props.stt + i }}</td>
                     <td>{{ item.ten }}</td>
                     <td>{{ item.dia_chi }}</td>
                     <td>{{ item.dien_thoai }}</td>
@@ -169,7 +200,14 @@ keyModal
                             @refresh="onRefresh"
                         />
                     </td>
-                    <td class="text-center"><a :data-id=item.id class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
+                    <td class="text-center">
+                        <!--
+                        <a :data-id=item.id class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a>
+                        -->
+                        <a @click.prevent="editModal(item)" class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a>
+                            
+                        <a @click.prevent="remove(item)"  class="edit cursor-pointer" title="Xóa"><i class="fas fa-times-circle mr-1"></i></a>
+                    </td>
                 </tr>
                 </tbody>
                 </table>
@@ -192,6 +230,11 @@ keyModal
             @refresh="onRefresh"
             :is-edit="isEdit"
             />
-        
+        <Question
+        @close-modal="question.hideModal"
+        @drop="drop"
+        :obj="don_vi_selected"
+        :msg="msg"
+    />
     </MainLayout>
 </template>

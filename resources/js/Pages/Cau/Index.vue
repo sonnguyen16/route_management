@@ -9,12 +9,14 @@ import {nextTick, onMounted, ref, watch} from "vue";
 import { debounce } from 'lodash';
 import {_TIME_DEBOUNCE, maPhanCapOptions} from "@/Constants/constants.js";
 import Upload from "@/Components/UploadFile.vue";
+import Question from "@/Components/Question.vue";
 
 const props = defineProps({
     cau: Object,
     loai_ket_cau_nhip: Object,
     loai_cau: Object,
-    tuyen_duong: Object
+    tuyen_duong: Object,
+    stt: Number,
 })
 
 const cau_selected = ref(null);
@@ -46,20 +48,21 @@ const columns = [
 const modal = useModal('modal');
 
 onMounted(() => {
-    eventForEditBtn()
+   // eventForEditBtn()
 })
 
 const onRefresh = () => {
     key.value++
     keyModal.value++
     nextTick(() => {
-        eventForEditBtn()
+        // eventForEditBtn()
     })
     if (cau_selected.value) {
         cau_selected.value = props.cau.data.
         find(item => item.id === cau_selected.value.id);
     }
 }
+/*
 const eventForEditBtn = () => {
     $('.edit').click(function () {
         const id = $(this).data('id');
@@ -69,6 +72,13 @@ const eventForEditBtn = () => {
         keyModal.value++
         modal.showModal();
     });
+} */
+
+const editModal = (item) => {   
+    cau_selected.value = item;
+    isEdit.value = true;
+    keyModal.value++
+    modal.showModal();
 }
 
 const openModal = () => {
@@ -119,6 +129,23 @@ const chooseFile = (id) => {
     input.click();
 }
 // ket thuc
+
+const msg = ref(null);
+const question = useModal('question');
+const remove = (item) => {    
+    msg.value ="Bạn có muốn xóa: "+ item.ten +"?";
+    cau_selected.value =  item;
+    question.showModal();
+}
+const drop = (item) => {
+    question.hideModal();
+    router.visit(route('cau.delete', {id: item.id}), {
+        preserveState: true,
+        onSuccess: () => {
+            onRefresh()
+        }
+    });
+}
 </script>
 
 <template>
@@ -158,7 +185,7 @@ const chooseFile = (id) => {
                 </thead>
                 <tbody>
                     <tr v-for="(item,i) in cau.data" :key="i">
-                    <td class="text-center" scope="row">{{ i+1 }}</td>  
+                    <td class="text-center" scope="row">{{ props.stt + i }}</td>  
                     <td><a :data-id=item.id class="edit cursor-pointer" title="Sửa">{{ item.ten }}</a></td> 
                     <td>{{ item.loai_cau ? item.loai_cau.ten : ''}}</td>  
                     <td>{{ item.loai_ket_cau_nhip ? item.loai_ket_cau_nhip.ten : ''}}</td>  
@@ -180,7 +207,13 @@ const chooseFile = (id) => {
                             @refresh="onRefresh"
                         />
                     </td>
-                    <td class="text-center"><a :data-id=item.id class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
+                    <td class="text-center">
+                        <a @click.prevent="editModal(item)" class="cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a>
+                        <!--
+                        <a :data-id=item.id class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a>
+                        -->
+                        <a @click.prevent="remove(item)"  class="edit cursor-pointer" title="Xóa"><i class="fas fa-times-circle mr-1"></i></a>
+                    </td>
                 </tr>
                 </tbody>
                 </table>
@@ -200,5 +233,11 @@ const chooseFile = (id) => {
          :loai_cau="loai_cau"
          :tuyen_duong="tuyen_duong"
      />
+     <Question
+        @close-modal="question.hideModal"
+        @drop="drop"
+        :obj="cau_selected"
+        :msg="msg"
+    />
 </MainLayout>
 </template>

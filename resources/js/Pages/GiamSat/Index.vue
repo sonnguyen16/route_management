@@ -9,11 +9,13 @@ import {nextTick, onMounted, ref, watch} from "vue";
 import { debounce } from 'lodash';
 import {_TIME_DEBOUNCE, maPhanCapOptions} from "@/Constants/constants.js";
 import Upload from "@/Components/UploadFile.vue";
+import Question from "@/Components/Question.vue";
 
 const props = defineProps({
     giam_sat: Object,
     tuyen_duong: Object,
     don_vi: Object,
+    stt: Number,
 })
 
 const giam_sat_selected = ref(null);
@@ -141,6 +143,26 @@ const chooseFile = (id) => {
     input.click();
 }
 // ket thuc
+
+// ket thuc
+const msg = ref(null);
+const question = useModal('question');
+const remove = (item) => {    
+    msg.value ="Bạn có muốn xóa: "+( item.hu_hong ? item.hu_hong : item.tuyen_duong.ten) +"?";
+    giam_sat_selected.value =  item;
+    question.showModal();
+}
+const drop = (item) => {
+    question.hideModal();
+    router.visit(route('giam-sat.delete', {id: item.id}), {
+        preserveState: true,
+        onSuccess: () => {
+            onRefresh()
+        }
+    });
+}
+
+
 </script>
 
 <template>
@@ -168,7 +190,7 @@ const chooseFile = (id) => {
                 <tbody>
                     <template v-for="(it, i) in giam_sat.data" :key="i">
                     <tr v-if="!it.giam_sat_id">
-                        <td class="text-center" scope="row">{{ i+1 }}</td>
+                        <td class="text-center" scope="row">{{ props.stt + i }}</td>
                         <td>{{ it.tuyen_duong ? it.tuyen_duong.ten : '' }}</td>
                         <td></td>
                         <td></td>
@@ -185,7 +207,10 @@ const chooseFile = (id) => {
                             <i class="fa fa-paperclip mr-2"></i>
                         </label>
                         </td>
-                        <td class="text-center"><a @click.prevent="editModal(it)" class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
+                        <td class="text-center">
+                            <a @click.prevent="editModal(it)" class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a>
+                            <a @click.prevent="remove(it)"  class="edit cursor-pointer" title="Xóa"><i class="fas fa-times-circle mr-1"></i></a>
+                        </td>
                     </tr>
                    
                     <tr v-for="(item,i) in it.doan_duong" :key="i">
@@ -206,7 +231,10 @@ const chooseFile = (id) => {
                             <i class="fa fa-paperclip mr-2"></i>
                         </label>
                     </td>
-                    <td class="text-center"><a @click.prevent="editModal(item)" class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a></td>
+                    <td class="text-center">
+                        <a @click.prevent="editModal(item)" class="edit cursor-pointer" title="Sửa"><i class="fas fa-edit mr-2"></i></a>
+                        <a @click.prevent="remove(item)"  class="edit cursor-pointer" title="Xóa"><i class="fas fa-times-circle mr-1"></i></a>
+                    </td>
                     </tr>
                     <tr v-if="!it.giam_sat_id">
                         <td class="text-center" scope="row"></td>
@@ -240,5 +268,11 @@ const chooseFile = (id) => {
          :don_vi="don_vi"
          :flag="flag"
      />
+     <Question
+        @close-modal="question.hideModal"
+        @drop="drop"
+        :obj="giam_sat_selected"
+        :msg="msg"
+    />
 </MainLayout>
 </template>

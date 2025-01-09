@@ -84,7 +84,6 @@ const submit = () => {
 
 
 watch(() => props.keyModal, () => {
-    console.log(props.huyen);
     if(props.tuyen_duong) {
         Object.assign(form, props.tuyen_duong);
         form.don_vi_id = props.tuyen_duong.don_vi_id;
