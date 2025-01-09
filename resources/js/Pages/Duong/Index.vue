@@ -26,6 +26,7 @@ const tuyen_duong_cha_selected = ref(null);
 const keyModal = ref(0);
 const flag = ref(false);
 const key = ref(0);
+const item = ref(0);
 const changePage = (page) => {
     router.visit(route('tuyen-duong.index', {page: page, ten_duong: search.value}), {
         preserveState: true,
@@ -39,7 +40,10 @@ const modal = useModal('modal');
 onMounted(() => {
    // eventForEditBtn()
 })
-
+const getItem = () => {
+    item.value = item.value +1;
+    return item.value;
+}
 const onRefresh = () => {
     key.value++
     keyModal.value++

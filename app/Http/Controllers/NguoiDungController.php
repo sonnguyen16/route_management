@@ -16,7 +16,7 @@ class NguoiDungController extends Controller
             $nguoi_dung = User::where('name', 'like', '%'.$request->search.'%')
                 ->orWhere('email', 'like', '%'.$request->search.'%');
         }
-        $nguoi_dung = $nguoi_dung->paginate(10);
+        $nguoi_dung = $nguoi_dung->paginate(100);
         return Inertia::render('NguoiDung/Index', compact('nguoi_dung'));
     }
 

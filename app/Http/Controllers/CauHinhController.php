@@ -18,7 +18,7 @@ class CauHinhController extends Controller
         if($request->loai) {
             $cau_hinh = $cau_hinh->where('loai', str_replace('-','_',$request->loai));
         }
-        $cau_hinh = $cau_hinh->paginate(10);
+        $cau_hinh = $cau_hinh->paginate(100);
         $loai = str_replace('-','_',$request->loai);
         $ten = '';
         $linkback='';
