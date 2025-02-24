@@ -165,11 +165,11 @@ const addAllRoutes = () => {
             'text-keep-upright': false
           },
           paint: {
-            //'text-color': 'blue', // màu của chữ
+            'text-color': 'blue', // màu của chữ
             'text-halo-color': 'white', // đường viền của chữ
-            'text-halo-width': 1 // độ đậm của đường viền
-            //'line-opacity': 0.5,
-            //'line-dasharray': [0, 2]
+            'text-halo-width': 1, // độ đậm của đường viền
+            'line-opacity': 0.5,
+            'line-dasharray': [0, 2]
           }
         })
       }
@@ -219,17 +219,15 @@ const addMarker = (point, name, iconUrl, iconId) => {
         'icon-size': 0.4,
         'text-field': name,
         'text-size': 10,
-        'text-color': 'blue',
         'text-offset': [0, 1.25],
         'text-anchor': 'top'
       },
       paint: {
-        // "text-color": "#000000",
-        //'text-color': 'blue', // màu của chữ
+        'text-color': 'blue', // màu của chữ
         'text-halo-color': 'white', // đường viền của chữ
-        'text-halo-width': 1 // độ đậm của đường viền
-        //'line-opacity': 0.5,
-        //'line-dasharray': [0, 2]
+        'text-halo-width': 1, // độ đậm của đường viền
+        'line-opacity': 0.5,
+        'line-dasharray': [0, 2]
       }
     })
 
