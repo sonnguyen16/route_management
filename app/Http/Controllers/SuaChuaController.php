@@ -16,6 +16,7 @@ use App\Models\TaiLieu;
 use App\Models\CauHinh;
 use App\Enums\DanhMucTaiLieu;
 use Illuminate\Support\Facades\DB;
+use App\Models\ToaDo;
 
 class SuaChuaController extends Controller
 {
@@ -24,7 +25,7 @@ class SuaChuaController extends Controller
         $sua_chua = SuaChua::where('isdelete',0)
         ->where('sua_chua_id',null)
         ->whereRaw('tuyen_duong_id in (select id from tuyen_duong where isdelete = 0)')
-        ->with(['tai_lieu','tuyen_duong', 'don_vi', 'nguoi_duyet','loai_sua_chua','doan_duong','doan_duong.don_vi','doan_duong.loai_sua_chua']);
+        ->with([ 'tai_lieu','tuyen_duong', 'don_vi', 'nguoi_duyet','loai_sua_chua','doan_duong.toa_do','doan_duong.don_vi','doan_duong.loai_sua_chua']);
         if($request->filled('ten_duong')){
             $sua_chua = $sua_chua->whereHas('tuyen_duong', function($query) use ($request){
                 $query->where('ten', 'like', '%'.$request->ten_duong.'%');
@@ -40,7 +41,7 @@ class SuaChuaController extends Controller
         }
 
         $sua_chua = $sua_chua->paginate(20);
-       
+
         $tuyen_duong = TuyenDuong::where('isdelete',0)->where('tuyen_duong_id',null)->get();
         $don_vi = DonVi::where('isdelete',0)->get();
         $nguoi_duyet = User::all();
@@ -55,10 +56,25 @@ class SuaChuaController extends Controller
 
     public function store(StoreSuaChuaRequest $request)
     {
-        
         $validated = $request->validated();
         unset($validated['tai_lieu']);
         $sua_chua = SuaChua::updateOrCreate(['id' => $validated['id']],$validated);
+
+        ToaDo::where('parent_id', $sua_chua->id)->delete();
+
+        // Nếu route_geometry đã là mảng, không cần json_decode
+        $coordinates = is_string($validated['route_geometry'])
+        ? json_decode($validated['route_geometry'], true)['coordinates']
+        : $validated['route_geometry']['coordinates'];
+
+        foreach ($coordinates as $coordinate) {
+            ToaDo::create([
+                'parent_id' => $sua_chua->id,
+                'lng' => $coordinate[0],
+                'lat' => $coordinate[1],
+                'type' => 'sua_chua',
+            ]);
+        }
     }
     public function delete(Request $request)
     {

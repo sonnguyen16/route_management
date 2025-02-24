@@ -59,4 +59,9 @@ class SuaChua extends Model
     {
         return $this->hasMany(SuaChua::class, 'sua_chua_id', 'id')->where('isdelete',0);
     }
+
+    public function toa_do()
+    {
+        return $this->hasMany(ToaDo::class, 'parent_id', 'id')->where('type', 'sua_chua');
+    }
 }

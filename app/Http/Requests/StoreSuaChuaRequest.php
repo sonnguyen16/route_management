@@ -33,6 +33,7 @@ class StoreSuaChuaRequest extends FormRequest
             'ngay_hoan_thanh' => 'nullable',
             'noi_dung' => 'nullable',
             'sua_chua_id' => 'nullable',
+            'route_geometry' => 'nullable',
         ];
     }
     /**
