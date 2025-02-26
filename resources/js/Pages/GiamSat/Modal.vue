@@ -162,12 +162,12 @@ const handleRouteSelect = (route) => {
                 />
               </div>
 
-              <div class="form-group">
+              <div class="form-group" :class="[props.flag ? '' : 'disable_tr']">
                 <label for="tu_km_id">Chọn tuyến đường</label>
                 <button class="btn btn-info btn-sm mb-3 w-1/2" @click="openMapModal">📍 Chọn tuyến đường</button>
               </div>
 
-              <div v-if="routeCoords" class="form-group">
+              <div v-if="routeCoords" class="form-group" :class="[props.flag ? '' : 'disable_tr']">
                 <label for="tu_km_id">Tọa độ đã chọn:</label>
                 <div class="flex gap-3">
                   <input type="text" class="form-control mb-3" v-model="routeCoords.start" />

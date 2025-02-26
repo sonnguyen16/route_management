@@ -155,9 +155,7 @@ const addAllRoutes = (type) => {
   if (!route || route.length === 0) return
 
   props[type].forEach((item) => {
-    const routesToProcess = type === 'giam_sat' ? [item] : item.doan_duong
-
-    routesToProcess.forEach((route) => {
+    item.doan_duong?.forEach((route) => {
       const coordinates = route.toa_do.map((point) => [point.lng, point.lat])
       if (coordinates.length === 0) return
 
@@ -234,7 +232,6 @@ const addRouteClickEvent = (routeId) => {
   map.on('click', routeId, (e) => {
     const properties = e.features[0].properties
     const tuyenDuong = JSON.parse(properties.tuyen_duong) // Chuyển từ string về object
-    console.log(tuyenDuong)
     selectedRoute.value = tuyenDuong
     isSheetOpen.value = true
   })
@@ -242,8 +239,7 @@ const addRouteClickEvent = (routeId) => {
 
 const removeAllRoutes = (type) => {
   props[type].forEach((item) => {
-    const routesToProcess = type === 'giam_sat' ? [item] : item.doan_duong
-    routesToProcess.forEach((route) => {
+    item.doan_duong?.forEach((route) => {
       const routeId = `${type}-${route.id}`
       const routeNameId = `route-name-${route.id}`
 

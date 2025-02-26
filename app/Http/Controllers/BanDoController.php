@@ -29,7 +29,7 @@ class BanDoController extends Controller
         ])->where('isdelete', 0)->get();
 
         $giam_sat = GiamSat::with([
-            'toa_do',
+            'doan_duong.toa_do',
             'tuyen_duong',
         ])->where('isdelete', 0)->get();
 
