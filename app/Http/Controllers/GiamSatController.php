@@ -20,13 +20,12 @@ class GiamSatController extends Controller
         ->where('giam_sat_id',null)
         ->whereRaw('tuyen_duong_id in (select id from tuyen_duong where isdelete = 0)')
         ->with([
-            'toa_do',
             'tai_lieu',
             'tuyen_duong',
             'tuyen_duong.diem_dau_xa',
             'tuyen_duong.diem_cuoi_xa',
             'tuyen_duong.loai_tuyen_duong',
-            'don_vi','doan_duong']);
+            'don_vi','doan_duong.toa_do']);
 
         if($request->filled('ten_duong')){
             $giam_sat = $giam_sat->whereHas('tuyen_duong', function($query){
