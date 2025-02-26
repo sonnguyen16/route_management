@@ -47,4 +47,9 @@ class CapPhep extends Model
     {
         return $this->hasMany(CapPhep::class, 'cap_phep_id', 'id')->where('isdelete',0);
     }
+
+    public function toa_do()
+    {
+        return $this->hasMany(ToaDo::class, 'parent_id', 'id')->where('type', 'cap_phep');
+    }
 }

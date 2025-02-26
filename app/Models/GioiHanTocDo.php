@@ -53,4 +53,9 @@ class GioiHanTocDo extends Model
     {
         return $this->hasMany(GioiHanTocDo::class, 'gioi_han_toc_do_id', 'id')->where('isdelete',0);
     }
+
+    public function toa_do()
+    {
+        return $this->hasMany(ToaDo::class, 'parent_id', 'id')->where('type', 'toc_do');
+    }
 }

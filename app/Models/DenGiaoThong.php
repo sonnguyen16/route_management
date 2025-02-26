@@ -20,6 +20,8 @@ class DenGiaoThong extends Model
         'isdelete',
         'tai_lieu',
         'ngay_lap_dat',
+        'lat',
+        'lng'
     ];
     public function tai_lieu()
     {

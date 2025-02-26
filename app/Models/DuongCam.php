@@ -51,4 +51,9 @@ class DuongCam extends Model
     {
         return $this->hasMany(DuongCam::class, 'duong_cam_id', 'id')->where('isdelete',0);
     }
+
+    public function toa_do()
+    {
+        return $this->hasMany(ToaDo::class, 'parent_id', 'id')->where('type', 'duong_cam');
+    }
 }

@@ -29,13 +29,15 @@ class StoreDenGiaoThongRequest extends FormRequest
             'thoi_gian_hoat_dong' => 'nullable',
             'vi_tri' => 'nullable',
             'ngay_lap_dat' => 'nullable',
+            'lat' => 'nullable',
+            'lng' => 'nullable'
         ];
     }
     public function messages(): array
     {
         return [
             'nut_giao.required' => 'Nút giao không được để trống',
-            /*            
+            /*
             'so_pha_den.required' => 'Số pha đèn không được để trống',
             'thoi_gian_pha_den.required' => 'Thời gian pha đèn không để trống loại',
             'thoi_gian_hoat_dong.required' => 'Thời gian hoạt động không để trống loại',

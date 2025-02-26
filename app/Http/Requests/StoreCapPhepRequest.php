@@ -32,6 +32,7 @@ class StoreCapPhepRequest extends FormRequest
             'den_km' => 'nullable',
             'noi_dung' => 'nullable',
             'cap_phep_id' => 'nullable',
+            'route_geometry' => 'nullable'
         ];
     }
 

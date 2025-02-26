@@ -10,8 +10,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\CapPhep;
 use App\Http\Requests\StoreCapPhepRequest;
-use App\Http\Requests\StoreCapPhepDiemRequest;
-use Illuminate\Support\Facades\DB;
+use App\Models\ToaDo;
 
 class CapPhepController extends Controller
 {
@@ -24,7 +23,7 @@ class CapPhepController extends Controller
             'don_vi',
             'tai_lieu',
             'tuyen_duong',
-            'doan_duong',
+            'doan_duong.toa_do',
             'doan_duong.don_vi'
         ]);
         if($request->filled('ten_duong')){
@@ -48,8 +47,25 @@ class CapPhepController extends Controller
         $validated = $request->validated();
         unset($validated['tai_lieu']);
         $cap_phep = CapPhep::updateOrCreate(['id' => $validated['id']],$validated);
+
+        if($request->filled('route_geometry')){
+            ToaDo::where('parent_id', $cap_phep->id)->delete();
+
+            $coordinates = is_string($validated['route_geometry'])
+            ? json_decode($validated['route_geometry'], true)['coordinates']
+            : $validated['route_geometry']['coordinates'];
+
+            foreach ($coordinates as $coordinate) {
+                ToaDo::create([
+                    'parent_id' => $cap_phep->id,
+                    'lng' => $coordinate[0],
+                    'lat' => $coordinate[1],
+                    'type' => 'cap_phep',
+                ]);
+            }
+        }
     }
-   
+
     public function delete(Request $request)
     {
        $obj = CapPhep::find($request->id);

@@ -33,6 +33,7 @@ class StoreDuongCamRequest extends FormRequest
             'den_km' => 'nullable', //'required|string',
             'noi_dung' => 'nullable', //'required|string',
             'duong_cam_id' => 'nullable', //'required|string',
+            'route_geometry' => 'nullable',
         ];
     }
 

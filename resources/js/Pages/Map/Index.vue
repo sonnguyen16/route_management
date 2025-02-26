@@ -1,8 +1,25 @@
 <template>
   <MainLayout>
-    <div class="cont">
+    <div class="cont position-relative">
       <div ref="mapContainer" class="map-container"></div>
       <Popup :selectedRoute="selectedRoute" :is-sheet-open="isSheetOpen" @close-sheet="closeSheet" />
+      <!-- list checkbox filter tyoe -->
+      <div class="absolute top-0 left-0 p-3 z-10">
+        <div class="bg-white p-3 rounded-lg shadow-lg">
+          <div class="">
+            <h3 class="text-lg font-semibold">Bộ lọc</h3>
+          </div>
+          <div>
+            <div class="grid grid-cols-2 gap-3" v-for="t in type" :key="t.type">
+              <div>
+                <input type="checkbox" class="rounded-sm" :id="t.type" :value="t.type" v-model="filterType" />
+                <label :for="t.type" class="ml-2">{{ t.name }}</label>
+              </div>
+              <div class="w-6 h-6 rounded-sm" :style="{ backgroundColor: t.color }"></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </MainLayout>
 </template>
@@ -17,13 +34,58 @@ import { danhMucTaiLieuOptions, iconFileTypes } from '@/Constants/constants.js'
 import { useForm } from '@inertiajs/vue3'
 
 const props = defineProps({
-  tuyen_duong: Object,
-  toa_do_khac: Object
+  sua_chua: Object,
+  duong_cam: Object,
+  giam_sat: Object,
+  toc_do: Object,
+  cap_phep: Object,
+  cau: Object,
+  den_giao_thong: Object
+})
+
+const type = [
+  {
+    type: 'sua_chua',
+    name: 'Sửa chữa',
+    color: '#00ff00'
+  },
+  {
+    type: 'duong_cam',
+    name: 'Đường cấm',
+    color: '#ff0000'
+  },
+  {
+    type: 'giam_sat',
+    name: 'Giám sát',
+    color: '#0000ff'
+  },
+  {
+    type: 'toc_do',
+    name: 'Tốc độ',
+    color: '#ff6600'
+  },
+  {
+    type: 'cap_phep',
+    name: 'Cấp phép',
+    color: '#ffff00'
+  }
+]
+
+const filterType = ref(['sua_chua'])
+
+watch(filterType, (newValue) => {
+  type.forEach((t) => {
+    if (!newValue.includes(t.type)) {
+      removeAllRoutes(t.type)
+    }
+  })
+  newValue.forEach((type) => {
+    addAllRoutes(type)
+  })
 })
 
 const selectedRoute = ref(null)
 const isSheetOpen = ref(false)
-const selectedRouteId = ref(null)
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN
 
@@ -31,86 +93,77 @@ const mapContainer = ref()
 let map = null
 
 onMounted(() => {
-  // Khởi tao map
+  // Khởi tạo map
   map = new mapboxgl.Map({
     container: mapContainer.value,
     style: 'mapbox://styles/mapbox/streets-v12',
-    center: [107.161001, 10.43639],
-    zoom: 17
+    center: [107.242997, 10.495088],
+    zoom: 12
   })
 
   // Thêm đường các các điểm km, cầu vào map
   map.on('load', () => {
-    addAllRoutes()
-    for (let i = 0; i < props.toa_do_khac?.length; i++) {
-      const img_url = props.toa_do_khac[i]?.loai === 2 ? '/bridge.png' : '/Km3.png'
-      const iconId = props.toa_do_khac[i]?.loai === 2 ? 'bridge-marker-icon' : 'km-marker-icon'
-      addMarker(props.toa_do_khac[i], props.toa_do_khac[i]?.ten, img_url, iconId)
-    }
-  })
-
-  // Thêm sự kiện click vào map hiện thông tin đường
-  map.on('click', (e) => {
-    const features = map.queryRenderedFeatures(e.point, {
-      layers: props.tuyen_duong.map((_) => `${_.id}`)
+    map.loadImage('/bridge.png', (error, image) => {
+      if (!error && !map.hasImage('bridge-marker-icon')) {
+        map.addImage('bridge-marker-icon', image)
+      }
     })
 
-    if (features.length > 0) {
-      const clickedRoute = features[0]
-      const routeId = clickedRoute.properties.id
-      selectedRouteId.value = routeId
-
-      const route = props.tuyen_duong.find((r) => String(r.id) === routeId)
-
-      if (!isSheetOpen.value) {
-        map.setPaintProperty(clickedRoute.layer.id, 'line-color', '#ff0000')
-        isSheetOpen.value = true
-        selectedRoute.value = route
-      } else {
-        map.setPaintProperty(clickedRoute.layer.id, 'line-color', '#00ff00')
-        isSheetOpen.value = false
-        selectedRoute.value = null
+    map.loadImage('/traffic-light.png', (error, image) => {
+      if (!error && !map.hasImage('traffic-light-marker-icon')) {
+        map.addImage('traffic-light-marker-icon', image)
       }
-    }
-  })
+    })
 
-  // Load các icon km và cầu
-  map.loadImage('/Km3.png', (error, image) => {
-    if (error) throw error
-    map.addImage('km-marker-icon', image)
-  })
+    filterType.value.forEach((type) => {
+      addAllRoutes(type)
+    })
 
-  map.loadImage('/bridge.png', (error, image) => {
-    if (error) throw error
-    map.addImage('bridge-marker-icon', image)
-  })
-})
+    props.cau?.forEach((item) => {
+      addMarker(item.lng, item.lat, item.ten, '/bridge.png', `bridge-marker-icon`, item.id)
+    })
 
-watch(props.tuyen_duong, () => {
-  if (map && map.isStyleLoaded()) {
-    addAllRoutes()
-  }
+    props.den_giao_thong?.forEach((item) => {
+      addMarker(item.lng, item.lat, item.nut_giao, '/traffic-light.png', `traffic-light-marker-icon`, item.id)
+    })
+  })
 })
 
 const closeSheet = () => {
   isSheetOpen.value = false
-  map.setPaintProperty(String(selectedRoute.value.id), 'line-color', '#0000ff')
-  selectedRoute.value = null
+}
+
+const getColor = (type) => {
+  switch (type) {
+    case 'sua_chua':
+      return '#00ff00'
+    case 'duong_cam':
+      return '#ff0000'
+    case 'giam_sat':
+      return '#0000ff'
+    case 'toc_do':
+      return '#ff6600'
+    case 'cap_phep':
+      return '#ffff00'
+    default:
+      return '#000000'
+  }
 }
 
 // Hàm vẽ đường và tên đường
-const addAllRoutes = () => {
-  if (!props.tuyen_duong || props.tuyen_duong.length === 0) return
+const addAllRoutes = (type) => {
+  if (!route || route.length === 0) return
 
-  props.tuyen_duong.forEach((td) => {
-    td.doan_duong.forEach((route) => {
+  props[type].forEach((item) => {
+    const routesToProcess = type === 'giam_sat' ? [item] : item.doan_duong
+
+    routesToProcess.forEach((route) => {
       const coordinates = route.toa_do.map((point) => [point.lng, point.lat])
       if (coordinates.length === 0) return
 
-      const routeId = `${route.id}`
+      const routeId = `${type}-${route.id}`
       const routeNameId = `route-name-${route.id}`
 
-      // Tạo geojson
       const geojson = {
         type: 'Feature',
         geometry: {
@@ -119,21 +172,19 @@ const addAllRoutes = () => {
         },
         properties: {
           id: routeId,
-          ten_duong: `Sửa chữa - đường ${td.tuyen_duong.ten}` || `Đường ${route.id}`
+          ten_duong: `Đường ${item.tuyen_duong.ten}` || `Đường ${route.id}`,
+          tuyen_duong: JSON.stringify(item.tuyen_duong)
         }
       }
 
       if (map.getSource(routeId)) {
-        // Cập nhật source đường
         map.getSource(routeId).setData(geojson)
       } else {
-        // Thêm source đường
         map.addSource(routeId, {
           type: 'geojson',
           data: geojson
         })
 
-        // Thêm layer đường
         map.addLayer({
           id: routeId,
           type: 'line',
@@ -143,11 +194,11 @@ const addAllRoutes = () => {
             'line-cap': 'round'
           },
           paint: {
-            'line-color': '#00ff00',
+            'line-color': getColor(type),
             'line-width': 5
           }
         })
-        // Thêm layer tên đường
+
         map.addLayer({
           id: routeNameId,
           type: 'symbol',
@@ -171,7 +222,54 @@ const addAllRoutes = () => {
           }
         })
       }
+      //   addRouteClickEvent(routeId)
     })
+  })
+
+  moveMarkersToTop()
+}
+
+const addRouteClickEvent = (routeId) => {
+  console.log(routeId)
+  map.on('click', routeId, (e) => {
+    const properties = e.features[0].properties
+    const tuyenDuong = JSON.parse(properties.tuyen_duong) // Chuyển từ string về object
+    console.log(tuyenDuong)
+    selectedRoute.value = tuyenDuong
+    isSheetOpen.value = true
+  })
+}
+
+const removeAllRoutes = (type) => {
+  props[type].forEach((item) => {
+    const routesToProcess = type === 'giam_sat' ? [item] : item.doan_duong
+    routesToProcess.forEach((route) => {
+      const routeId = `${type}-${route.id}`
+      const routeNameId = `route-name-${route.id}`
+
+      if (map.getSource(routeId)) {
+        map.removeLayer(routeId)
+        map.removeLayer(routeNameId)
+        map.removeSource(routeId)
+      }
+    })
+  })
+}
+
+const moveMarkersToTop = () => {
+  // Di chuyển các marker của cầu và đèn giao thông lên trên các tuyến đường
+  props.cau?.forEach((item) => {
+    const markerId = `bridge-marker-icon-${item.id}`
+    if (map.getLayer(markerId)) {
+      map.moveLayer(markerId)
+    }
+  })
+
+  props.den_giao_thong?.forEach((item) => {
+    const markerId = `traffic-light-marker-icon-${item.id}`
+    if (map.getLayer(markerId)) {
+      map.moveLayer(markerId)
+    }
   })
 }
 
@@ -186,13 +284,13 @@ const formMota = useForm({
   toa_do_id: ''
 })
 // Hàm thêm marker
-const addMarker = (point, name, iconUrl, iconId) => {
+const addMarker = (lng, lat, name, iconUrl, iconId, id) => {
   // Tạo geojson
   const markerGeojson = {
     type: 'Feature',
     geometry: {
       type: 'Point',
-      coordinates: [point?.lng, point?.lat]
+      coordinates: [lng, lat]
     },
     properties: {
       name: name,
@@ -200,18 +298,18 @@ const addMarker = (point, name, iconUrl, iconId) => {
     }
   }
 
-  if (!map.getSource(`marker-${point.id}`)) {
+  if (!map.getSource(`${iconId}-${id}`)) {
     // Thêm source marker
-    map.addSource(`marker-${point.id}`, {
+    map.addSource(`${iconId}-${id}`, {
       type: 'geojson',
       data: markerGeojson
     })
 
     // Thêm layer marker
     map.addLayer({
-      id: `marker-${point.id}`,
+      id: `${iconId}-${id}`,
       type: 'symbol',
-      source: `marker-${point.id}`,
+      source: `${iconId}-${id}`,
       layout: {
         'icon-image': iconId,
         'icon-size': 0.4,
@@ -228,7 +326,7 @@ const addMarker = (point, name, iconUrl, iconId) => {
     })
 
     // Thêm sự kiện click vào marker
-    map.on('click', `marker-${point.id}`, (e) => {
+    map.on('click', `${iconId}-${id}`, (e) => {
       const coordinates = e.lngLat
       formFile.toa_do_id = point.id
       formMota.toa_do_id = point.id

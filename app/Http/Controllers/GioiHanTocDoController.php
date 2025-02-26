@@ -10,7 +10,7 @@ use App\Models\TaiLieu;
 use App\Enums\DanhMucTaiLieu;
 use App\Models\TuyenDuong;
 use App\Models\DonVi;
-use Illuminate\Support\Facades\DB;
+use App\Models\ToaDo;
 
 class GioiHanTocDoController extends Controller
 {
@@ -23,7 +23,7 @@ class GioiHanTocDoController extends Controller
             'tai_lieu',
             'tuyen_duong',
             'tuyen_duong.diem_dau_xa',
-            'tuyen_duong.diem_cuoi_xa','tuyen_duong.loai_tuyen_duong','don_vi_thuc_hien','doan_duong','don_vi','doan_duong.don_vi','doan_duong.don_vi_thuc_hien']);
+            'tuyen_duong.diem_cuoi_xa','tuyen_duong.loai_tuyen_duong','don_vi_thuc_hien','doan_duong.toa_do','don_vi','doan_duong.don_vi','doan_duong.don_vi_thuc_hien']);
         if($request->filled('ten_duong')) {
             $gioi_han_toc_do = $gioi_han_toc_do->whereHas('tuyen_duong', function($query) use ($request) {
                 $query->where('ten', 'like', '%'.$request->ten_duong.'%');
@@ -45,6 +45,23 @@ class GioiHanTocDoController extends Controller
         $validated = $request->validated();
         unset($validated['tai_lieu']);
         $toc_do = GioiHanTocDo::updateOrCreate(['id' => $validated['id']],$validated);
+
+        if($request->filled('route_geometry')){
+            ToaDo::where('parent_id', $toc_do->id)->delete();
+
+            $coordinates = is_string($validated['route_geometry'])
+            ? json_decode($validated['route_geometry'], true)['coordinates']
+            : $validated['route_geometry']['coordinates'];
+
+            foreach ($coordinates as $coordinate) {
+                ToaDo::create([
+                    'parent_id' => $toc_do->id,
+                    'lng' => $coordinate[0],
+                    'lat' => $coordinate[1],
+                    'type' => 'toc_do',
+                ]);
+            }
+        }
     }
     public function delete(Request $request)
     {
@@ -52,5 +69,5 @@ class GioiHanTocDoController extends Controller
         $obj->isdelete = 1;
         $obj->save();
     }
-    
+
 }

@@ -17,6 +17,8 @@ use App\Http\Controllers\CauHinhController;
 use App\Http\Controllers\DiemTaiNanController;
 use App\Http\Controllers\DenGiaoThongController;
 use App\Http\Controllers\CauController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 Route::get('/', [AuthController::class, 'index'])->name('index');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
@@ -45,7 +47,7 @@ Route::prefix('don-vi')->middleware('auth')->group(function () {
 
 Route::prefix('sua-chua')->middleware('auth')->group(function () {
     Route::get('/', [SuaChuaController::class, 'index'])->name('sua-chua.index');
-    Route::post('/store', [SuaChuaController::class, 'store'])->name('sua-chua.store');    
+    Route::post('/store', [SuaChuaController::class, 'store'])->name('sua-chua.store');
     Route::get('/delete/{id}', [SuaChuaController::class, 'delete'])->name('sua-chua.delete');
 });
 
@@ -110,4 +112,19 @@ Route::prefix('cau')->middleware('auth')->group(function () {
     Route::get('/', [CauController::class, 'index'])->name('cau.index');
     Route::post('/store', [CauController::class, 'store'])->name('cau.store');
     Route::get('/delete/{id}', [CauController::class, 'delete'])->name('cau.delete');
+});
+
+Route::get('/proxy-osrm', function (Request $request) {
+    $start = $request->query('start');
+    $end = $request->query('end');
+
+    if (!$start || !$end) {
+        return response()->json(['error' => 'Thiếu tham số tọa độ'], 400);
+    }
+
+    $url = "https://router.project-osrm.org/route/v1/driving/$start;$end?overview=full&geometries=geojson";
+
+    $response = Http::get($url);
+
+    return $response->json(); // Trả về JSON cho frontend
 });

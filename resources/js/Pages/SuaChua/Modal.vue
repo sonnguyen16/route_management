@@ -1,11 +1,8 @@
 <script setup>
 import Input from '@/Components/Input.vue'
-import { router, useForm } from '@inertiajs/vue3'
+import { useForm } from '@inertiajs/vue3'
 import Select from '@/Components/Select.vue'
 import { ref, watch } from 'vue'
-import { formatDate } from '@/assets/js/script.js'
-import Upload from '@/Components/Upload.vue'
-import File from '@/Components/File.vue'
 import MapModal from '@/Components/MapModal.vue'
 
 const props = defineProps({
@@ -62,11 +59,15 @@ watch(
   () => {
     if (props.sua_chua) {
       Object.assign(form, props.sua_chua)
-      routeCoords.value = {
-        start: `${props.sua_chua.toa_do[0]?.lng || ''}, ${props.sua_chua.toa_do[0]?.lat || ''}`,
-        end: `${props.sua_chua.toa_do[props.sua_chua.toa_do.length - 1]?.lng || ''}, ${
-          props.sua_chua.toa_do[props.sua_chua.toa_do.length - 1]?.lat || ''
-        }`
+      if (props.sua_chua.toa_do?.length > 0) {
+        routeCoords.value = {
+          start: `${props.sua_chua.toa_do[0]?.lng || ''}, ${props.sua_chua.toa_do[0]?.lat || ''}`,
+          end: `${props.sua_chua.toa_do[props.sua_chua.toa_do.length - 1]?.lng || ''}, ${
+            props.sua_chua.toa_do[props.sua_chua.toa_do.length - 1]?.lat || ''
+          }`
+        }
+      } else {
+        routeCoords.value = null
       }
     } else {
       form.reset()

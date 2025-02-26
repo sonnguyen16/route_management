@@ -60,20 +60,21 @@ class SuaChuaController extends Controller
         unset($validated['tai_lieu']);
         $sua_chua = SuaChua::updateOrCreate(['id' => $validated['id']],$validated);
 
-        ToaDo::where('parent_id', $sua_chua->id)->delete();
+        if($request->filled('route_geometry')){
+            ToaDo::where('parent_id', $sua_chua->id)->delete();
 
-        // Nếu route_geometry đã là mảng, không cần json_decode
-        $coordinates = is_string($validated['route_geometry'])
-        ? json_decode($validated['route_geometry'], true)['coordinates']
-        : $validated['route_geometry']['coordinates'];
+            $coordinates = is_string($validated['route_geometry'])
+            ? json_decode($validated['route_geometry'], true)['coordinates']
+            : $validated['route_geometry']['coordinates'];
 
-        foreach ($coordinates as $coordinate) {
-            ToaDo::create([
-                'parent_id' => $sua_chua->id,
-                'lng' => $coordinate[0],
-                'lat' => $coordinate[1],
-                'type' => 'sua_chua',
-            ]);
+            foreach ($coordinates as $coordinate) {
+                ToaDo::create([
+                    'parent_id' => $sua_chua->id,
+                    'lng' => $coordinate[0],
+                    'lat' => $coordinate[1],
+                    'type' => 'sua_chua',
+                ]);
+            }
         }
     }
     public function delete(Request $request)

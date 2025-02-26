@@ -4,15 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\DonVi;
 use App\Models\DuongCam;
-use App\Models\DiemCam;
 use App\Http\Requests\StoreDuongCamRequest;
-use App\Http\Requests\StoreDuongCamDiemRequest;
 use App\Models\TuyenDuong;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Models\TaiLieu;
-use App\Enums\DanhMucTaiLieu;
-use Illuminate\Support\Facades\DB;
+use App\Models\ToaDo;
+
 class DuongCamController extends Controller
 {
     public function index(Request $request)
@@ -25,7 +22,7 @@ class DuongCamController extends Controller
             'don_vi_quyet_dinh',
             'don_vi_thuc_hien',
             'tuyen_duong',
-            'doan_duong',
+            'doan_duong.toa_do',
             'doan_duong.don_vi_quyet_dinh',
             'doan_duong.don_vi_thuc_hien'
         ]);
@@ -59,6 +56,23 @@ class DuongCamController extends Controller
         $validated = $request->validated();
         unset($validated['tai_lieu']);
         $duong_cam = DuongCam::updateOrCreate(['id' => $validated['id']],$validated);
+
+        if($request->filled('route_geometry')){
+            ToaDo::where('parent_id', $duong_cam->id)->delete();
+
+            $coordinates = is_string($validated['route_geometry'])
+            ? json_decode($validated['route_geometry'], true)['coordinates']
+            : $validated['route_geometry']['coordinates'];
+
+            foreach ($coordinates as $coordinate) {
+                ToaDo::create([
+                    'parent_id' => $duong_cam->id,
+                    'lng' => $coordinate[0],
+                    'lat' => $coordinate[1],
+                    'type' => 'duong_cam',
+                ]);
+            }
+        }
     }
     public function delete(Request $request)
     {

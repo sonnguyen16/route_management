@@ -31,6 +31,7 @@ class StoreGiamSatRequest extends FormRequest
             'muc_do' => 'nullable',
             'tinh_trang_khac_phuc' => 'nullable',
             'giam_sat_id' => 'nullable',
+            'route_geometry' => 'nullable',
         ];
     }
 

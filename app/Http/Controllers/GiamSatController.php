@@ -10,7 +10,7 @@ use Inertia\Inertia;
 use App\Models\GiamSat;
 use App\Models\DonVi;
 use App\Http\Requests\StoreGiamSatRequest;
-use Illuminate\Support\Facades\DB;
+use App\Models\ToaDo;
 
 class GiamSatController extends Controller
 {
@@ -20,6 +20,7 @@ class GiamSatController extends Controller
         ->where('giam_sat_id',null)
         ->whereRaw('tuyen_duong_id in (select id from tuyen_duong where isdelete = 0)')
         ->with([
+            'toa_do',
             'tai_lieu',
             'tuyen_duong',
             'tuyen_duong.diem_dau_xa',
@@ -48,6 +49,23 @@ class GiamSatController extends Controller
        $validated = $request->validated();
         // unset($validated['tai_lieu']);
         $giam_sat = GiamSat::updateOrCreate(['id' => $validated['id']],$validated);
+
+        if($request->filled('route_geometry')){
+            ToaDo::where('parent_id', $giam_sat->id)->delete();
+
+            $coordinates = is_string($validated['route_geometry'])
+            ? json_decode($validated['route_geometry'], true)['coordinates']
+            : $validated['route_geometry']['coordinates'];
+
+            foreach ($coordinates as $coordinate) {
+                ToaDo::create([
+                    'parent_id' => $giam_sat->id,
+                    'lng' => $coordinate[0],
+                    'lat' => $coordinate[1],
+                    'type' => 'giam_sat',
+                ]);
+            }
+        }
     }
     public function delete(Request $request)
     {

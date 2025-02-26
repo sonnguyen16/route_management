@@ -40,4 +40,9 @@ class GiamSat extends Model
     {
         return $this->hasMany(GiamSat::class, 'giam_sat_id','id')->where('isdelete',0);
     }
+
+    public function toa_do()
+    {
+        return $this->hasMany(ToaDo::class, 'parent_id', 'id')->where('type', 'giam_sat');
+    }
 }

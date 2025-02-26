@@ -32,6 +32,7 @@ class StoreGioiHanTocDoRequest extends FormRequest
             'don_vi_id' =>'nullable',
             'gioi_han_toc_do_id' => 'nullable',
             'don_vi_thuc_hien_id' => 'nullable',
+            'route_geometry' => 'nullable',
         ];
     }
 

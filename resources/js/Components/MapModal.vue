@@ -25,7 +25,16 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 
 const props = defineProps({
   show: Boolean,
-  existingRoute: Array
+  existingRoute: Array,
+  existingMarker: Array,
+  type: {
+    type: String,
+    default: 'bridge'
+  },
+  mode: {
+    type: String,
+    default: 'multiple'
+  }
 })
 
 const emits = defineEmits(['close', 'selectRoute'])
@@ -50,27 +59,72 @@ onMounted(() => {
     if (props.existingRoute && props.existingRoute.length > 0) {
       drawExistingRoute(props.existingRoute)
     }
+    if (props.existingMarker[0] && props.existingMarker[1]) {
+      addCustomMarker(props.existingMarker, props.type)
+    }
+  })
+
+  map.on('load', () => {
+    map.loadImage('/bridge.png', (error, image) => {
+      if (!error && !map.hasImage('bridge-marker-icon')) {
+        map.addImage('bridge-marker-icon', image)
+      }
+    })
+
+    map.loadImage('/traffic-light.png', (error, image) => {
+      if (!error && !map.hasImage('traffic-light-marker-icon')) {
+        map.addImage('traffic-light-marker-icon', image)
+      }
+    })
   })
 
   map.on('click', async (e) => {
-    if (!startPoint) {
+    if (props.mode === 'single') {
+      // Nếu ở chế độ 1 điểm (Cầu, Đèn giao thông)
       startPoint = [e.lngLat.lng, e.lngLat.lat]
-      addMarker(startPoint, 'red')
-    } else if (!endPoint) {
-      endPoint = [e.lngLat.lng, e.lngLat.lat]
-      addMarker(endPoint, 'blue')
-
-      // Gọi API OSRM để lấy tuyến đường
-      await fetchRoute(startPoint, endPoint)
+      if (markers.length > 0) {
+        resetMarkers()
+      }
+      addCustomMarker(startPoint, props.type)
     } else {
-      resetMarkers()
+      if (!startPoint) {
+        startPoint = [e.lngLat.lng, e.lngLat.lat]
+        addMarker(startPoint, 'red')
+      } else if (!endPoint) {
+        endPoint = [e.lngLat.lng, e.lngLat.lat]
+        addMarker(endPoint, 'blue')
+
+        // Gọi API OSRM để lấy tuyến đường
+        await fetchRoute(startPoint, endPoint)
+      } else {
+        resetMarkers()
+      }
     }
   })
 })
 
-// Hàm thêm Marker vào Map
 const addMarker = (coords, color) => {
   const marker = new mapboxgl.Marker({ color }).setLngLat(coords).addTo(map)
+  markers.push(marker)
+}
+
+// Hàm thêm Marker vào Map
+const addCustomMarker = (coords, type) => {
+  if (!coords || !Array.isArray(coords) || coords.length !== 2) {
+    console.error('Lỗi: Tọa độ không hợp lệ', coords)
+    return
+  }
+
+  // Tạo thẻ HTML div chứa ảnh
+  const markerElement = document.createElement('div')
+  markerElement.className = 'custom-marker'
+  markerElement.style.backgroundImage = `url(${type === 'bridge' ? '/bridge.png' : '/traffic-light.png'})`
+  markerElement.style.width = '40px'
+  markerElement.style.height = '40px'
+  markerElement.style.backgroundSize = 'cover'
+
+  // Tạo marker với phần tử HTML
+  const marker = new mapboxgl.Marker(markerElement).setLngLat([parseFloat(coords[0]), parseFloat(coords[1])]).addTo(map)
   markers.push(marker)
 }
 
@@ -114,7 +168,7 @@ const drawExistingRoute = (coordinates) => {
 }
 
 const fetchRoute = async (start, end) => {
-  const url = `https://router.project-osrm.org/route/v1/driving/${start[0]},${start[1]};${end[0]},${end[1]}?overview=full&geometries=geojson`
+  const url = `/proxy-osrm?start=${start.join(',')}&end=${end.join(',')}`
 
   try {
     const response = await fetch(url)
@@ -143,7 +197,13 @@ const fetchRoute = async (start, end) => {
 }
 
 const close = () => emits('close')
-const confirmSelection = () => emits('selectRoute', { start: startPoint, end: endPoint, route: routeLayer })
+const confirmSelection = () => {
+  if (props.mode === 'single') {
+    emits('selectRoute', { point: startPoint })
+  } else {
+    emits('selectRoute', { start: startPoint, end: endPoint, route: routeLayer })
+  }
+}
 </script>
 
 <style scoped>

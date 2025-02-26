@@ -35,14 +35,14 @@ class StoreCauRequest extends FormRequest
             'tuyen_duong_id' => 'nullable',
             'loai_cau_id' => 'nullable',
             'vi_tri' => 'nullable',
-          //  'lat' => 'required|string|max:255',
-         //   'lng' => 'required|string|max:255',
+            'lat' => 'nullable',
+            'lng' => 'nullable',
         ];
     }
     public function messages(): array
     {
         return [
-            'ten.required' => 'Tên không được để trống',            
+            'ten.required' => 'Tên không được để trống',
            /*  'ly_trinh.required' => 'Lý trình không được để trống',
             'loai_ket_cau_nhip_id.required' => 'Loại kết cấu không để trống loại',
             'nam_khai_thac.required' => 'Năm khai thác không để trống loại',
