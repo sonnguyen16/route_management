@@ -41,6 +41,7 @@ class StoreTuyenDuongRequest extends FormRequest
             'tuyen_duong_id' => 'nullable|Int',
             'diem_dau' => 'nullable',
             'diem_cuoi' => 'nullable',
+            'route_geometry' => 'nullable',
         ];
     }
 

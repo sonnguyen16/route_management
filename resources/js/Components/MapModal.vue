@@ -8,10 +8,110 @@
         </div>
         <div class="modal-body">
           <div ref="mapContainer" class="mapbox-map"></div>
+
+          <!-- Nhập tọa độ bằng tay -->
+          <div class="manual-input mt-3">
+            <h5 class="text-primary">Nhập Tọa Độ</h5>
+
+            <div v-if="props.mode === 'single'" class="container">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="lng">Kinh độ (Lng):</label>
+                    <input
+                      v-model="lng"
+                      type="number"
+                      step="any"
+                      class="form-control"
+                      id="lng"
+                      placeholder="Nhập kinh độ"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="lat">Vĩ độ (Lat):</label>
+                    <input
+                      v-model="lat"
+                      type="number"
+                      step="any"
+                      class="form-control"
+                      id="lat"
+                      placeholder="Nhập vĩ độ"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div v-if="props.mode === 'multiple'" class="container">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="lng1">Kinh độ điểm đầu (Lng1):</label>
+                    <input
+                      v-model="lng1"
+                      type="number"
+                      step="any"
+                      class="form-control"
+                      id="lng1"
+                      placeholder="Nhập kinh độ"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="lat1">Vĩ độ điểm đầu (Lat1):</label>
+                    <input
+                      v-model="lat1"
+                      type="number"
+                      step="any"
+                      class="form-control"
+                      id="lat1"
+                      placeholder="Nhập vĩ độ"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="lng2">Kinh độ điểm cuối (Lng2):</label>
+                    <input
+                      v-model="lng2"
+                      type="number"
+                      step="any"
+                      class="form-control"
+                      id="lng2"
+                      placeholder="Nhập kinh độ"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="lat2">Vĩ độ điểm cuối (Lat2):</label>
+                    <input
+                      v-model="lat2"
+                      type="number"
+                      step="any"
+                      class="form-control"
+                      id="lat2"
+                      placeholder="Nhập vĩ độ"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="modal-footer">
-          <button style="z-index: 9999" @click="close" class="btn btn-secondary">Hủy</button>
-          <button style="z-index: 9999" @click="confirmSelection" class="btn btn-primary">Xác nhận</button>
+
+        <div class="modal-footer" style="padding-right: 22px">
+          <button @click="close" class="btn btn-secondary">Hủy</button>
+          <button v-if="props.mode === 'single'" @click="confirmManualSingle" class="btn btn-success">
+            Xem tọa độ
+          </button>
+          <button v-if="props.mode === 'multiple'" @click="confirmManualMultiple" class="btn btn-success">
+            Xem tọa độ
+          </button>
+          <button @click="confirmSelection" class="btn btn-primary">Xác nhận</button>
         </div>
       </div>
     </div>
@@ -44,6 +144,13 @@ let map,
   endPoint = null,
   routeLayer = null
 const markers = []
+// Biến để lưu tọa độ nhập thủ công
+const lng = ref('')
+const lat = ref('')
+const lng1 = ref('')
+const lat1 = ref('')
+const lng2 = ref('')
+const lat2 = ref('')
 
 onMounted(() => {
   mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN
@@ -82,6 +189,8 @@ onMounted(() => {
     if (props.mode === 'single') {
       // Nếu ở chế độ 1 điểm (Cầu, Đèn giao thông)
       startPoint = [e.lngLat.lng, e.lngLat.lat]
+      lng.value = startPoint[0]
+      lat.value = startPoint[1]
       if (markers.length > 0) {
         resetMarkers()
       }
@@ -89,9 +198,13 @@ onMounted(() => {
     } else {
       if (!startPoint) {
         startPoint = [e.lngLat.lng, e.lngLat.lat]
+        lng1.value = startPoint[0]
+        lat1.value = startPoint[1]
         addMarker(startPoint, 'red')
       } else if (!endPoint) {
         endPoint = [e.lngLat.lng, e.lngLat.lat]
+        lng2.value = endPoint[0]
+        lat2.value = endPoint[1]
         addMarker(endPoint, 'blue')
 
         // Gọi API OSRM để lấy tuyến đường
@@ -104,6 +217,7 @@ onMounted(() => {
 })
 
 const addMarker = (coords, color) => {
+  console.log(coords)
   const marker = new mapboxgl.Marker({ color }).setLngLat(coords).addTo(map)
   markers.push(marker)
 }
@@ -138,6 +252,37 @@ const resetMarkers = () => {
     map.removeLayer('route')
     map.removeSource('route')
   }
+}
+
+// ✅ Xử lý khi nhập tọa độ thủ công (Chế độ Single)
+const confirmManualSingle = () => {
+  if (!lng.value || !lat.value) {
+    alert('Vui lòng nhập đầy đủ tọa độ!')
+    return
+  }
+  startPoint = [parseFloat(lng.value), parseFloat(lat.value)]
+  if (markers.length > 0) {
+    resetMarkers()
+  }
+  addCustomMarker(startPoint, props.type)
+}
+
+// ✅ Xử lý khi nhập tọa độ thủ công (Chế độ Multiple)
+const confirmManualMultiple = () => {
+  if (!lng1.value || !lat1.value || !lng2.value || !lat2.value) {
+    alert('Vui lòng nhập đầy đủ tọa độ!')
+    return
+  }
+  if (markers.length > 0) {
+    resetMarkers()
+  }
+
+  startPoint = [parseFloat(lng1.value), parseFloat(lat1.value)]
+  endPoint = [parseFloat(lng2.value), parseFloat(lat2.value)]
+
+  addMarker(startPoint, 'red')
+  addMarker(endPoint, 'blue')
+  fetchRoute(startPoint, endPoint)
 }
 
 // Hàm vẽ tuyến đường cũ nếu có

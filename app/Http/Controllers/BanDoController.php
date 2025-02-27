@@ -18,6 +18,12 @@ class BanDoController extends Controller
 {
     public function index()
     {
+        $tuyen_duong = TuyenDuong::with([
+            'doan_duong.tuyen_duong',
+            'doan_duong.toa_do',
+            'toa_do',
+        ])->where('isdelete', 0)->get();
+
         $sua_chua = SuaChua::with([
             'doan_duong.toa_do',
             'tuyen_duong',
@@ -46,7 +52,7 @@ class BanDoController extends Controller
         $cau = Cau::where('isdelete', 0)->get();
         $den_giao_thong = DenGiaoThong::where('isdelete', 0)->get();
 
-        return Inertia::render('Map/Index', compact('sua_chua', 'duong_cam', 'giam_sat', 'toc_do', 'cap_phep', 'cau', 'den_giao_thong'));
+        return Inertia::render('Map/Index', compact('tuyen_duong' ,'sua_chua', 'duong_cam', 'giam_sat', 'toc_do', 'cap_phep', 'cau', 'den_giao_thong'));
     }
 
     public function update_mota(Request $request)

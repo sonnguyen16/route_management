@@ -10,6 +10,12 @@
             <h3 class="text-lg font-semibold">Bộ lọc</h3>
           </div>
           <div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="">Đường chính</label>
+              </div>
+              <div class="w-6 h-6 rounded-sm" style="background-color: #65c0ed"></div>
+            </div>
             <div class="grid grid-cols-2 gap-3" v-for="t in type" :key="t.type">
               <div>
                 <input type="checkbox" class="rounded-sm" :id="t.type" :value="t.type" v-model="filterType" />
@@ -34,6 +40,7 @@ import { danhMucTaiLieuOptions, iconFileTypes } from '@/Constants/constants.js'
 import { useForm } from '@inertiajs/vue3'
 
 const props = defineProps({
+  tuyen_duong: Object,
   sua_chua: Object,
   duong_cam: Object,
   giam_sat: Object,
@@ -62,7 +69,7 @@ const type = [
   {
     type: 'toc_do',
     name: 'Tốc độ',
-    color: '#ff6600'
+    color: '#ed9e4d'
   },
   {
     type: 'cap_phep',
@@ -119,6 +126,8 @@ onMounted(() => {
       addAllRoutes(type)
     })
 
+    addAllRoutes('tuyen_duong')
+
     props.cau?.forEach((item) => {
       addMarker(item.lng, item.lat, item.ten, '/bridge.png', `bridge-marker-icon`, item.id)
     })
@@ -135,6 +144,8 @@ const closeSheet = () => {
 
 const getColor = (type) => {
   switch (type) {
+    case 'tuyen_duong':
+      return '#65c0ed'
     case 'sua_chua':
       return '#00ff00'
     case 'duong_cam':
@@ -142,7 +153,7 @@ const getColor = (type) => {
     case 'giam_sat':
       return '#0000ff'
     case 'toc_do':
-      return '#ff6600'
+      return '#ed9e4d'
     case 'cap_phep':
       return '#ffff00'
     default:
@@ -153,6 +164,75 @@ const getColor = (type) => {
 // Hàm vẽ đường và tên đường
 const addAllRoutes = (type) => {
   if (!route || route.length === 0) return
+
+  if (type === 'tuyen_duong') {
+    props[type].forEach((route) => {
+      const coordinates = route.toa_do.map((point) => [point.lng, point.lat])
+      if (coordinates.length === 0) return
+
+      const routeId = `${type}-${route.id}`
+      const routeNameId = `route-name-${route.id}`
+
+      const geojson = {
+        type: 'Feature',
+        geometry: {
+          type: 'LineString',
+          coordinates: coordinates
+        },
+        properties: {
+          id: routeId,
+          ten_duong: `Đường ${route.ten}` || `Đường ${route.id}`,
+          tuyen_duong: JSON.stringify(route)
+        }
+      }
+
+      if (map.getSource(routeId)) {
+        map.getSource(routeId).setData(geojson)
+      } else {
+        map.addSource(routeId, {
+          type: 'geojson',
+          data: geojson
+        })
+
+        map.addLayer({
+          id: routeId,
+          type: 'line',
+          source: routeId,
+          layout: {
+            'line-join': 'round',
+            'line-cap': 'round'
+          },
+          paint: {
+            'line-color': getColor(type),
+            'line-width': 5
+          }
+        })
+
+        map.addLayer({
+          id: routeNameId,
+          type: 'symbol',
+          source: routeId,
+          layout: {
+            'icon-image': 'demo',
+            'icon-size': 1,
+            'icon-allow-overlap': true,
+            'symbol-placement': 'line', // line-center, line, point // hiển thị nhiều lần hay ít lần
+            'text-field': ['get', 'ten_duong'],
+            'text-size': 12,
+            'text-max-width': 10,
+            'symbol-spacing': 2,
+            'text-rotation-alignment': 'map',
+            'text-keep-upright': false
+          },
+          paint: {
+            'text-color': 'blue', // màu của chữ
+            'text-halo-color': 'white', // đường viền của chữ
+            'text-halo-width': 1 // độ đậm của đường viền
+          }
+        })
+      }
+    })
+  }
 
   props[type].forEach((item) => {
     item.doan_duong?.forEach((route) => {
@@ -170,8 +250,8 @@ const addAllRoutes = (type) => {
         },
         properties: {
           id: routeId,
-          ten_duong: `Đường ${item.tuyen_duong.ten}` || `Đường ${route.id}`,
-          tuyen_duong: JSON.stringify(item.tuyen_duong)
+          ten_duong: `Đường ${item.tuyen_duong ? item.tuyen_duong.ten : route.tuyen_duong.ten}` || `Đường ${route.id}`,
+          tuyen_duong: JSON.stringify(item.tuyen_duong ? item.tuyen_duong : route.tuyen_duong)
         }
       }
 

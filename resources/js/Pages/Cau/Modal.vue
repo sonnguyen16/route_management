@@ -175,8 +175,8 @@ const handleRouteSelect = (point) => {
               <div class="form-group">
                 <label for="tu_km_id">Vị trí đã chọn:</label>
                 <div class="flex gap-3">
-                  <input type="text" class="form-control mb-3" v-model="form.lng" />
-                  <input type="text" class="form-control" v-model="form.lat" />
+                  <input readonly="readonly" type="text" class="form-control mb-3" v-model="form.lng" />
+                  <input readonly="readonly" type="text" class="form-control" v-model="form.lat" />
                 </div>
               </div>
             </div>

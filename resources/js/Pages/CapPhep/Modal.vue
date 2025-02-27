@@ -62,10 +62,10 @@ watch(
       Object.assign(form, props.cap_phep)
       if (props.cap_phep?.toa_do?.length > 0) {
         routeCoords.value = {
-          start: `${props.cap_phep.toa_do[0]?.lng || ''}, ${props.cap_phep.toa_do[0]?.lat || ''}`,
-          end: `${props.cap_phep.toa_do[props.cap_phep.toa_do.length - 1]?.lng || ''}, ${
-            props.cap_phep.toa_do[props.cap_phep.toa_do.length - 1]?.lat || ''
-          }`
+          lng_start: props.cap_phep.toa_do[0]?.lng,
+          lat_start: props.cap_phep.toa_do[0]?.lat,
+          lng_end: props.cap_phep.toa_do[1]?.lng,
+          lat_end: props.cap_phep.toa_do[1]?.lat
         }
       } else {
         routeCoords.value = null
@@ -126,7 +126,12 @@ const routeCoords = ref(null)
 const openMapModal = () => (showMap.value = true)
 
 const handleRouteSelect = (route) => {
-  routeCoords.value = route
+  routeCoords.value = {
+    lng_start: route.start[0],
+    lat_start: route.start[1],
+    lng_end: route.end[0],
+    lat_end: route.end[1]
+  }
   form.route_geometry = route.route
   showMap.value = false
 }
@@ -178,10 +183,18 @@ const handleRouteSelect = (route) => {
                 </div>
 
                 <div v-if="routeCoords" class="form-group">
-                  <label for="tu_km_id">Tọa độ đã chọn:</label>
+                  <label for="tu_km_id">Tọa độ điểm đầu:</label>
                   <div class="flex gap-3">
-                    <input type="text" class="form-control mb-3" v-model="routeCoords.start" />
-                    <input type="text" class="form-control" v-model="routeCoords.end" />
+                    <input readonly="readonly" type="text" class="form-control mb-3" v-model="routeCoords.lng_start" />
+                    <input readonly="readonly" type="text" class="form-control" v-model="routeCoords.lat_start" />
+                  </div>
+                </div>
+
+                <div v-if="routeCoords" class="form-group">
+                  <label for="tu_km_id">Tọa độ điểm cuối:</label>
+                  <div class="flex gap-3">
+                    <input readonly="readonly" type="text" class="form-control mb-3" v-model="routeCoords.lng_end" />
+                    <input readonly="readonly" type="text" class="form-control" v-model="routeCoords.lat_end" />
                   </div>
                 </div>
 

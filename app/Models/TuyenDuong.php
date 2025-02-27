@@ -73,7 +73,7 @@ class TuyenDuong extends Model
 
     public function toa_do()
     {
-        return $this->hasMany(ToaDo::class, 'duong', 'key');
+        return $this->hasMany(ToaDo::class, 'parent_id', 'id')->where('type', 'tuyen_duong');
     }
     public function loai_tuyen_duong()
     {
@@ -87,5 +87,10 @@ class TuyenDuong extends Model
     public function doan_duong()
     {
         return $this->hasMany(TuyenDuong::class, 'tuyen_duong_id')->where('isdelete',0);
+    }
+
+    public function tuyen_duong()
+    {
+        return $this->belongsTo(TuyenDuong::class, 'tuyen_duong_id')->where('isdelete',0);
     }
 }
