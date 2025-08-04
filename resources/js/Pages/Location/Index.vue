@@ -228,7 +228,7 @@ onMounted(() => {
       source: 'user-location',
       layout: {
         'icon-image': 'csgt-icon',
-        'icon-size': 0.1, // Kích thước nhỏ như đèn giao thông
+        'icon-size': 0.5, // Kích thước nhỏ như đèn giao thông
         'icon-allow-overlap': true,
         'icon-anchor': 'bottom'
       }
