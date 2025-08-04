@@ -199,6 +199,15 @@ onMounted(() => {
 
   // Khi map đã load xong
   map.on('load', () => {
+    // Load icon CSGT cho vị trí người dùng
+    map.loadImage('/csgt.png', (error, image) => {
+      if (error) {
+        console.error('Lỗi load csgt.png:', error)
+      } else if (!map.hasImage('csgt-icon')) {
+        map.addImage('csgt-icon', image)
+      }
+    })
+
     // Tạo source cho vị trí người dùng
     map.addSource('user-location', {
       type: 'geojson',
@@ -212,16 +221,16 @@ onMounted(() => {
       }
     })
 
-    // Tạo layer hiển thị vị trí người dùng
+    // Tạo layer hiển thị vị trí người dùng với icon CSGT
     map.addLayer({
       id: 'user-location-point',
-      type: 'circle',
+      type: 'symbol',
       source: 'user-location',
-      paint: {
-        'circle-radius': 8,
-        'circle-color': '#3887be',
-        'circle-stroke-width': 2,
-        'circle-stroke-color': '#ffffff'
+      layout: {
+        'icon-image': 'csgt-icon',
+        'icon-size': 0.1, // Kích thước nhỏ như đèn giao thông
+        'icon-allow-overlap': true,
+        'icon-anchor': 'bottom'
       }
     })
 
