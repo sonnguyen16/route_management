@@ -62,7 +62,7 @@ const isActive = (href) => {
 </script>
 
 <template>
-  <aside class="main-sidebar sidebar-collapse sidebar-light-primary border-top border-right" style="max-width: 190px">
+  <aside class="main-sidebar sidebar-collapse sidebar-light-primary border-top border-right">
     <div class="sidebar p-0">
       <nav class="mt-3">
         <ul
