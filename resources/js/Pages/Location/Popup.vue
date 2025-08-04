@@ -29,19 +29,45 @@
         </div>
         <div class="grid grid-cols-2 gap-2 mb-2">
           <div class="font-medium">Độ chính xác:</div>
-          <div>{{ locationData.accuracy ? `${locationData.accuracy} mét` : 'Không có dữ liệu' }}</div>
+          <div>{{ locationData.accuracy }}</div>
         </div>
         <div class="grid grid-cols-2 gap-2 mb-2">
           <div class="font-medium">Độ cao:</div>
-          <div>{{ locationData.altitude ? `${locationData.altitude} mét` : 'Không có dữ liệu' }}</div>
+          <div>{{ locationData.altitude }}</div>
         </div>
         <div class="grid grid-cols-2 gap-2 mb-2">
           <div class="font-medium">Hướng di chuyển:</div>
-          <div>{{ locationData.heading ? `${locationData.heading}°` : 'Không có dữ liệu' }}</div>
+          <div>{{ locationData.heading }}</div>
         </div>
         <div class="grid grid-cols-2 gap-2 mb-2">
           <div class="font-medium">Tốc độ:</div>
-          <div>{{ locationData.speed ? `${(locationData.speed * 3.6).toFixed(1)} km/h` : 'Không có dữ liệu' }}</div>
+          <div>{{ locationData.speed }}</div>
+        </div>
+
+        <!-- Thông tin thiết bị -->
+        <div class="mt-4 border-t pt-3">
+          <h4 class="font-semibold mb-2">Thông tin thiết bị</h4>
+          <div class="grid grid-cols-2 gap-2 mb-2">
+            <div class="font-medium">Trình duyệt:</div>
+            <div>{{ browserInfo }}</div>
+          </div>
+        </div>
+
+        <!-- Nút lấy địa chỉ -->
+        <div class="mt-4 border-t pt-3">
+          <h4 class="font-semibold mb-2">Địa chỉ ước tính</h4>
+          <div v-if="address">
+            <p>{{ address }}</p>
+          </div>
+          <div v-else>
+            <button
+              @click="getAddress"
+              class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded"
+              :disabled="isLoadingAddress"
+            >
+              {{ isLoadingAddress ? 'Đang tải...' : 'Lấy địa chỉ' }}
+            </button>
+          </div>
         </div>
       </div>
       <div v-else class="text-center py-4">
@@ -52,7 +78,7 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from 'vue'
+import { defineProps, defineEmits, ref, computed } from 'vue'
 
 const props = defineProps({
   locationData: Object,
@@ -63,6 +89,68 @@ const emit = defineEmits(['close-sheet'])
 
 const closeSheet = () => {
   emit('close-sheet')
+}
+
+// Thông tin trình duyệt
+const browserInfo = computed(() => {
+  if (typeof navigator === 'undefined') return 'Không xác định'
+
+  const userAgent = navigator.userAgent
+  let browserName = 'Không xác định'
+
+  if (userAgent.match(/chrome|chromium|crios/i)) {
+    browserName = 'Chrome'
+  } else if (userAgent.match(/firefox|fxios/i)) {
+    browserName = 'Firefox'
+  } else if (userAgent.match(/safari/i)) {
+    browserName = 'Safari'
+  } else if (userAgent.match(/opr\//i)) {
+    browserName = 'Opera'
+  } else if (userAgent.match(/edg/i)) {
+    browserName = 'Edge'
+  } else if (userAgent.match(/android/i)) {
+    browserName = 'Android'
+  } else if (userAgent.match(/iphone|ipad|ipod/i)) {
+    browserName = 'iOS'
+  }
+
+  return `${browserName} (${navigator.platform})`
+})
+
+// Địa chỉ từ tọa độ
+const address = ref(null)
+const isLoadingAddress = ref(false)
+
+// Lấy địa chỉ từ tọa độ sử dụng OpenStreetMap Nominatim API
+const getAddress = async () => {
+  if (!props.locationData || !props.locationData.lat || !props.locationData.lng) {
+    return
+  }
+
+  isLoadingAddress.value = true
+
+  try {
+    const { lat, lng } = props.locationData
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`
+    )
+
+    if (response.ok) {
+      const data = await response.json()
+      if (data && data.display_name) {
+        address.value = data.display_name
+      } else {
+        address.value = 'Không tìm thấy địa chỉ'
+      }
+    } else {
+      address.value = 'Lỗi khi lấy địa chỉ'
+    }
+  } catch (error) {
+    console.error('Lỗi khi lấy địa chỉ:', error)
+    address.value = 'Lỗi khi lấy địa chỉ'
+  } finally {
+    isLoadingAddress.value = false
+  }
 }
 </script>
 

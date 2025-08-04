@@ -19,6 +19,10 @@
               <div>{{ currentLocation.lat || 'Đang xác định...' }}</div>
             </div>
             <div class="grid grid-cols-2 gap-3">
+              <div>Độ chính xác:</div>
+              <div>{{ currentLocation.accuracy || 'Không xác định' }}</div>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
               <div>Cập nhật lúc:</div>
               <div>{{ currentLocation.time || 'Chưa có dữ liệu' }}</div>
             </div>
@@ -27,6 +31,7 @@
                 {{ isTracking ? 'Dừng theo dõi' : 'Bắt đầu theo dõi' }}
               </button>
               <button @click="showDetails" class="btn btn-info ml-2">Chi tiết</button>
+              <button @click="getCurrentLocation" class="btn btn-warning ml-2">Làm mới</button>
             </div>
           </div>
         </div>
@@ -137,7 +142,7 @@ onMounted(() => {
   })
 })
 
-// Hàm lấy vị trí hiện tại
+// Hàm lấy vị trí hiện tại với độ chính xác cao nhất có thể
 const getCurrentLocation = () => {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
@@ -150,11 +155,13 @@ const getCurrentLocation = () => {
           lat: latitude,
           lng: longitude,
           time: timestamp.toLocaleTimeString(),
-          accuracy: accuracy,
-          altitude: altitude,
-          heading: heading,
-          speed: speed
+          accuracy: accuracy ? `${accuracy.toFixed(2)} mét` : 'Không xác định',
+          altitude: altitude ? `${altitude ? altitude.toFixed(2) : 0} mét` : 'Không xác định',
+          heading: heading ? `${heading.toFixed(2)}°` : 'Không xác định',
+          speed: speed ? `${(speed * 3.6).toFixed(2)} km/h` : 'Không xác định'
         }
+
+        console.log('Vị trí hiện tại:', currentLocation.value)
 
         // Thêm vị trí vào lịch sử
         locationHistory.push([longitude, latitude])
@@ -165,20 +172,24 @@ const getCurrentLocation = () => {
         // Di chuyển bản đồ đến vị trí hiện tại
         map.flyTo({
           center: [longitude, latitude],
-          zoom: 15
+          zoom: 16
         })
       },
       (error) => {
         console.error('Lỗi khi lấy vị trí:', error.message)
+
+        // Hiển thị thông báo lỗi cho người dùng
+        alert(`Không thể xác định vị trí: ${error.message}. Vui lòng kiểm tra quyền truy cập vị trí trong trình duyệt.`)
       },
       {
-        enableHighAccuracy: true,
-        timeout: 5000,
-        maximumAge: 0
+        enableHighAccuracy: true, // Yêu cầu độ chính xác cao nhất có thể
+        timeout: 10000, // Tăng thời gian chờ lên 10 giây để có kết quả tốt hơn
+        maximumAge: 0 // Luôn yêu cầu vị trí mới nhất
       }
     )
   } else {
     console.error('Trình duyệt không hỗ trợ Geolocation')
+    alert('Trình duyệt của bạn không hỗ trợ định vị. Vui lòng sử dụng trình duyệt khác.')
   }
 }
 
@@ -217,17 +228,75 @@ const toggleTracking = () => {
     // Bắt đầu theo dõi vị trí mỗi phút
     trackingInterval = setInterval(() => {
       getCurrentLocation()
-    }, 60000) // 60000ms = 1 phút
+    }, 30000) // 30000ms = 30 giây (tăng tần suất cập nhật)
 
     // Lấy vị trí hiện tại ngay lập tức
     getCurrentLocation()
+
+    // Thêm sự kiện lắng nghe khi người dùng di chuyển (nếu trình duyệt hỗ trợ watchPosition)
+    if (navigator.geolocation && !userMarker) {
+      userMarker = navigator.geolocation.watchPosition(
+        (position) => {
+          const { latitude, longitude, accuracy } = position.coords
+          const timestamp = new Date()
+
+          // Cập nhật vị trí hiện tại
+          currentLocation.value = {
+            lat: latitude,
+            lng: longitude,
+            time: timestamp.toLocaleTimeString(),
+            accuracy: accuracy ? `${accuracy.toFixed(2)} mét` : 'Không xác định',
+            altitude: position.coords.altitude ? `${position.coords.altitude.toFixed(2)} mét` : 'Không xác định',
+            heading: position.coords.heading ? `${position.coords.heading.toFixed(2)}°` : 'Không xác định',
+            speed: position.coords.speed ? `${(position.coords.speed * 3.6).toFixed(2)} km/h` : 'Không xác định'
+          }
+
+          // Chỉ thêm vào lịch sử nếu vị trí thay đổi đáng kể (> 10m)
+          const lastLocation = locationHistory.length > 0 ? locationHistory[locationHistory.length - 1] : null
+          if (!lastLocation || calculateDistance(lastLocation[1], lastLocation[0], latitude, longitude) > 10) {
+            locationHistory.push([longitude, latitude])
+
+            // Cập nhật vị trí trên bản đồ
+            updateLocationOnMap(longitude, latitude)
+          }
+        },
+        (error) => {
+          console.error('Lỗi khi theo dõi vị trí:', error.message)
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0
+        }
+      )
+    }
   } else {
     // Dừng theo dõi vị trí
     if (trackingInterval) {
       clearInterval(trackingInterval)
       trackingInterval = null
     }
+
+    // Dừng theo dõi vị trí thời gian thực
+    if (userMarker) {
+      navigator.geolocation.clearWatch(userMarker)
+      userMarker = null
+    }
   }
+}
+
+// Tính khoảng cách giữa 2 điểm (theo công thức Haversine)
+const calculateDistance = (lat1, lon1, lat2, lon2) => {
+  const R = 6371e3 // Bán kính trái đất tính bằng mét
+  const φ1 = (lat1 * Math.PI) / 180 // φ, λ in radians
+  const φ2 = (lat2 * Math.PI) / 180
+  const Δφ = ((lat2 - lat1) * Math.PI) / 180
+  const Δλ = ((lon2 - lon1) * Math.PI) / 180
+
+  const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2)
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+
+  return R * c // khoảng cách tính bằng mét
 }
 
 // Hiển thị chi tiết vị trí
