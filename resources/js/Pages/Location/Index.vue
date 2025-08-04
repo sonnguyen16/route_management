@@ -142,48 +142,51 @@ onMounted(() => {
   })
 })
 
-// Hàm lấy vị trí hiện tại với độ chính xác cao nhất có thể
+// Hàm lấy vị trí hiện tại với độ chính xác phù hợp
 const getCurrentLocation = () => {
   if (navigator.geolocation) {
+    // Thử với độ chính xác thấp trước để tránh timeout
+    const tryWithLowAccuracy = () => {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          handlePositionSuccess(position)
+        },
+        (error) => {
+          console.error('Lỗi khi lấy vị trí với độ chính xác thấp:', error.message)
+          // Nếu không thành công, hiển thị thông báo lỗi
+          alert(
+            `Không thể xác định vị trí: ${error.message}. Vui lòng kiểm tra quyền truy cập vị trí trong trình duyệt.`
+          )
+        },
+        {
+          enableHighAccuracy: false, // Không yêu cầu độ chính xác cao
+          timeout: 15000, // Tăng thời gian chờ lên 15 giây
+          maximumAge: 60000 // Cho phép sử dụng cache trong 1 phút
+        }
+      )
+    }
+
+    // Thử với độ chính xác cao trước
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        const { latitude, longitude, accuracy, altitude, heading, speed } = position.coords
-        const timestamp = new Date()
-
-        // Cập nhật vị trí hiện tại
-        currentLocation.value = {
-          lat: latitude,
-          lng: longitude,
-          time: timestamp.toLocaleTimeString(),
-          accuracy: accuracy ? `${accuracy.toFixed(2)} mét` : 'Không xác định',
-          altitude: altitude ? `${altitude ? altitude.toFixed(2) : 0} mét` : 'Không xác định',
-          heading: heading ? `${heading.toFixed(2)}°` : 'Không xác định',
-          speed: speed ? `${(speed * 3.6).toFixed(2)} km/h` : 'Không xác định'
-        }
-
-        console.log('Vị trí hiện tại:', currentLocation.value)
-
-        // Thêm vị trí vào lịch sử
-        locationHistory.push([longitude, latitude])
-
-        // Cập nhật vị trí trên bản đồ
-        updateLocationOnMap(longitude, latitude)
-
-        // Di chuyển bản đồ đến vị trí hiện tại
-        map.flyTo({
-          center: [longitude, latitude],
-          zoom: 16
-        })
+        handlePositionSuccess(position)
       },
       (error) => {
-        console.error('Lỗi khi lấy vị trí:', error.message)
-
-        // Hiển thị thông báo lỗi cho người dùng
-        alert(`Không thể xác định vị trí: ${error.message}. Vui lòng kiểm tra quyền truy cập vị trí trong trình duyệt.`)
+        console.error('Lỗi khi lấy vị trí với độ chính xác cao:', error.message)
+        // Nếu timeout hoặc POSITION_UNAVAILABLE, thử lại với độ chính xác thấp hơn
+        if (error.code === error.TIMEOUT || error.code === error.POSITION_UNAVAILABLE) {
+          console.log('Thử lại với độ chính xác thấp hơn...')
+          tryWithLowAccuracy()
+        } else {
+          // Lỗi khác (ví dụ: quyền bị từ chối)
+          alert(
+            `Không thể xác định vị trí: ${error.message}. Vui lòng kiểm tra quyền truy cập vị trí trong trình duyệt.`
+          )
+        }
       },
       {
-        enableHighAccuracy: true, // Yêu cầu độ chính xác cao nhất có thể
-        timeout: 10000, // Tăng thời gian chờ lên 10 giây để có kết quả tốt hơn
+        enableHighAccuracy: true, // Yêu cầu độ chính xác cao
+        timeout: 5000, // Giảm thời gian chờ để tránh chờ quá lâu nếu không có GPS
         maximumAge: 0 // Luôn yêu cầu vị trí mới nhất
       }
     )
@@ -191,6 +194,37 @@ const getCurrentLocation = () => {
     console.error('Trình duyệt không hỗ trợ Geolocation')
     alert('Trình duyệt của bạn không hỗ trợ định vị. Vui lòng sử dụng trình duyệt khác.')
   }
+}
+
+// Xử lý khi lấy được vị trí thành công
+const handlePositionSuccess = (position) => {
+  const { latitude, longitude, accuracy, altitude, heading, speed } = position.coords
+  const timestamp = new Date()
+
+  // Cập nhật vị trí hiện tại
+  currentLocation.value = {
+    lat: latitude,
+    lng: longitude,
+    time: timestamp.toLocaleTimeString(),
+    accuracy: accuracy ? `${accuracy.toFixed(2)} mét` : 'Không xác định',
+    altitude: altitude ? `${altitude ? altitude.toFixed(2) : 0} mét` : 'Không xác định',
+    heading: heading ? `${heading.toFixed(2)}°` : 'Không xác định',
+    speed: speed ? `${(speed * 3.6).toFixed(2)} km/h` : 'Không xác định'
+  }
+
+  console.log('Vị trí hiện tại:', currentLocation.value)
+
+  // Thêm vị trí vào lịch sử
+  locationHistory.push([longitude, latitude])
+
+  // Cập nhật vị trí trên bản đồ
+  updateLocationOnMap(longitude, latitude)
+
+  // Di chuyển bản đồ đến vị trí hiện tại
+  map.flyTo({
+    center: [longitude, latitude],
+    zoom: 16
+  })
 }
 
 // Hàm cập nhật vị trí trên bản đồ
@@ -235,23 +269,14 @@ const toggleTracking = () => {
 
     // Thêm sự kiện lắng nghe khi người dùng di chuyển (nếu trình duyệt hỗ trợ watchPosition)
     if (navigator.geolocation && !userMarker) {
+      // Theo dõi vị trí với độ chính xác thấp để tiết kiệm pin và tránh timeout
       userMarker = navigator.geolocation.watchPosition(
         (position) => {
-          const { latitude, longitude, accuracy } = position.coords
-          const timestamp = new Date()
-
-          // Cập nhật vị trí hiện tại
-          currentLocation.value = {
-            lat: latitude,
-            lng: longitude,
-            time: timestamp.toLocaleTimeString(),
-            accuracy: accuracy ? `${accuracy.toFixed(2)} mét` : 'Không xác định',
-            altitude: position.coords.altitude ? `${position.coords.altitude.toFixed(2)} mét` : 'Không xác định',
-            heading: position.coords.heading ? `${position.coords.heading.toFixed(2)}°` : 'Không xác định',
-            speed: position.coords.speed ? `${(position.coords.speed * 3.6).toFixed(2)} km/h` : 'Không xác định'
-          }
+          // Sử dụng hàm xử lý chung để cập nhật vị trí
+          handlePositionSuccess(position)
 
           // Chỉ thêm vào lịch sử nếu vị trí thay đổi đáng kể (> 10m)
+          const { latitude, longitude } = position.coords
           const lastLocation = locationHistory.length > 0 ? locationHistory[locationHistory.length - 1] : null
           if (!lastLocation || calculateDistance(lastLocation[1], lastLocation[0], latitude, longitude) > 10) {
             locationHistory.push([longitude, latitude])
@@ -262,11 +287,25 @@ const toggleTracking = () => {
         },
         (error) => {
           console.error('Lỗi khi theo dõi vị trí:', error.message)
+
+          // Nếu lỗi là do timeout, thử lại với độ chính xác thấp hơn
+          if (error.code === error.TIMEOUT && userMarker) {
+            navigator.geolocation.clearWatch(userMarker)
+            userMarker = navigator.geolocation.watchPosition(
+              handlePositionSuccess,
+              (err) => console.error('Không thể theo dõi vị trí:', err.message),
+              {
+                enableHighAccuracy: false,
+                timeout: 15000,
+                maximumAge: 60000
+              }
+            )
+          }
         },
         {
           enableHighAccuracy: true,
           timeout: 10000,
-          maximumAge: 0
+          maximumAge: 5000 // Cho phép sử dụng cache trong 5 giây
         }
       )
     }
