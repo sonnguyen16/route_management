@@ -128,3 +128,9 @@ Route::get('/proxy-osrm', function (Request $request) {
 
     return $response->json(); // Trả về JSON cho frontend
 });
+
+Route::prefix('location')->middleware('auth')->group(function () {
+    Route::get('/', function () {
+        return Inertia::render('Location/Index');
+    })->name('location.index');
+});
