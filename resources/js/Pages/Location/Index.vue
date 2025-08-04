@@ -20,18 +20,26 @@
             </div>
             <div class="grid grid-cols-2 gap-3">
               <div>Độ chính xác:</div>
-              <div>{{ currentLocation.accuracy || 'Không xác định' }}</div>
+              <div :class="getAccuracyColor(currentLocation.accuracy)">
+                {{ currentLocation.accuracy || 'Không xác định' }}
+              </div>
             </div>
             <div class="grid grid-cols-2 gap-3">
               <div>Cập nhật lúc:</div>
               <div>{{ currentLocation.time || 'Chưa có dữ liệu' }}</div>
+            </div>
+            <div class="grid grid-cols-2 gap-3" v-if="positionSamples.length > 0">
+              <div>Mẫu thu thập:</div>
+              <div>{{ positionSamples.length }}/{{ maxSamples }}</div>
             </div>
             <div class="mt-2">
               <button @click="toggleTracking" class="btn" :class="isTracking ? 'btn-danger' : 'btn-success'">
                 {{ isTracking ? 'Dừng theo dõi' : 'Bắt đầu theo dõi' }}
               </button>
               <button @click="showDetails" class="btn btn-info ml-2">Chi tiết</button>
-              <button @click="getCurrentLocation" class="btn btn-warning ml-2">Làm mới</button>
+              <button @click="getCurrentLocation" class="btn btn-warning ml-2" :disabled="positionSamples.length > 0">
+                {{ positionSamples.length > 0 ? 'Đang lấy mẫu...' : 'Làm mới' }}
+              </button>
             </div>
           </div>
         </div>
@@ -142,58 +150,167 @@ onMounted(() => {
   })
 })
 
-// Hàm lấy vị trí hiện tại với độ chính xác phù hợp
+// Lưu trữ các vị trí để tính toán trung bình
+const positionSamples = ref([])
+const maxSamples = 5 // Số mẫu tối đa để tính trung bình
+
+// Hàm lấy vị trí hiện tại với độ chính xác cao nhất
 const getCurrentLocation = () => {
   if (navigator.geolocation) {
-    // Thử với độ chính xác thấp trước để tránh timeout
-    const tryWithLowAccuracy = () => {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          handlePositionSuccess(position)
-        },
-        (error) => {
-          console.error('Lỗi khi lấy vị trí với độ chính xác thấp:', error.message)
-          // Nếu không thành công, hiển thị thông báo lỗi
-          alert(
-            `Không thể xác định vị trí: ${error.message}. Vui lòng kiểm tra quyền truy cập vị trí trong trình duyệt.`
-          )
-        },
-        {
-          enableHighAccuracy: false, // Không yêu cầu độ chính xác cao
-          timeout: 15000, // Tăng thời gian chờ lên 15 giây
-          maximumAge: 60000 // Cho phép sử dụng cache trong 1 phút
-        }
-      )
-    }
-
-    // Thử với độ chính xác cao trước
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        handlePositionSuccess(position)
-      },
-      (error) => {
-        console.error('Lỗi khi lấy vị trí với độ chính xác cao:', error.message)
-        // Nếu timeout hoặc POSITION_UNAVAILABLE, thử lại với độ chính xác thấp hơn
-        if (error.code === error.TIMEOUT || error.code === error.POSITION_UNAVAILABLE) {
-          console.log('Thử lại với độ chính xác thấp hơn...')
-          tryWithLowAccuracy()
-        } else {
-          // Lỗi khác (ví dụ: quyền bị từ chối)
-          alert(
-            `Không thể xác định vị trí: ${error.message}. Vui lòng kiểm tra quyền truy cập vị trí trong trình duyệt.`
-          )
-        }
-      },
-      {
-        enableHighAccuracy: true, // Yêu cầu độ chính xác cao
-        timeout: 5000, // Giảm thời gian chờ để tránh chờ quá lâu nếu không có GPS
-        maximumAge: 0 // Luôn yêu cầu vị trí mới nhất
-      }
-    )
+    // Reset mẫu vị trí
+    positionSamples.value = []
+    
+    // Lấy nhiều mẫu vị trí để tính trung bình
+    collectPositionSamples()
   } else {
     console.error('Trình duyệt không hỗ trợ Geolocation')
     alert('Trình duyệt của bạn không hỗ trợ định vị. Vui lòng sử dụng trình duyệt khác.')
   }
+}
+
+// Thu thập nhiều mẫu vị trí để tính toán chính xác hơn
+const collectPositionSamples = () => {
+  const sampleCount = ref(0)
+  
+  const getSample = () => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude, accuracy } = position.coords
+        
+        // Chỉ chấp nhận vị trí có độ chính xác dưới 100m
+        if (accuracy <= 100) {
+          positionSamples.value.push({
+            lat: latitude,
+            lng: longitude,
+            accuracy: accuracy,
+            timestamp: Date.now(),
+            coords: position.coords
+          })
+          
+          console.log(`Mẫu ${positionSamples.value.length}/${maxSamples}: Accuracy ${accuracy.toFixed(2)}m`)
+          
+          // Nếu đã có đủ mẫu hoặc có mẫu rất chính xác (<10m), xử lý kết quả
+          if (positionSamples.value.length >= maxSamples || accuracy < 10) {
+            processPositionSamples()
+          } else if (positionSamples.value.length < maxSamples) {
+            // Tiếp tục lấy mẫu sau 1 giây
+            setTimeout(getSample, 1000)
+          }
+        } else {
+          console.log(`Bỏ qua mẫu có độ chính xác thấp: ${accuracy.toFixed(2)}m`)
+          sampleCount.value++
+          
+          // Nếu đã thử quá nhiều lần mà không có mẫu tốt, sử dụng mẫu hiện tại
+          if (sampleCount.value > 10) {
+            if (positionSamples.value.length > 0) {
+              processPositionSamples()
+            } else {
+              // Fallback với mẫu hiện tại dù độ chính xác thấp
+              positionSamples.value.push({
+                lat: latitude,
+                lng: longitude,
+                accuracy: accuracy,
+                timestamp: Date.now(),
+                coords: position.coords
+              })
+              processPositionSamples()
+            }
+          } else {
+            // Thử lại sau 2 giây
+            setTimeout(getSample, 2000)
+          }
+        }
+      },
+      (error) => {
+        console.error('Lỗi khi lấy mẫu vị trí:', error.message)
+        sampleCount.value++
+        
+        // Nếu có ít nhất 1 mẫu, sử dụng nó
+        if (positionSamples.value.length > 0) {
+          processPositionSamples()
+        } else if (sampleCount.value <= 3) {
+          // Thử lại với cài đặt khác
+          setTimeout(() => {
+            navigator.geolocation.getCurrentPosition(
+              (position) => {
+                positionSamples.value.push({
+                  lat: position.coords.latitude,
+                  lng: position.coords.longitude,
+                  accuracy: position.coords.accuracy,
+                  timestamp: Date.now(),
+                  coords: position.coords
+                })
+                processPositionSamples()
+              },
+              (err) => {
+                alert(`Không thể xác định vị trí: ${err.message}`)
+              },
+              {
+                enableHighAccuracy: false,
+                timeout: 10000,
+                maximumAge: 0
+              }
+            )
+          }, 1000)
+        } else {
+          alert(`Không thể xác định vị trí: ${error.message}. Vui lòng kiểm tra quyền truy cập vị trí.`)
+        }
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 15000, // Tăng timeout để GPS có thời gian khởi động
+        maximumAge: 0
+      }
+    )
+  }
+  
+  // Bắt đầu thu thập mẫu
+  getSample()
+}
+
+// Xử lý các mẫu vị trí để tính toán vị trí chính xác nhất
+const processPositionSamples = () => {
+  if (positionSamples.value.length === 0) return
+  
+  console.log('Xử lý', positionSamples.value.length, 'mẫu vị trí')
+  
+  // Sắp xếp theo độ chính xác (accuracy thấp = chính xác hơn)
+  const sortedSamples = positionSamples.value.sort((a, b) => a.accuracy - b.accuracy)
+  
+  let finalPosition
+  
+  if (sortedSamples.length === 1) {
+    // Chỉ có 1 mẫu
+    finalPosition = sortedSamples[0]
+  } else {
+    // Sử dụng weighted average dựa trên độ chính xác
+    const weights = sortedSamples.map(sample => 1 / (sample.accuracy + 1)) // +1 để tránh chia cho 0
+    const totalWeight = weights.reduce((sum, weight) => sum + weight, 0)
+    
+    const weightedLat = sortedSamples.reduce((sum, sample, index) => 
+      sum + (sample.lat * weights[index]), 0) / totalWeight
+    const weightedLng = sortedSamples.reduce((sum, sample, index) => 
+      sum + (sample.lng * weights[index]), 0) / totalWeight
+    
+    // Sử dụng độ chính xác tốt nhất
+    const bestAccuracy = sortedSamples[0].accuracy
+    const bestCoords = sortedSamples[0].coords
+    
+    finalPosition = {
+      lat: weightedLat,
+      lng: weightedLng,
+      accuracy: bestAccuracy,
+      coords: {
+        ...bestCoords,
+        latitude: weightedLat,
+        longitude: weightedLng,
+        accuracy: bestAccuracy
+      }
+    }
+  }
+  
+  console.log('Vị trí cuối cùng:', finalPosition)
+  handlePositionSuccess({ coords: finalPosition.coords })
 }
 
 // Xử lý khi lấy được vị trí thành công
@@ -346,6 +463,19 @@ const showDetails = () => {
 // Đóng popup chi tiết
 const closeSheet = () => {
   isSheetOpen.value = false
+}
+
+// Hàm xác định màu sắc dựa trên độ chính xác
+const getAccuracyColor = (accuracy) => {
+  if (!accuracy) return 'text-gray-500'
+  
+  const numericAccuracy = parseFloat(accuracy.toString().replace(' mét', ''))
+  
+  if (numericAccuracy <= 5) return 'text-green-600 font-bold' // Rất tốt
+  if (numericAccuracy <= 10) return 'text-green-500' // Tốt
+  if (numericAccuracy <= 20) return 'text-yellow-500' // Khá tốt
+  if (numericAccuracy <= 50) return 'text-orange-500' // Trung bình
+  return 'text-red-500' // Kém
 }
 
 // Dọn dẹp khi component bị hủy
