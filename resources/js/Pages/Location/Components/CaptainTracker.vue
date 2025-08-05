@@ -80,9 +80,8 @@ const initializeWebSocket = () => {
   // Initialize Laravel Echo for real-time communication
   window.Pusher = Pusher
 
-  const port = import.meta.env.VITE_REVERB_PORT ?? (
-    (import.meta.env.VITE_REVERB_SCHEME ?? 'http') === 'https' ? 443 : 8080
-  )
+  const port =
+    import.meta.env.VITE_REVERB_PORT ?? ((import.meta.env.VITE_REVERB_SCHEME ?? 'http') === 'https' ? 443 : 8080)
 
   echo = new Echo({
     broadcaster: 'reverb',
