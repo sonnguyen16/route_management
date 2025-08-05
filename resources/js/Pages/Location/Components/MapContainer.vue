@@ -381,6 +381,7 @@ const updateCaptainsLocations = (captains) => {
     const captainColors = {}
     const colors = ['#FF5733', '#33FF57', '#3357FF', '#F033FF', '#FF33A8', '#33FFF6']
 
+    // Tạo một feature cho mỗi đội trưởng (chỉ điểm cuối cùng hiện icon)
     const features = captains.map((captain, index) => {
       // Lấy hoặc tạo track cho đội trưởng này
       const trackCoords = captainTracks[captain.user_id] || []
@@ -406,6 +407,7 @@ const updateCaptainsLocations = (captains) => {
         captainColors[captain.user_id] = colors[index % colors.length]
       }
 
+      // Chỉ trả về feature cho điểm cuối cùng (vị trí hiện tại)
       return {
         type: 'Feature',
         geometry: {
@@ -418,7 +420,8 @@ const updateCaptainsLocations = (captains) => {
           last_update: captain.location.recorded_at,
           accuracy: captain.location.accuracy,
           track: trackCoords,
-          color: captainColors[captain.user_id]
+          color: captainColors[captain.user_id],
+          is_current: true // Đánh dấu đây là vị trí hiện tại
         }
       }
     })
