@@ -377,11 +377,11 @@ const updateCaptainsLocations = (captains) => {
     // Lưu trữ vị trí cũ của các đội trưởng để vẽ đường tracking
     const captainTracks = {}
 
-    // Nếu đã có dữ liệu trước đó, lấy ra để cập nhật
-    if (map.getSource('captains-locations')._data && map.getSource('captains-locations')._data.features) {
-      map.getSource('captains-locations')._data.features.forEach((feature) => {
-        if (feature.properties.track) {
-          captainTracks[feature.properties.user_id] = feature.properties.track
+    // Nếu đã có dữ liệu tracking trước đó, lấy ra để cập nhật
+    if (map.getSource('captains-tracks')._data && map.getSource('captains-tracks')._data.features) {
+      map.getSource('captains-tracks')._data.features.forEach((feature) => {
+        if (feature.properties.user_id) {
+          captainTracks[feature.properties.user_id] = feature.geometry.coordinates
         }
       })
     }

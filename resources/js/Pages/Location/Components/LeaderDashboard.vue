@@ -97,22 +97,22 @@
           <form @submit.prevent="savePlan" class="plan-form">
             <div class="form-group">
               <label>Mô tả:</label>
-              <textarea v-model="planForm.description" required rows="3"></textarea>
+              <textarea class="mb-3" v-model="planForm.description" required rows="3"></textarea>
             </div>
             <div class="form-group">
               <label>Ngày:</label>
-              <input v-model="planForm.date" type="date" required />
+              <input v-model="planForm.date" type="date" class="mb-3" required />
             </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label>Giờ bắt đầu:</label>
-                <input v-model="planForm.start_time" type="time" required />
-              </div>
-              <div class="form-group">
-                <label>Giờ kết thúc:</label>
-                <input v-model="planForm.end_time" type="time" required />
-              </div>
+
+            <div class="form-group">
+              <label>Bắt đầu:</label>
+              <input v-model="planForm.start_time" type="time" class="mb-3" required />
             </div>
+            <div class="form-group">
+              <label>Kết thúc:</label>
+              <input v-model="planForm.end_time" type="time" class="mb-3" required />
+            </div>
+
             <div class="form-group">
               <label>Vị trí:</label>
               <div class="location-input">
