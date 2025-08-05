@@ -1,0 +1,414 @@
+<template>
+  <div ref="mapContainer" class="map-container w-full h-full"></div>
+</template>
+
+<script setup>
+import mapboxgl from 'mapbox-gl'
+import { onMounted, ref, watch } from 'vue'
+import 'mapbox-gl/dist/mapbox-gl.css'
+
+const props = defineProps({
+  center: {
+    type: Array,
+    default: () => [107.242997, 10.495088]
+  },
+  zoom: {
+    type: Number,
+    default: 14
+  },
+  locations: {
+    type: Array,
+    default: () => []
+  },
+  plans: {
+    type: Array,
+    default: () => []
+  },
+  userRole: {
+    type: String,
+    default: 'captain'
+  }
+})
+
+const emit = defineEmits(['map-click', 'map-ready'])
+
+mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN
+
+const mapContainer = ref()
+let map = null
+let userMarker = null
+let locationHistory = []
+
+onMounted(() => {
+  initializeMap()
+})
+
+const initializeMap = () => {
+  map = new mapboxgl.Map({
+    container: mapContainer.value,
+    style: 'mapbox://styles/mapbox/streets-v12',
+    center: props.center,
+    zoom: props.zoom
+  })
+
+  // Thêm điều khiển zoom và xoay
+  map.addControl(new mapboxgl.NavigationControl(), 'bottom-right')
+
+  // Khi map đã load xong
+  map.on('load', () => {
+    setupMapSources()
+    setupMapLayers()
+    setupMapEvents()
+
+    // Load initial plans nếu có
+    if (props.plans && props.plans.length > 0) {
+      updatePlans(props.plans)
+    }
+
+    emit('map-ready', map)
+  })
+}
+
+const setupMapSources = () => {
+  // Load icon CSGT cho vị trí người dùng
+  map.loadImage('/csgt.png', (error, image) => {
+    if (error) {
+      console.error('Lỗi load csgt.png:', error)
+    } else if (!map.hasImage('csgt-icon')) {
+      map.addImage('csgt-icon', image)
+    }
+  })
+
+  // Load icon task cho plans
+  map.loadImage('/Km3.png', (error, image) => {
+    if (error) {
+      console.error('Lỗi load task.png:', error)
+    } else if (!map.hasImage('task-icon')) {
+      map.addImage('task-icon', image)
+    }
+  })
+
+  // Source cho vị trí người dùng
+  map.addSource('user-location', {
+    type: 'geojson',
+    data: {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [0, 0]
+      },
+      properties: {}
+    }
+  })
+
+  // Source cho lịch sử di chuyển
+  map.addSource('location-history', {
+    type: 'geojson',
+    data: {
+      type: 'Feature',
+      geometry: {
+        type: 'LineString',
+        coordinates: []
+      },
+      properties: {}
+    }
+  })
+
+  // Source cho các đội trưởng (chỉ cho lãnh đạo)
+  if (props.userRole === 'leader') {
+    map.addSource('captains-locations', {
+      type: 'geojson',
+      data: {
+        type: 'FeatureCollection',
+        features: []
+      }
+    })
+  }
+
+  // Source cho plans
+  map.addSource('plans', {
+    type: 'geojson',
+    data: {
+      type: 'FeatureCollection',
+      features: []
+    }
+  })
+}
+
+const setupMapLayers = () => {
+  // Layer hiển thị vị trí người dùng với icon CSGT
+  map.addLayer({
+    id: 'user-location-point',
+    type: 'symbol',
+    source: 'user-location',
+    layout: {
+      'icon-image': 'csgt-icon',
+      'icon-size': 0.2,
+      'icon-allow-overlap': true,
+      'icon-anchor': 'bottom'
+    }
+  })
+
+  // Layer hiển thị lịch sử di chuyển
+  map.addLayer({
+    id: 'location-history-line',
+    type: 'line',
+    source: 'location-history',
+    layout: {
+      'line-join': 'round',
+      'line-cap': 'round'
+    },
+    paint: {
+      'line-color': '#3887be',
+      'line-width': 3,
+      'line-opacity': 0.8
+    }
+  })
+
+  // Layer cho các đội trưởng (chỉ cho lãnh đạo)
+  if (props.userRole === 'leader') {
+    map.addLayer({
+      id: 'captains-locations-points',
+      type: 'circle',
+      source: 'captains-locations',
+      paint: {
+        'circle-radius': 8,
+        'circle-color': '#ff6b6b',
+        'circle-stroke-width': 2,
+        'circle-stroke-color': '#ffffff'
+      }
+    })
+
+    // Labels cho đội trưởng
+    map.addLayer({
+      id: 'captains-locations-labels',
+      type: 'symbol',
+      source: 'captains-locations',
+      layout: {
+        'text-field': ['get', 'name'],
+        'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+        'text-size': 12,
+        'text-offset': [0, -2]
+      },
+      paint: {
+        'text-color': '#ffffff',
+        'text-halo-color': '#000000',
+        'text-halo-width': 1
+      }
+    })
+  }
+
+  // Layer cho plans
+  map.addLayer({
+    id: 'plans-points',
+    type: 'symbol',
+    source: 'plans',
+    layout: {
+      'icon-image': 'task-icon',
+      'icon-size': 0.8,
+      'icon-allow-overlap': true,
+      'icon-anchor': 'bottom'
+    }
+  })
+}
+
+const setupMapEvents = () => {
+  // Click event cho map
+  map.on('click', (e) => {
+    emit('map-click', {
+      lng: e.lngLat.lng,
+      lat: e.lngLat.lat
+    })
+  })
+
+  // Click event cho plans
+  map.on('click', 'plans-points', (e) => {
+    const plan = e.features[0].properties
+    const formattedDate = formatDate(plan.date)
+    const statusText = getStatusText(plan.status)
+
+    new mapboxgl.Popup()
+      .setLngLat(e.lngLat)
+      .setHTML(
+        `
+        <div class="p-3 min-w-[200px]">
+          <h4 class="font-bold text-lg mb-2">${plan.description}</h4>
+          <p class="mb-1"><strong>📅 Ngày:</strong> ${formattedDate}</p>
+          <p class="mb-1"><strong>⏰ Thời gian:</strong> ${plan.start_time} - ${plan.end_time}</p>
+          <p><strong>📋 Trạng thái:</strong> <span class="px-2 py-1 rounded text-sm ${getStatusClass(
+            plan.status
+          )}">${statusText}</span></p>
+        </div>
+      `
+      )
+      .addTo(map)
+  })
+
+  // Click event cho captains (nếu là lãnh đạo)
+  if (props.userRole === 'leader') {
+    map.on('click', 'captains-locations-points', (e) => {
+      const captain = e.features[0].properties
+      new mapboxgl.Popup()
+        .setLngLat(e.lngLat)
+        .setHTML(
+          `
+          <div class="p-2">
+            <h4 class="font-bold">${captain.name}</h4>
+            <p><strong>Cập nhật:</strong> ${captain.last_update}</p>
+            <p><strong>Độ chính xác:</strong> ${captain.accuracy}m</p>
+          </div>
+        `
+        )
+        .addTo(map)
+    })
+  }
+}
+
+// Utility functions
+const formatDate = (dateString) => {
+  const date = new Date(dateString)
+  return date.toLocaleDateString('vi-VN', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  })
+}
+
+const getStatusText = (status) => {
+  switch (status) {
+    case 'pending':
+      return 'Chờ thực hiện'
+    case 'active':
+      return 'Đang thực hiện'
+    case 'completed':
+      return 'Hoàn thành'
+    default:
+      return status
+  }
+}
+
+const getStatusClass = (status) => {
+  switch (status) {
+    case 'pending':
+      return 'bg-yellow-100 text-yellow-800'
+    case 'active':
+      return 'bg-green-100 text-green-800'
+    case 'completed':
+      return 'bg-gray-100 text-gray-800'
+    default:
+      return 'bg-gray-100 text-gray-800'
+  }
+}
+
+// Update user location on map
+const updateUserLocation = (longitude, latitude) => {
+  if (map && map.getSource('user-location')) {
+    map.getSource('user-location').setData({
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [longitude, latitude]
+      },
+      properties: {}
+    })
+
+    // Update location history
+    locationHistory.push([longitude, latitude])
+    if (locationHistory.length > 1) {
+      map.getSource('location-history').setData({
+        type: 'Feature',
+        geometry: {
+          type: 'LineString',
+          coordinates: locationHistory
+        },
+        properties: {}
+      })
+    }
+  }
+}
+
+// Update captains locations (for leaders)
+const updateCaptainsLocations = (captains) => {
+  if (props.userRole === 'leader' && map && map.getSource('captains-locations')) {
+    const features = captains.map((captain) => ({
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [captain.location.lng, captain.location.lat]
+      },
+      properties: {
+        name: captain.user_name,
+        last_update: captain.location.recorded_at,
+        accuracy: captain.location.accuracy
+      }
+    }))
+
+    map.getSource('captains-locations').setData({
+      type: 'FeatureCollection',
+      features
+    })
+  }
+}
+
+// Update plans on map
+const updatePlans = (plans) => {
+  console.log('Updating plans on map:', plans)
+  if (map && map.getSource('plans')) {
+    const features = plans.map((plan) => ({
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [parseFloat(plan.lng), parseFloat(plan.lat)]
+      },
+      properties: {
+        id: plan.id,
+        description: plan.description,
+        date: plan.date,
+        start_time: plan.start_time,
+        end_time: plan.end_time,
+        status: plan.status
+      }
+    }))
+
+    console.log('Plan features:', features)
+    map.getSource('plans').setData({
+      type: 'FeatureCollection',
+      features
+    })
+  }
+}
+
+// Fly to location
+const flyTo = (coordinates, zoom = 16) => {
+  if (map) {
+    map.flyTo({
+      center: coordinates,
+      zoom
+    })
+  }
+}
+
+// Watch for prop changes
+watch(() => props.locations, updateCaptainsLocations, { deep: true })
+watch(() => props.plans, updatePlans, { deep: true })
+
+// Expose methods
+defineExpose({
+  updateUserLocation,
+  updateCaptainsLocations,
+  updatePlans,
+  flyTo,
+  map: () => map
+})
+</script>
+
+<style scoped>
+.map-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+</style>

@@ -1,0 +1,29 @@
+# THÊM CÁC DÒNG SAU VÀO FILE .env
+
+# Broadcast Configuration
+BROADCAST_CONNECTION=reverb
+
+# Laravel Reverb Configuration
+REVERB_APP_ID=local-app
+REVERB_APP_KEY=ogfyrRCX8uVRd1dccWt8lzd/tLO5QavL2n+xRrALEEw=
+REVERB_APP_SECRET=HVPDqUMHVZ01bh1bUMorQ2LdCnyYg8z3oS7dYgddy14=
+REVERB_HOST=localhost
+REVERB_PORT=8080
+REVERB_SCHEME=http
+
+# Queue Configuration (cần thiết cho broadcasting)
+QUEUE_CONNECTION=database
+
+# Pusher Configuration (fallback - giống với Reverb)
+PUSHER_APP_ID=local-app
+PUSHER_APP_KEY=ogfyrRCX8uVRd1dccWt8lzd/tLO5QavL2n+xRrALEEw=
+PUSHER_APP_SECRET=HVPDqUMHVZ01bh1bUMorQ2LdCnyYg8z3oS7dYgddy14=
+PUSHER_HOST=localhost
+PUSHER_PORT=8080
+PUSHER_SCHEME=http
+
+# Vite Configuration (cho frontend)
+VITE_REVERB_APP_KEY=ogfyrRCX8uVRd1dccWt8lzd/tLO5QavL2n+xRrALEEw=
+VITE_REVERB_HOST=localhost
+VITE_REVERB_PORT=8080
+VITE_REVERB_SCHEME=http

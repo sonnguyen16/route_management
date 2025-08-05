@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -44,5 +45,37 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Check if user is a leader
+     */
+    public function isLeader(): bool
+    {
+        return $this->role === 'leader';
+    }
+
+    /**
+     * Check if user is a captain
+     */
+    public function isCaptain(): bool
+    {
+        return $this->role === 'captain';
+    }
+
+    /**
+     * Get user's location histories
+     */
+    public function locationHistories()
+    {
+        return $this->hasMany(LocationHistory::class);
+    }
+
+    /**
+     * Get user's plans
+     */
+    public function plans()
+    {
+        return $this->hasMany(Plan::class);
     }
 }
