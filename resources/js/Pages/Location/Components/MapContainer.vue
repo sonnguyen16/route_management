@@ -377,11 +377,11 @@ const updateCaptainsLocations = (captains) => {
     // Lưu trữ vị trí cũ của các đội trưởng để vẽ đường tracking
     const captainTracks = {}
 
-    // Nếu đã có dữ liệu trước đó, lấy ra để cập nhật
-    if (map.getSource('captains-locations')._data && map.getSource('captains-locations')._data.features) {
-      map.getSource('captains-locations')._data.features.forEach((feature) => {
-        if (feature.properties.track) {
-          captainTracks[feature.properties.user_id] = feature.properties.track
+    // Nếu đã có dữ liệu tracking trước đó, lấy ra để cập nhật
+    if (map.getSource('captains-tracks')._data && map.getSource('captains-tracks')._data.features) {
+      map.getSource('captains-tracks')._data.features.forEach((feature) => {
+        if (feature.properties.user_id) {
+          captainTracks[feature.properties.user_id] = feature.geometry.coordinates
         }
       })
     }
@@ -390,8 +390,31 @@ const updateCaptainsLocations = (captains) => {
     const captainColors = {}
     const colors = ['#FF5733', '#33FF57', '#3357FF', '#F033FF', '#FF33A8', '#33FFF6']
 
-    // Tạo một feature cho mỗi đội trưởng (chỉ điểm cuối cùng hiện icon)
-    const features = captains.map((captain, index) => {
+    // Tạo features cho vị trí hiện tại của đội trưởng (chỉ icon CSGT)
+    const locationFeatures = captains.map((captain, index) => {
+      // Lấy hoặc tạo màu cho đội trưởng
+      if (!captainColors[captain.user_id]) {
+        captainColors[captain.user_id] = colors[index % colors.length]
+      }
+
+      return {
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [captain.location.lng, captain.location.lat]
+        },
+        properties: {
+          user_id: captain.user_id,
+          name: captain.user_name,
+          last_update: captain.location.recorded_at,
+          accuracy: captain.location.accuracy,
+          color: captainColors[captain.user_id]
+        }
+      }
+    })
+
+    // Tạo features cho đường tracking
+    const trackFeatures = captains.map((captain, index) => {
       // Lấy hoặc tạo track cho đội trưởng này
       const trackCoords = captainTracks[captain.user_id] || []
 
@@ -416,50 +439,33 @@ const updateCaptainsLocations = (captains) => {
         captainColors[captain.user_id] = colors[index % colors.length]
       }
 
-      // Chỉ trả về feature cho điểm cuối cùng (vị trí hiện tại)
-      return {
-        type: 'Feature',
-        geometry: {
-          type: 'Point',
-          coordinates: currentCoord
-        },
-        properties: {
-          user_id: captain.user_id,
-          name: captain.user_name,
-          last_update: captain.location.recorded_at,
-          accuracy: captain.location.accuracy,
-          track: trackCoords,
-          color: captainColors[captain.user_id],
-          is_current: true // Đánh dấu đây là vị trí hiện tại
-        }
-      }
-    })
-
-    // Thêm features cho đường tracking
-    const trackFeatures = captains
-      .map((captain, index) => {
-        const trackCoords = captainTracks[captain.user_id] || []
-        if (trackCoords.length > 1) {
-          return {
-            type: 'Feature',
-            geometry: {
-              type: 'LineString',
-              coordinates: trackCoords
-            },
-            properties: {
-              user_id: captain.user_id,
-              color: captainColors[captain.user_id] || colors[index % colors.length],
-              track: trackCoords
-            }
+      // Chỉ tạo feature nếu có đường tracking
+      if (trackCoords.length > 1) {
+        return {
+          type: 'Feature',
+          geometry: {
+            type: 'LineString',
+            coordinates: trackCoords
+          },
+          properties: {
+            user_id: captain.user_id,
+            color: captainColors[captain.user_id]
           }
         }
-        return null
-      })
-      .filter(Boolean)
+      }
+      return null
+    }).filter(Boolean)
 
+    // Cập nhật vị trí hiện tại (icon CSGT)
     map.getSource('captains-locations').setData({
       type: 'FeatureCollection',
-      features: [...features, ...trackFeatures]
+      features: locationFeatures
+    })
+
+    // Cập nhật đường tracking
+    map.getSource('captains-tracks').setData({
+      type: 'FeatureCollection',
+      features: trackFeatures
     })
   }
 }
