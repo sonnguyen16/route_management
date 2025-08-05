@@ -56,7 +56,7 @@
             </div>
           </div>
           <div class="captain-actions">
-            <button @click.stop="viewCaptainHistory(captain)" class="btn-sm">Xem lịch sử</button>
+            <!-- <button @click.stop="viewCaptainHistory(captain)" class="btn-sm">Xem lịch sử</button> -->
             <button @click.stop="focusOnCaptain(captain)" class="btn-sm btn-primary">Định vị</button>
           </div>
         </div>

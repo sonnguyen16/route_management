@@ -165,18 +165,31 @@ const setupMapLayers = () => {
     }
   })
 
-  // Layer cho các đội trưởng (chỉ cho lãnh đạo)
+  // Layer cho các đội trưởng (chỉ cho lãnh đạo) - Dùng icon CSGT thay vì chấm đỏ
   if (props.userRole === 'leader') {
     map.addLayer({
       id: 'captains-locations-points',
-      type: 'circle',
+      type: 'symbol',
+      source: 'captains-locations',
+      layout: {
+        'icon-image': 'csgt-icon',
+        'icon-size': 0.2,
+        'icon-allow-overlap': true,
+        'icon-anchor': 'bottom'
+      }
+    })
+
+    // Thêm đường tracking cho từng đội trưởng
+    map.addLayer({
+      id: 'captains-tracks',
+      type: 'line',
       source: 'captains-locations',
       paint: {
-        'circle-radius': 8,
-        'circle-color': '#ff6b6b',
-        'circle-stroke-width': 2,
-        'circle-stroke-color': '#ffffff'
-      }
+        'line-color': ['get', 'color'],
+        'line-width': 3,
+        'line-opacity': 0.8
+      },
+      filter: ['has', 'track']
     })
 
     // Labels cho đội trưởng
@@ -248,14 +261,35 @@ const setupMapEvents = () => {
   if (props.userRole === 'leader') {
     map.on('click', 'captains-locations-points', (e) => {
       const captain = e.features[0].properties
+
+      // Format thời gian cập nhật
+      const lastUpdateDate = new Date(captain.last_update)
+      const formattedTime = lastUpdateDate.toLocaleTimeString('vi-VN', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      })
+      const formattedDate = lastUpdateDate.toLocaleDateString('vi-VN', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      })
+
       new mapboxgl.Popup()
         .setLngLat(e.lngLat)
         .setHTML(
           `
-          <div class="p-2">
-            <h4 class="font-bold">${captain.name}</h4>
-            <p><strong>Cập nhật:</strong> ${captain.last_update}</p>
-            <p><strong>Độ chính xác:</strong> ${captain.accuracy}m</p>
+          <div class="p-3 min-w-[200px]">
+            <h4 class="font-bold text-lg mb-2">${captain.name}</h4>
+            <p class="mb-1"><strong>📅 Ngày:</strong> ${formattedDate}</p>
+            <p class="mb-1"><strong>⏰ Cập nhật:</strong> ${formattedTime}</p>
+            <p class="mb-1"><strong>📍 Độ chính xác:</strong> ${captain.accuracy}m</p>
+            <div class="mt-2 pt-2 border-t border-gray-200">
+              <div class="flex items-center">
+                <span class="w-3 h-3 rounded-full mr-2" style="background-color: ${captain.color}"></span>
+                <span class="text-xs text-gray-600">Đường tracking</span>
+              </div>
+            </div>
           </div>
         `
         )
@@ -331,22 +365,89 @@ const updateUserLocation = (longitude, latitude) => {
 // Update captains locations (for leaders)
 const updateCaptainsLocations = (captains) => {
   if (props.userRole === 'leader' && map && map.getSource('captains-locations')) {
-    const features = captains.map((captain) => ({
-      type: 'Feature',
-      geometry: {
-        type: 'Point',
-        coordinates: [captain.location.lng, captain.location.lat]
-      },
-      properties: {
-        name: captain.user_name,
-        last_update: captain.location.recorded_at,
-        accuracy: captain.location.accuracy
+    // Lưu trữ vị trí cũ của các đội trưởng để vẽ đường tracking
+    const captainTracks = {}
+
+    // Nếu đã có dữ liệu trước đó, lấy ra để cập nhật
+    if (map.getSource('captains-locations')._data && map.getSource('captains-locations')._data.features) {
+      map.getSource('captains-locations')._data.features.forEach((feature) => {
+        if (feature.properties.track) {
+          captainTracks[feature.properties.user_id] = feature.properties.track
+        }
+      })
+    }
+
+    // Tạo màu ngẫu nhiên cho mỗi đội trưởng nếu chưa có
+    const captainColors = {}
+    const colors = ['#FF5733', '#33FF57', '#3357FF', '#F033FF', '#FF33A8', '#33FFF6']
+
+    const features = captains.map((captain, index) => {
+      // Lấy hoặc tạo track cho đội trưởng này
+      const trackCoords = captainTracks[captain.user_id] || []
+
+      // Thêm vị trí hiện tại vào track (nếu khác vị trí cuối cùng)
+      const currentCoord = [captain.location.lng, captain.location.lat]
+      if (
+        trackCoords.length === 0 ||
+        trackCoords[trackCoords.length - 1][0] !== currentCoord[0] ||
+        trackCoords[trackCoords.length - 1][1] !== currentCoord[1]
+      ) {
+        trackCoords.push(currentCoord)
       }
-    }))
+
+      // Giới hạn số điểm trong track để tránh quá tải
+      const maxTrackPoints = 100
+      if (trackCoords.length > maxTrackPoints) {
+        trackCoords.splice(0, trackCoords.length - maxTrackPoints)
+      }
+
+      // Lấy hoặc tạo màu cho đội trưởng
+      if (!captainColors[captain.user_id]) {
+        captainColors[captain.user_id] = colors[index % colors.length]
+      }
+
+      return {
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: currentCoord
+        },
+        properties: {
+          user_id: captain.user_id,
+          name: captain.user_name,
+          last_update: captain.location.recorded_at,
+          accuracy: captain.location.accuracy,
+          track: trackCoords,
+          color: captainColors[captain.user_id]
+        }
+      }
+    })
+
+    // Thêm features cho đường tracking
+    const trackFeatures = captains
+      .map((captain, index) => {
+        const trackCoords = captainTracks[captain.user_id] || []
+        if (trackCoords.length > 1) {
+          return {
+            type: 'Feature',
+            geometry: {
+              type: 'LineString',
+              coordinates: trackCoords
+            },
+            properties: {
+              user_id: captain.user_id,
+              color: captainColors[captain.user_id] || colors[index % colors.length],
+              track: trackCoords
+            }
+          }
+        }
+        return null
+      })
+      .filter(Boolean)
 
     map.getSource('captains-locations').setData({
       type: 'FeatureCollection',
-      features
+      features: [...features, ...trackFeatures]
     })
   }
 }
