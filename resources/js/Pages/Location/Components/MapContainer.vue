@@ -414,47 +414,49 @@ const updateCaptainsLocations = (captains) => {
     })
 
     // Tạo features cho đường tracking
-    const trackFeatures = captains.map((captain, index) => {
-      // Lấy hoặc tạo track cho đội trưởng này
-      const trackCoords = captainTracks[captain.user_id] || []
+    const trackFeatures = captains
+      .map((captain, index) => {
+        // Lấy hoặc tạo track cho đội trưởng này
+        const trackCoords = captainTracks[captain.user_id] || []
 
-      // Thêm vị trí hiện tại vào track (nếu khác vị trí cuối cùng)
-      const currentCoord = [captain.location.lng, captain.location.lat]
-      if (
-        trackCoords.length === 0 ||
-        trackCoords[trackCoords.length - 1][0] !== currentCoord[0] ||
-        trackCoords[trackCoords.length - 1][1] !== currentCoord[1]
-      ) {
-        trackCoords.push(currentCoord)
-      }
+        // Thêm vị trí hiện tại vào track (nếu khác vị trí cuối cùng)
+        const currentCoord = [captain.location.lng, captain.location.lat]
+        if (
+          trackCoords.length === 0 ||
+          trackCoords[trackCoords.length - 1][0] !== currentCoord[0] ||
+          trackCoords[trackCoords.length - 1][1] !== currentCoord[1]
+        ) {
+          trackCoords.push(currentCoord)
+        }
 
-      // Giới hạn số điểm trong track để tránh quá tải
-      const maxTrackPoints = 100
-      if (trackCoords.length > maxTrackPoints) {
-        trackCoords.splice(0, trackCoords.length - maxTrackPoints)
-      }
+        // Giới hạn số điểm trong track để tránh quá tải
+        const maxTrackPoints = 100
+        if (trackCoords.length > maxTrackPoints) {
+          trackCoords.splice(0, trackCoords.length - maxTrackPoints)
+        }
 
-      // Lấy hoặc tạo màu cho đội trưởng
-      if (!captainColors[captain.user_id]) {
-        captainColors[captain.user_id] = colors[index % colors.length]
-      }
+        // Lấy hoặc tạo màu cho đội trưởng
+        if (!captainColors[captain.user_id]) {
+          captainColors[captain.user_id] = colors[index % colors.length]
+        }
 
-      // Chỉ tạo feature nếu có đường tracking
-      if (trackCoords.length > 1) {
-        return {
-          type: 'Feature',
-          geometry: {
-            type: 'LineString',
-            coordinates: trackCoords
-          },
-          properties: {
-            user_id: captain.user_id,
-            color: captainColors[captain.user_id]
+        // Chỉ tạo feature nếu có đường tracking
+        if (trackCoords.length > 1) {
+          return {
+            type: 'Feature',
+            geometry: {
+              type: 'LineString',
+              coordinates: trackCoords
+            },
+            properties: {
+              user_id: captain.user_id,
+              color: captainColors[captain.user_id]
+            }
           }
         }
-      }
-      return null
-    }).filter(Boolean)
+        return null
+      })
+      .filter(Boolean)
 
     // Cập nhật vị trí hiện tại (icon CSGT)
     map.getSource('captains-locations').setData({
