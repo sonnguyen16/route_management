@@ -83,16 +83,12 @@ const initializeWebSocket = () => {
   if (usePage().props.auth.user.role === 'leader') {
     window.Pusher = Pusher
 
-    const port = import.meta.env.VITE_REVERB_PORT ?? (
-      (import.meta.env.VITE_REVERB_SCHEME ?? 'http') === 'https' ? 443 : 8080
-    )
-
     echo = new Echo({
       broadcaster: 'reverb',
       key: import.meta.env.VITE_REVERB_APP_KEY,
       wsHost: import.meta.env.VITE_REVERB_HOST ?? 'localhost',
-      wsPort: port,
-      wssPort: port,
+      wsPort: 443,
+      wssPort: 443,
       forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'http') === 'https',
       enabledTransports: ['ws', 'wss'],
       auth: {
