@@ -195,7 +195,7 @@ const setupMapLayers = () => {
       type: 'line',
       source: 'captains-tracks',
       paint: {
-        'line-color': ['get', 'color'],
+        'line-color': '#3887be',
         'line-width': 3,
         'line-opacity': 0.8
       }
