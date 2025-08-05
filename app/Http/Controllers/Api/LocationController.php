@@ -98,24 +98,30 @@ class LocationController extends Controller
 
         $minutes = $request->get('minutes', 5); // Active trong 5 phút gần nhất
 
+        // Lấy location gần nhất của mỗi captain trong khoảng thời gian cho phép
+        $recentTime = now()->subMinutes($minutes);
+
         $captains = User::where('role', 'captain')
-            ->with(['locationHistories' => function ($query) use ($minutes) {
-                $query->recent($minutes)
-                    ->active()
-                    ->orderBy('recorded_at', 'desc')
-                    ->limit(1);
-            }])
-            ->get()
-            ->filter(function ($captain) {
-                return $captain->locationHistories->isNotEmpty();
+            ->whereHas('locationHistories', function ($query) use ($recentTime) {
+                $query->where('recorded_at', '>=', $recentTime)
+                    ->where('is_active', true);
             })
-            ->map(function ($captain) {
-                $latestLocation = $captain->locationHistories->first();
+            ->get()
+            ->map(function ($captain) use ($recentTime) {
+                $latestLocation = LocationHistory::where('user_id', $captain->id)
+                    ->where('recorded_at', '>=', $recentTime)
+                    ->where('is_active', true)
+                    ->orderBy('recorded_at', 'desc')
+                    ->first();
+
                 return [
                     'user_id' => $captain->id,
                     'user_name' => $captain->name,
                     'location' => $latestLocation
                 ];
+            })
+            ->filter(function ($captain) {
+                return $captain['location'] !== null;
             });
 
         return response()->json([
