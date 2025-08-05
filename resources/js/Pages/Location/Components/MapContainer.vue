@@ -195,7 +195,7 @@ const setupMapLayers = () => {
       type: 'line',
       source: 'captains-tracks',
       paint: {
-        'line-color': '#3887be',
+        'line-color': ['get', 'color'],
         'line-width': 3,
         'line-opacity': 0.8
       }
@@ -372,104 +372,78 @@ const updateUserLocation = (longitude, latitude) => {
 }
 
 // Update captains locations (for leaders)
-const updateCaptainsLocations = (captains) => {
-  if (props.userRole === 'leader' && map && map.getSource('captains-locations')) {
-    // Lưu trữ vị trí cũ của các đội trưởng để vẽ đường tracking
-    const captainTracks = {}
+// Khai báo global ở ngoài hàm để lưu lịch sử tracking
+let captainTracks = {} // { user_id: [[lng, lat], ...] }
+let captainColors = {} // { user_id: '#RRGGBB' }
+const colors = ['#FF5733', '#33FF57', '#3357FF', '#F033FF', '#FF33A8', '#33FFF6']
 
-    // Nếu đã có dữ liệu tracking trước đó, lấy ra để cập nhật
-    if (map.getSource('captains-tracks')._data && map.getSource('captains-tracks')._data.features) {
-      map.getSource('captains-tracks')._data.features.forEach((feature) => {
-        if (feature.properties.user_id) {
-          captainTracks[feature.properties.user_id] = feature.geometry.coordinates
-        }
-      })
+const updateCaptainsLocations = (captains) => {
+  if (props.userRole !== 'leader' || !map) return
+  const locationsSource = map.getSource('captains-locations')
+  const tracksSource = map.getSource('captains-tracks')
+  if (!locationsSource || !tracksSource) return
+
+  // Cập nhật vị trí và track cho từng captain
+  captains.forEach((captain, index) => {
+    // 1️⃣ Gán màu cố định cho captain nếu chưa có
+    if (!captainColors[captain.user_id]) {
+      captainColors[captain.user_id] = colors[index % colors.length]
     }
 
-    // Tạo màu ngẫu nhiên cho mỗi đội trưởng nếu chưa có
-    const captainColors = {}
-    const colors = ['#FF5733', '#33FF57', '#3357FF', '#F033FF', '#FF33A8', '#33FFF6']
+    // 2️⃣ Cập nhật track
+    const currentCoord = [captain.location.lng, captain.location.lat]
+    const track = captainTracks[captain.user_id] || []
 
-    // Tạo features cho vị trí hiện tại của đội trưởng (chỉ icon CSGT)
-    const locationFeatures = captains.map((captain, index) => {
-      // Lấy hoặc tạo màu cho đội trưởng
-      if (!captainColors[captain.user_id]) {
-        captainColors[captain.user_id] = colors[index % colors.length]
+    // Thêm điểm mới nếu khác điểm cuối cùng
+    const last = track[track.length - 1]
+    if (!last || last[0] !== currentCoord[0] || last[1] !== currentCoord[1]) {
+      track.push(currentCoord)
+      // Giới hạn số điểm để tránh quá tải
+      if (track.length > 100) track.shift()
+      captainTracks[captain.user_id] = track
+    }
+  })
+
+  // 3️⃣ Tạo FeatureCollection cho locations
+  const locationFeatures = captains.map((captain) => ({
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [captain.location.lng, captain.location.lat]
+    },
+    properties: {
+      user_id: captain.user_id,
+      name: captain.user_name,
+      last_update: captain.location.recorded_at,
+      accuracy: captain.location.accuracy,
+      color: captainColors[captain.user_id]
+    }
+  }))
+
+  // 4️⃣ Tạo FeatureCollection cho tracks
+  const trackFeatures = Object.entries(captainTracks)
+    .filter(([_, coords]) => coords.length > 1)
+    .map(([userId, coords]) => ({
+      type: 'Feature',
+      geometry: {
+        type: 'LineString',
+        coordinates: coords
+      },
+      properties: {
+        user_id: userId,
+        color: captainColors[userId]
       }
+    }))
 
-      return {
-        type: 'Feature',
-        geometry: {
-          type: 'Point',
-          coordinates: [captain.location.lng, captain.location.lat]
-        },
-        properties: {
-          user_id: captain.user_id,
-          name: captain.user_name,
-          last_update: captain.location.recorded_at,
-          accuracy: captain.location.accuracy,
-          color: captainColors[captain.user_id]
-        }
-      }
-    })
-
-    // Tạo features cho đường tracking
-    const trackFeatures = captains
-      .map((captain, index) => {
-        // Lấy hoặc tạo track cho đội trưởng này
-        const trackCoords = captainTracks[captain.user_id] || []
-
-        // Thêm vị trí hiện tại vào track (nếu khác vị trí cuối cùng)
-        const currentCoord = [captain.location.lng, captain.location.lat]
-        if (
-          trackCoords.length === 0 ||
-          trackCoords[trackCoords.length - 1][0] !== currentCoord[0] ||
-          trackCoords[trackCoords.length - 1][1] !== currentCoord[1]
-        ) {
-          trackCoords.push(currentCoord)
-        }
-
-        // Giới hạn số điểm trong track để tránh quá tải
-        const maxTrackPoints = 100
-        if (trackCoords.length > maxTrackPoints) {
-          trackCoords.splice(0, trackCoords.length - maxTrackPoints)
-        }
-
-        // Lấy hoặc tạo màu cho đội trưởng
-        if (!captainColors[captain.user_id]) {
-          captainColors[captain.user_id] = colors[index % colors.length]
-        }
-
-        // Chỉ tạo feature nếu có đường tracking
-        if (trackCoords.length > 1) {
-          return {
-            type: 'Feature',
-            geometry: {
-              type: 'LineString',
-              coordinates: trackCoords
-            },
-            properties: {
-              user_id: captain.user_id,
-              color: captainColors[captain.user_id]
-            }
-          }
-        }
-        return null
-      })
-      .filter(Boolean)
-
-    // Cập nhật vị trí hiện tại (icon CSGT)
-    map.getSource('captains-locations').setData({
-      type: 'FeatureCollection',
-      features: locationFeatures
-    })
-
-    // Cập nhật đường tracking
-    map.getSource('captains-tracks').setData({
-      type: 'FeatureCollection',
-      features: trackFeatures
-    })
-  }
+  // 5️⃣ Cập nhật dữ liệu cho Mapbox source
+  locationsSource.setData({
+    type: 'FeatureCollection',
+    features: locationFeatures
+  })
+  tracksSource.setData({
+    type: 'FeatureCollection',
+    features: trackFeatures
+  })
 }
 
 // Update plans on map
