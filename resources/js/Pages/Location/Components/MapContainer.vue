@@ -399,7 +399,7 @@ const updateCaptainsLocations = (captains) => {
     if (!last || last[0] !== currentCoord[0] || last[1] !== currentCoord[1]) {
       track.push(currentCoord)
       // Giới hạn số điểm để tránh quá tải
-      if (track.length > 100) track.shift()
+    //   if (track.length > 100) track.shift()
       captainTracks[captain.user_id] = track
     }
   })

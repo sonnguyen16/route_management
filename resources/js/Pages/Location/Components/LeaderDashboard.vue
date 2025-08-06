@@ -2,7 +2,7 @@
   <div class="leader-dashboard">
     <!-- Header -->
     <div class="dashboard-header">
-      <h2 class="dashboard-title">Dashboard Lãnh Đạo</h2>
+      <h2 class="dashboard-title">Dashboard</h2>
       <div class="header-actions">
         <button @click="togglePlansPanel" class="btn-secondary">
           <span v-if="showPlansPanel">Ẩn</span>

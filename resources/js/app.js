@@ -6,7 +6,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createApp, h } from 'vue';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 
-const appName = 'Quản lý hệ thống';
+const appName = 'Đội Cảnh sát giao thông số 2 - Phòng PC08 - Công an TP Hồ Chí Minh';
 
 createInertiaApp({
     title: (title) => `${appName}`,
