@@ -1,5 +1,41 @@
 <template>
-  <div ref="mapContainer" class="map-container w-full h-full"></div>
+  <div ref="mapContainer" class="map-container w-full h-full relative">
+    <!-- Popup danh sách đèn giao thông -->
+    <div v-if="showDenGiaoThongList" class="den-giao-thong-list">
+      <div class="list-header">
+        <h3 class="list-title">🚦 Danh sách đèn giao thông</h3>
+        <button @click="closeDenGiaoThongList" class="close-btn">&times;</button>
+      </div>
+      <div class="list-content">
+        <div v-if="props.denGiaoThong.length === 0" class="no-data">Không có dữ liệu đèn giao thông</div>
+        <div v-else class="den-list">
+          <div v-for="den in props.denGiaoThong" :key="den.id" class="den-item" @click="flyToDen(den)">
+            <div class="den-icon">🚦</div>
+            <div class="den-info">
+              <div class="den-name">{{ den.nut_giao || 'N/A' }}</div>
+              <div class="den-details">
+                <span class="den-phase">{{ den.so_pha_den || 0 }} pha</span>
+                <span class="den-time">{{ den.thoi_gian_pha_den || 0 }}s</span>
+              </div>
+            </div>
+            <div class="den-action">
+              <button class="view-btn" @click.stop="flyToDen(den)">👁️ Xem</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nút mở danh sách đèn giao thông -->
+    <button
+      v-if="props.denGiaoThong.length > 0"
+      @click="openDenGiaoThongList"
+      class="den-list-toggle"
+      title="Danh sách đèn giao thông"
+    >
+      🚦
+    </button>
+  </div>
 </template>
 
 <script setup>
@@ -27,6 +63,10 @@ const props = defineProps({
   userRole: {
     type: String,
     default: 'captain'
+  },
+  denGiaoThong: {
+    type: Array,
+    default: () => []
   }
 })
 
@@ -35,8 +75,8 @@ const emit = defineEmits(['map-click', 'map-ready'])
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN
 
 const mapContainer = ref()
+const showDenGiaoThongList = ref(false)
 let map = null
-let userMarker = null
 let locationHistory = []
 
 onMounted(() => {
@@ -65,6 +105,10 @@ const initializeMap = () => {
       updatePlans(props.plans)
     }
 
+    if (props.denGiaoThong && props.denGiaoThong.length > 0) {
+      updateDenGiaoThong(props.denGiaoThong)
+    }
+
     emit('map-ready', map)
   })
 }
@@ -85,6 +129,15 @@ const setupMapSources = () => {
       console.error('Lỗi load task.png:', error)
     } else if (!map.hasImage('task-icon')) {
       map.addImage('task-icon', image)
+    }
+  })
+
+  // Load icon đèn giao thông
+  map.loadImage('/traffic-light.png', (error, image) => {
+    if (error) {
+      console.error('Lỗi load traffic-light.png:', error)
+    } else if (!map.hasImage('traffic-light-icon')) {
+      map.addImage('traffic-light-icon', image)
     }
   })
 
@@ -137,6 +190,15 @@ const setupMapSources = () => {
 
   // Source cho plans
   map.addSource('plans', {
+    type: 'geojson',
+    data: {
+      type: 'FeatureCollection',
+      features: []
+    }
+  })
+
+  // Source cho đèn giao thông
+  map.addSource('den-giao-thong', {
     type: 'geojson',
     data: {
       type: 'FeatureCollection',
@@ -227,7 +289,20 @@ const setupMapLayers = () => {
     source: 'plans',
     layout: {
       'icon-image': 'task-icon',
-      'icon-size': 0.8,
+      'icon-size': 0.4,
+      'icon-allow-overlap': true,
+      'icon-anchor': 'bottom'
+    }
+  })
+
+  // Layer cho đèn giao thông
+  map.addLayer({
+    id: 'den-giao-thong-points',
+    type: 'symbol',
+    source: 'den-giao-thong',
+    layout: {
+      'icon-image': 'traffic-light-icon',
+      'icon-size': 0.4,
       'icon-allow-overlap': true,
       'icon-anchor': 'bottom'
     }
@@ -260,6 +335,30 @@ const setupMapEvents = () => {
           <p><strong>📋 Trạng thái:</strong> <span class="px-2 py-1 rounded text-sm ${getStatusClass(
             plan.status
           )}">${statusText}</span></p>
+        </div>
+      `
+      )
+      .addTo(map)
+  })
+
+  // Click event cho đèn giao thông
+  map.on('click', 'den-giao-thong-points', (e) => {
+    const den = e.features[0].properties
+
+    new mapboxgl.Popup()
+      .setLngLat(e.lngLat)
+      .setHTML(
+        `
+        <div class="p-3 min-w-[250px]">
+          <h4 class="font-bold text-lg mb-2">🚦 Đèn giao thông</h4>
+          <p class="mb-1"><strong>📍 Nút giao:</strong> ${den.nut_giao || 'N/A'}</p>
+          <p class="mb-1"><strong>🔴 Số pha đèn:</strong> ${den.so_pha_den || 'N/A'}</p>
+          <p class="mb-1"><strong>⏱️ Thời gian pha đèn:</strong> ${den.thoi_gian_pha_den || 'N/A'}s</p>
+          <p class="mb-1"><strong>🕐 Thời gian hoạt động:</strong> ${den.thoi_gian_hoat_dong || 'N/A'}</p>
+          <p class="mb-1"><strong>📍 Vị trí:</strong> ${den.vi_tri || 'N/A'}</p>
+          <p class="mb-1"><strong>📅 Ngày lắp đặt:</strong> ${
+            den.ngay_lap_dat ? new Date(den.ngay_lap_dat).toLocaleDateString('vi-VN') : 'N/A'
+          }</p>
         </div>
       `
       )
@@ -399,7 +498,7 @@ const updateCaptainsLocations = (captains) => {
     if (!last || last[0] !== currentCoord[0] || last[1] !== currentCoord[1]) {
       track.push(currentCoord)
       // Giới hạn số điểm để tránh quá tải
-    //   if (track.length > 100) track.shift()
+      //   if (track.length > 100) track.shift()
       captainTracks[captain.user_id] = track
     }
   })
@@ -474,6 +573,35 @@ const updatePlans = (plans) => {
   }
 }
 
+// Update den giao thong on map
+const updateDenGiaoThong = (denGiaoThong) => {
+  console.log('Updating den giao thong on map:', denGiaoThong)
+  if (map && map.getSource('den-giao-thong')) {
+    const features = denGiaoThong.map((den) => ({
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [parseFloat(den.lng), parseFloat(den.lat)]
+      },
+      properties: {
+        id: den.id,
+        nut_giao: den.nut_giao,
+        so_pha_den: den.so_pha_den,
+        thoi_gian_pha_den: den.thoi_gian_pha_den,
+        thoi_gian_hoat_dong: den.thoi_gian_hoat_dong,
+        vi_tri: den.vi_tri,
+        ngay_lap_dat: den.ngay_lap_dat
+      }
+    }))
+
+    console.log('Den giao thong features:', features)
+    map.getSource('den-giao-thong').setData({
+      type: 'FeatureCollection',
+      features
+    })
+  }
+}
+
 // Fly to location
 const flyTo = (coordinates, zoom = 16) => {
   if (map) {
@@ -484,15 +612,38 @@ const flyTo = (coordinates, zoom = 16) => {
   }
 }
 
+// Fly to den giao thong
+const flyToDen = (den) => {
+  if (map && den.lat && den.lng) {
+    map.flyTo({
+      center: [parseFloat(den.lng), parseFloat(den.lat)],
+      zoom: 16
+    })
+    closeDenGiaoThongList()
+  }
+}
+
+// Open den giao thong list
+const openDenGiaoThongList = () => {
+  showDenGiaoThongList.value = true
+}
+
+// Close den giao thong list
+const closeDenGiaoThongList = () => {
+  showDenGiaoThongList.value = false
+}
+
 // Watch for prop changes
 watch(() => props.locations, updateCaptainsLocations, { deep: true })
 watch(() => props.plans, updatePlans, { deep: true })
+watch(() => props.denGiaoThong, updateDenGiaoThong, { deep: true })
 
 // Expose methods
 defineExpose({
   updateUserLocation,
   updateCaptainsLocations,
   updatePlans,
+  updateDenGiaoThong,
   flyTo,
   map: () => map
 })
@@ -505,5 +656,172 @@ defineExpose({
   left: 0;
   bottom: 0;
   right: 0;
+}
+
+/* Den giao thong list popup */
+.den-giao-thong-list {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 350px;
+  max-height: 500px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.list-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #666;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.close-btn:hover {
+  background-color: #e9ecef;
+  color: #333;
+}
+
+.list-content {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.no-data {
+  padding: 20px;
+  text-align: center;
+  color: #666;
+  font-style: italic;
+}
+
+.den-list {
+  padding: 0;
+}
+
+.den-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  border-bottom: 1px solid #f1f3f4;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.den-item:hover {
+  background-color: #f8f9fa;
+}
+
+.den-item:last-child {
+  border-bottom: none;
+}
+
+.den-icon {
+  font-size: 20px;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.den-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.den-name {
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.den-details {
+  display: flex;
+  gap: 12px;
+  font-size: 12px;
+  color: #666;
+}
+
+.den-phase,
+.den-time {
+  background: #e9ecef;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.den-action {
+  margin-left: 8px;
+}
+
+.view-btn {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.view-btn:hover {
+  background: #0056b3;
+}
+
+/* Toggle button */
+.den-list-toggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  background: white;
+  border: 2px solid #007bff;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.den-list-toggle:hover {
+  background: #007bff;
+  color: white;
+  transform: scale(1.05);
+}
+
+.den-list-toggle:active {
+  transform: scale(0.95);
 }
 </style>

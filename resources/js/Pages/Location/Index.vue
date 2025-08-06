@@ -8,6 +8,7 @@
         :zoom="14"
         :locations="activeCaptains"
         :plans="todayPlans"
+        :den-giao-thong="denGiaoThong"
         :user-role="$page.props.auth.user.role"
         @map-click="handleMapClick"
         @map-ready="handleMapReady"
@@ -62,6 +63,7 @@ const leaderDashboard = ref()
 // State
 const activeCaptains = ref([])
 const todayPlans = ref([])
+const denGiaoThong = ref([])
 const selectingLocation = ref(false)
 const selectedCaptain = ref(null)
 
@@ -107,6 +109,10 @@ const initializeWebSocket = () => {
 
 const loadInitialData = async () => {
   try {
+    // Load đèn giao thông cho tất cả users
+    const denGiaoThongResponse = await axios.get('/api/den-giao-thong')
+    denGiaoThong.value = denGiaoThongResponse.data
+
     if (usePage().props.auth.user.role === 'leader') {
       // Load active captains and plans for leaders
       const [captainsResponse, plansResponse] = await Promise.all([
